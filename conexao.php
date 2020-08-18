@@ -1,6 +1,6 @@
 ﻿<?php
     //variaveis para conexao
-    $servername = "10.100.1.65";
+    $servername = "#####";
     $username = "####";
     $password = "####";
     $dbname = "####"; 

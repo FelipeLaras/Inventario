@@ -1,9 +1,9 @@
 <?php
 //montando critérios para o banco
 $local = "localhost";
-$user = "root";
-$pass = "qtbvar03";
-$bd = "ocsweb";
+$user = "####";
+$pass = "####";
+$bd = "####";
 $port = "3306";
 
 $conn_ocs = mysqli_connect($local, $user, $pass, $bd, $port);
