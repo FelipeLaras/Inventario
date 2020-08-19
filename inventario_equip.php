@@ -215,6 +215,12 @@ if ($_GET['msn'] == 1) {
                 case 15: //disponivel consorcio
                   echo "<td class='fonte'><i class='fas fa-circle' style='color: pink;'></i> ".$row['status']."</td>";
                 break;
+                case 16: //Não Devolvido
+                  echo "<td class='fonte'><i class='fas fa-circle' style='color: #000000;'></i> ".$row['status']."</td>";
+                break;
+                case 17: //Não Localizado
+                  echo "<td class='fonte'><i class='fas fa-circle' style='color: #504d4d;'></i> ".$row['status']."</td>";
+                break;
               }    
                 //buscando as observações
                $query_obs = "SELECT MIO.obs, MIO.data_criacao, MDSE.nome AS status
