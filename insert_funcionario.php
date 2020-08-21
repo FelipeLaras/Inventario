@@ -18,7 +18,7 @@
     if($linha_select['cpf'] != NULL){
         //fazendo um update
 
-        $updateFuncionario = "UPDATE manager_inventario_funcionario SET usuario =s '".$_SESSION['id']."', cpf = '".$_POST['cpf']."', nome = '".$_POST['nome']."', funcao = '".$_POST['funcao']."', departamento = '".$_POST['departamento']."', empresa = '".$_POST['empresa']."', data_cadastro = '".$data_hoje."', status = '9' WHERE id_funcionario = '".$linha_select['id_funcionario']."'";
+        $updateFuncionario = "UPDATE manager_inventario_funcionario SET usuario = '".$_SESSION['id']."', cpf = '".$_POST['cpf']."', nome = '".$_POST['nome']."', funcao = '".$_POST['funcao']."', departamento = '".$_POST['departamento']."', empresa = '".$_POST['empresa']."', data_cadastro = '".$data_hoje."', status = '9' WHERE id_funcionario = '".$linha_select['id_funcionario']."'";
 
         $resultupdate = mysqli_query($conn, $updateFuncionario) or die(mysqli_error($conn));
 
