@@ -10,13 +10,22 @@
 
     /*---------------------- VERIFICANDO SE O CPF JÁ NÃO ESTA CADASTRADO----------------------*/
 
-    $select_fun = "SELECT cpf FROM manager_inventario_funcionario WHERE cpf = '".$_POST['cpf']."'";
+    $select_fun = "SELECT id_funcionario, cpf FROM manager_inventario_funcionario WHERE cpf = '".$_POST['cpf']."'";
     $resultado_select = mysqli_query($conn, $select_fun);
     $linha_select = mysqli_fetch_assoc($resultado_select);
     
     //aplicando a regra caso tenha um funcionario
     if($linha_select['cpf'] != NULL){
-        header('location: add_funcionario.php?msn=1');
+        //fazendo um update
+
+        $updateFuncionario = "UPDATE manager_inventario_funcionario SET usuario = '".$_SESSION['id']."', cpf = '".$_POST['cpf']."', nome = '".$_POST['nome']."', funcao = '".$_POST['funcao']."', departamento = '".$_POST['departamento']."', empresa = '".$_POST['empresa']."', data_cadastro = '".$data_hoje."', status = '9' WHERE id_funcionario = '".$linha_select['id_funcionario']."'";
+
+        //$resultupdate = mysqli_query($conn, $updateFuncionario) or die(mysqli_error($conn));
+
+        echo $updateFuncionario;
+
+        exit;
+
     }else{        
         /*---------------------- SALVANDO O FUNCIONARIO ----------------------*/
 
