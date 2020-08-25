@@ -16,8 +16,11 @@ require 'conexao.php';
 
 //salvando equipamento no funcionário
 
-$queryInFunEquip = "UPDATE manager_inventario_equipamento SET id_funcionario = '".$_GET['id_funcio'].", status = 1 ' WHERE (id_equipamento = '".$_GET['id_equip']."')";
-$resultIncFunEquip = mysqli_query($conn, $queryInFunEquip);
+$queryInFunEquip = "UPDATE manager_inventario_equipamento SET id_funcionario = '".$_GET['id_funcio']."', status = 1 WHERE id_equipamento = '".$_GET['id_equip']."'";
+
+$resultIncFunEquip = mysqli_query($conn, $queryInFunEquip) or die(mysqli_error($conn));
+
+
 
 //trazendo todos os equipamentos DISPONIVEIS
 $queryDisponiveis = "SELECT 
