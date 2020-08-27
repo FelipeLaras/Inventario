@@ -18,17 +18,17 @@ $query_funcionario =  "SELECT
 MIF.cpf, 
 MIF.nome, 
 MDF.nome AS funcao,
- MDD.nome AS departamento, 
- MDE.nome AS empresa
+MDD.nome AS departamento, 
+MDE.nome AS empresa
 FROM manager_inventario_funcionario MIF
-INNER JOIN manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-INNER JOIN manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-INNER JOIN manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
+LEFT JOIN manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
+LEFT JOIN manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
+LEFT JOIN manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
 WHERE MIF.id_funcionario = ".$_GET['id_funcionario']."";
 
 $resultado_funcionarios = mysqli_query($conn, $query_funcionario);
 
-$row_fun = mysqli_fetch_assoc($resultado_funcionarios);	
+$row_fun = mysqli_fetch_assoc($resultado_funcionarios);
 
 /*PEGANDO DADOS DO EQUIPAMENTO*/
 $query_equipamento = "SELECT 
@@ -69,6 +69,11 @@ MIE.tipo_equipamento IN (9 , 5)";
 
 $resulado_equipamento = mysqli_query($conn, $query_equipamento);
 $row_equip = mysqli_fetch_assoc($resulado_equipamento);
+
+
+if(empty($row_fun['funcao'])){
+	header('location: equip_edit.php?id_equip='.$row_equip['id_equipamento'].'&id_fun='.$_GET['id_funcionario'].'&tipo='.$_GET['tipo'].'&erro=1');
+}
 
 /*CORPO DO PDF*/
 $html = "
