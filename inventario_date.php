@@ -15,25 +15,6 @@ if($limit_caracter < $total_sting){
 	exit;	
 }//if verificação caracteres
 
-if($_FILES['checklist']  != NULL){
-
-	$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['checklist']['name']."' AND deletar = '0'";
-	$resultNomeFile = mysqli_query($conn, $queryNomeFile);
-	
-	if($nomeFile = mysqli_fetch_assoc($resultNomeFile)){
-
-		//pegando ultima id do funcionario para mover a tela.acao
-
-		$queryUltiFuncionario = "SELECT max(id_funcionario) as id_funcionario FROM manager_inventario_funcionario";
-		$resultUltimoFuncionario = mysqli_query($conn, $queryUltiFuncionario);
-		$ultimofuncionario = mysqli_fetch_assoc($resultUltimoFuncionario);
-
-		header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&msn=9');
-
-		exit;
-	}
-}
-
 /*--------------------EXCLUIR ANEXO DE UM EQUIPAMENTO--------------------*/
 
 if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){

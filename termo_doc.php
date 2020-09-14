@@ -9,28 +9,6 @@ include 'conexao.php';
 $limit_caracter = 24;
 
 
-//Verificando se o arquivo já existe e ESTÁ ATIVO
-
-if($_FILES['termo'] != NULL){
-
-    $queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['termo']['name']."' AND deletar = '0'";
-    $resultNomeFile = mysqli_query($conn, $queryNomeFile);
-    
-    if($nomeFile = mysqli_fetch_assoc($resultNomeFile)){
-
-        //pegando ultima id do funcionario para mover a tela.acao
-
-        $queryUltiFuncionario = "SELECT max(id_funcionario) as id_funcionario FROM manager_inventario_funcionario";
-        $resultUltimoFuncionario = mysqli_query($conn, $queryUltiFuncionario);
-        $ultimofuncionario = mysqli_fetch_assoc($resultUltimoFuncionario);
-
-        header('location: inventario_edit.php?id='.$_POST['id_fun'].'&msn=9');
-
-        exit;
-    }
-}
-
-
 /*coletando informações do FILE*/ 
 $tipo_file = $_FILES['termo']['type'];//Pegando qual é a extensão do arquivo
 $caminho = "/var/www/html/ti/documentos/inventario/" . $_FILES['termo']['name'];//caminho onde será salvo o FILE
