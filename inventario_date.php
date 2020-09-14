@@ -8,7 +8,10 @@ include 'conexao.php';
 $limit_caracter = 24;
 
 //Verificando a quantidade de caracreres tem o nome do arquivo
-$total_sting = strlen($_FILES['checklist']['name']);
+
+if(!empty($_FILES['checklist']['name'])){
+	$total_sting = strlen($_FILES['checklist']['name']);
+}
 
 if($limit_caracter < $total_sting){
 	header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&msn=5');				
@@ -234,7 +237,6 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 	}//fim IF verificando se tem mais de 1 equipamento
 
 	/*------------------------------------------------------------------------------------------------------------------------------------------*/
-
 	
 	/*SALVANDO O checklist*/
 		
@@ -265,11 +267,14 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 			exit;
 		}
 
-		$insert_bd_file = "INSERT INTO manager_inventario_anexo (id_equipamento, usuario,  tipo_anexo, nome, caminho, tipo, data_criacao) 
-		VALUES ('".$_POST['id_equipamento']."', '".$_SESSION['id']."', '".$tipo_file."','".$_FILES['checklist']['name']."' ,'".$caminho_db."', '5', '".$date."')";
+		$insert_bd_file = "INSERT INTO manager_inventario_anexo (id_equipamento, id_funcionario, usuario,  tipo_anexo, nome, caminho, tipo, data_criacao) 
+		VALUES ('".$_POST['id_equipamento']."', '".$_POST['id_funcionario']."', '".$_SESSION['id']."', '".$tipo_file."','".$_FILES['checklist']['name']."' ,'".$caminho_db."', '5', '".$dataLog."')";
+
+		
+		echo $insert_bd_file;
 
 		//aplicando a query
-		$resultado_insert_file = mysqli_query($conn, $insert_bd_file);
+		$resultado_insert_file = mysqli_query($conn, $insert_bd_file) or die(mysqli_error($conn));
 	}//end IF salvando cheklist
 
 }//end IF

@@ -1245,7 +1245,7 @@ echo "
       <div class='control-group'>
         <div class='controls'>
           <label for='inputState'><i class='fas fa-angle-double-right'></i> Check-List:</label>
-          <input class='cpfcnpj span2 termo' type='file' name='checklist' required/>
+          <input class='cpfcnpj span2 termo' type='file' name='checklist' />
           <input type='text' name='tipo' value='5' style='display: none' />
         </div>
       </div>
@@ -1486,7 +1486,7 @@ $cont++;
                                   WHERE
                                     MIA.id_funcionario = ".$_GET['id']." AND 
                                     MIA.deletar = 0";
-                                    
+                                                                        
                                     if ($resultado_files = mysqli_query($conn, $query_files)) {
                                       while ($row_filess = mysqli_fetch_assoc($resultado_files)) {
 
