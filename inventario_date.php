@@ -290,13 +290,18 @@ if($_POST['list_fun'] != NULL){
 
 mysqli_close($conn);
 
-if($_POST['drop'] == 1){
-	header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&msn=3');
+
+switch ($_POST['drop']) {
+	case 1:
+		header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&msn=3');
+		break;
+	case 2:
+		header('location: inventario_equip_edit.php?id_equip='.$_POST['id_equipamento'].'&tipo='.$_POST['tipo_equip'].'&msn=2');
+		break;
+
+	default:
+		header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&msn=4');
+		break;
 }
 
-if($_POST['drop'] == 2){
-	header('location: inventario_equip_edit.php?id_equip='.$_POST['id_equipamento'].'&tipo='.$_POST['tipo_equip'].'&msn=2');
-}else{
-	header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&msn=4');
-}
 ?>
