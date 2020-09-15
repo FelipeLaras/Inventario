@@ -50,12 +50,13 @@ require 'header.php'
 </div>
 <!--MODAL CHEK LIST-->
 <div class="widget-header">
-    <h3>        
+    <h3>
         <a href="inventario_ti.php"><i class="icon-home"></i> &nbsp; Home</a>
         /
         <a href="inventario.php"><i class="icon-group"></i> &nbsp; Colaboradores</a>
         /
-        <a href="inventario_edit.php?id=<?= $_GET['id_fun'] ?>"><i class="icon-user"></i> &nbsp; <?= $_GET['nome'] ?></a>
+        <a href="inventario_edit.php?id=<?= $_GET['id_fun'] ?>"><i class="icon-user"></i> &nbsp;
+            <?= $_GET['nome'] ?></a>
         /
         <i class="fas fa-clipboard-list"></i> &nbsp;
         Chek-List
@@ -67,19 +68,20 @@ require 'header.php'
         <font style="vertical-align: inherit;" style="margin-top">
             <i class="fas fa-clipboard-list"></i> CHEK-LIST!
         </font>
-    </div>    
+    </div>
 </h3>
 <div class="widget-content">
     <div class="tabbable">
         <div id="formulario">
-            <form id='edit-profile' class='form-horizontal' action='form_checklist.php' method='post' style="margin-left: -12%" autocomplete="off" target="_blank">
+            <form id='edit-profile' class='form-horizontal' action='form_checklist.php' method='post'
+                style="margin-left: -12%" autocomplete="off" target="_blank">
                 <input name='id_fun' value='<?php echo $_GET['id_fun'] ?>' style='display: none' />
                 <div class="control-group">
                     <div class="controls">
                         <h5>1-) Chek-List do funcionário:</h5>
                         <p class="subtitulo"><?php echo $_GET['nome'] ?></p>
                     </div>
-                </div>   
+                </div>
                 <div class="control-group">
                     <div class="controls">
                         <h5>2-) Todos os equipamentos ?</h5>
@@ -89,7 +91,7 @@ require 'header.php'
                             <option value='1'>Não</option>
                         </select>
                     </div>
-                </div>               
+                </div>
                 <div id='equip_select' style='display: none'>
                     <div class="control-group">
                         <div class="controls">
@@ -124,10 +126,10 @@ require 'header.php'
                                         }
                                     }
                                 ?>
-                            </ul> 
-                        </div>                       
+                            </ul>
+                        </div>
                     </div>
-                </div>                                                        
+                </div>
                 <div class="form-actions">
                     <button type="submit" tar class="btn btn-primary pull-right" id="salvarTermo">Emitir</button>
                 </div>
@@ -139,15 +141,15 @@ require 'header.php'
 <!--ESCONDER UL-->
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js' type='text/javascript'></script>
 <script>
-    $('#selectEquip').change(
-        function() {
-                $('#equip_select').hide();
+$('#selectEquip').change(
+    function() {
+        $('#equip_select').hide();
 
-                if (this.value == '1') {
-                $('#equip_select').show();
-                }
+        if (this.value == '1') {
+            $('#equip_select').show();
         }
-    );
-</script> 
+    }
+);
+</script>
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
