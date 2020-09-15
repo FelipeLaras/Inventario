@@ -7,6 +7,7 @@ Bootstrap Admin Template by EGrappler.com
 [1. Global]
 */
 
+
 body {
     background: #f9f6f1;
     font: 13px/1.7em 'Open Sans';
@@ -122,6 +123,32 @@ div#botao {
 
 
 /*FELIPE*/
+
+.spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+	border: 5px solid #DCDCDC;
+	border-left-color: #00CC99;
+	border-radius: 100%;
+	height: 50px;
+	width: 50px;
+}
+
+.spinner.is-animating {
+    animation: loading 2s cubic-bezier(0, .25, .7125, .1) infinite;
+}
+
+
+@keyframes loading {
+	0% {
+		transform: rotate(0);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 .pdf{
     color: red;
     font-size: 9px;
