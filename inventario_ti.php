@@ -45,7 +45,7 @@ if ($linha_ver['id_equipamento'] == NULL) {
    $resul = mysqli_query($conn, $update_ver_funcio) or die(mysqli_error($conn));
 }
 
-   mysqli_close($conn);
+   $conn -> close();
    ?>
 <?php  require 'header.php'?><!--Chamando a Header-->
 <div class="subnavbar">
