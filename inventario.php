@@ -2,8 +2,7 @@
    //aplicando para usar varialve em outro arquivo
    session_start();
    unset($_SESSION['id_funcionario']);//LIMPANDO A SESSION
-   //chamando conexão com o banco
-   require 'conexao.php';
+   
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
      header('location: index.html');
@@ -13,84 +12,12 @@
        header('location: error.php');
    }
 
-
-/* ------------------------------ limando os históricos ------------------------------ */
- 
-//pegando os funcionarios que estão com o status diferente de 8(Demitido) e 3(Falta termo)
-
-$query_funcionario = "SELECT id_funcionario FROM manager_inventario_funcionario WHERE status NOT IN (8,3)";
-
-$result_funcionario = mysqli_query($conn, $query_funcionario);
-
-while($funcionario = mysqli_fetch_assoc($result_funcionario)){
-
-   $limpar = "SELECT id FROM manager_invent_historico WHERE id_funcionario = ".$funcionario['id_funcionario']."";
-   $result_limpar = mysqli_query($conn, $limpar);
-
-   while($limpar_historico = mysqli_fetch_assoc($result_limpar)){
-
-      $deletar = "UPDATE manager_invent_historico SET deletado = 1 WHERE id = ".$limpar_historico['id']."";
-      $result_deletar = mysqli_query($conn, $deletar) or die(mysqli_error($conn));
-      
-   }//fim while deletando
-
-}//fim while verificando usuário
-
-
-/* ------------------------------ fim limpando os históricos ------------------------------ */
-
-//contador
-$contador = 0;
-//query para a contagem dos itens ativos, faltaTermo e demitido.
-$query_f = "SELECT 
-         COUNT(status) AS faltaTermo
-         FROM
-         manager_inventario_funcionario
-         WHERE
-         status = 3 AND deletar = 0";
-$resultado_f = mysqli_query($conn, $query_f);
-$row_f = mysqli_fetch_assoc($resultado_f);
-
-/*-----------------------------------------------------------------------------*/
-
-$query_a = "SELECT 
-         COUNT(status) AS ativo
-         FROM
-         manager_inventario_funcionario
-         WHERE
-         status = 4 AND deletar = 0";
-$resultado_a = mysqli_query($conn, $query_a);
-$row_a = mysqli_fetch_assoc($resultado_a);
-
-/*-----------------------------------------------------------------------------*/
-         
-$query_d = "SELECT 
-         COUNT(status) AS demitido
-         FROM
-         manager_inventario_funcionario
-         WHERE
-         status = 8 AND deletar = 0";
-$resultado_d = mysqli_query($conn, $query_d);
-$row_d = mysqli_fetch_assoc($resultado_d);
-
-/*-----------------------------------------------------------------------------*/
-         
-$query_Squip = "SELECT 
-         COUNT(status) AS sem_equip
-         FROM
-         manager_inventario_funcionario
-         WHERE
-         status = 9 AND deletar = 0";
-$resultado_Squip = mysqli_query($conn, $query_Squip);
-$row_Squip = mysqli_fetch_assoc($resultado_Squip);
+   require_once('header.php');
+   require_once('queryColaborador.php');
+   require_once('conexao.php');
 
 ?>
-<?php  require 'header.php';?>
 <style>
-.col-sm-12.col-md-6 {
-    width: 10px;
-}
-
 select.form-control.form-control-sm {
     margin-top: 28px;
 }
@@ -219,10 +146,10 @@ select.form-control.form-control-sm {
                     <th class="titulo">FUNÇÃO</th>
                     <th class="titulo">DEPARTAMENTO</th>
                     <th class="titulo">EMPRESA/FILIAL</th>
-                    <th class="titulo" style='width: 140px;'>EQUIPAMENTOS
+                    <th class="titulo" style='width: 245px;'>EQUIPAMENTOS
                         <i class="icon-lithe icon-question-sign" title="| Quantidade - Nome |"></i>
                     </th>
-                    <th class="titulo" style='width: 126px'>STATUS</th>
+                    <th class="titulo">STATUS</th>
                     <th class="titulo acao">AÇÃO</th>
                 </tr>
             </thead>
@@ -230,71 +157,79 @@ select.form-control.form-control-sm {
                 <?php
                //criando a pesquisa dos funcionários
                $query = "SELECT 
-               F.id_funcionario,
-               F.nome,
-               F.cpf,
-               Fu.nome AS funcao,
-               D.nome AS departamento,
-               E.nome AS empresa,
-               S.nome AS status,
-               F.status AS id_status
-           FROM
-               manager_inventario_funcionario F
-                  LEFT JOIN
-               manager_dropfuncao Fu ON F.funcao = Fu.id_funcao
-                  LEFT JOIN
-               manager_dropdepartamento D ON F.departamento = D.id_depart
-                  LEFT JOIN
-               manager_dropempresa E ON F.empresa = E.id_empresa
-                  LEFT JOIN
-               manager_dropstatus S ON F.status = S.id_status
-           WHERE
-               F.deletar = 0 AND F.funcao IS NOT NULL "; 
+                              F.id_funcionario,
+                              F.nome,
+                              F.cpf,
+                              Fu.nome AS funcao,
+                              D.nome AS departamento,
+                              E.nome AS empresa,
+                              S.nome AS status,
+                              F.status AS id_status
+                        FROM
+                              manager_inventario_funcionario F
+                        LEFT JOIN
+                              manager_dropfuncao Fu ON F.funcao = Fu.id_funcao
+                        LEFT JOIN
+                              manager_dropdepartamento D ON F.departamento = D.id_depart
+                        LEFT JOIN
+                              manager_dropempresa E ON F.empresa = E.id_empresa
+                        LEFT JOIN
+                              manager_dropstatus S ON F.status = S.id_status
+                        WHERE
+                              F.deletar = 0 AND F.funcao IS NOT NULL "; 
 
-            if($_GET['status'] != NULL){
-               $query .= "AND F.status = ".$_GET['status']."";
-            }
+                           if($_GET['status'] != NULL){
+                              $query .= "AND F.status = ".$_GET['status']."";
+                           }
               
                //0 = ativo, 1 = desativado
                //Criando a pesquisa para contagem  
 
                //aplicando a regra e organizando na tela
-               if ($resultado = mysqli_query($conn, $query)){
+               if ($resultado = $conn -> query($query)){
                
-               while($row = mysqli_fetch_assoc($resultado)){
+               while($row = $resultado -> fetch_assoc()){
 
 
                /*---------------------------- contador para o histórico DEMITIDOS ---------------------------- */      
-               $query_HistoricoDemitidos = "SELECT count(id_funcionario) AS historico FROM manager_invent_historico where id_funcionario = ".$row['id_funcionario']." AND status_funcionario = 8 AND deletado = 0";
-               $result_HistoricoDemitidos = mysqli_query($conn, $query_HistoricoDemitidos);
-               $historico_demitidos = mysqli_fetch_assoc($result_HistoricoDemitidos);    
+               $query_HistoricoDemitidos = "SELECT 
+                                                count(id_funcionario) AS historico 
+                                             FROM 
+                                                manager_invent_historico 
+                                             WHERE 
+                                                id_funcionario = ".$row['id_funcionario']." AND 
+                                                status_funcionario = 8 AND 
+                                                deletado = 0";
+               $result_HistoricoDemitidos = $conn -> query($query_HistoricoDemitidos);
+
+               $historico_demitidos = $result_HistoricoDemitidos -> fetch_assoc();   
+
                /*---------------------------- FIM contador para o histórico demitidos ---------------------------- */    
 
                /*---------------------------- contador para o histórico FALTA TERMO ---------------------------- */      
-               $query_historico = "SELECT count(id_funcionario) AS historico FROM manager_invent_historico where id_funcionario = ".$row['id_funcionario']." AND status_funcionario = 3 AND deletado = 0";
-               $result_historico = mysqli_query($conn, $query_historico);
-               $historico_fataTermo = mysqli_fetch_assoc($result_historico);    
+               $query_historico = "SELECT 
+                                       count(id_funcionario) AS historico 
+                                    FROM 
+                                       manager_invent_historico 
+                                    WHERE 
+                                       id_funcionario = ".$row['id_funcionario']." AND 
+                                       status_funcionario = 3 AND 
+                                       deletado = 0";
+               $result_historico = $conn -> query($query_historico);
+               $historico_fataTermo = $result_historico -> fetch_assoc();    
                /*---------------------------- FIM contador para o histórico FALTA TERMO ---------------------------- */ 
 
                $query_equipamento = "SELECT 
-                     COUNT(*) AS quantidade, DQ.nome AS equipamento
-               FROM
-                     manager_inventario_equipamento IQ
-                        LEFT JOIN
-                     manager_dropequipamentos DQ ON IQ.tipo_equipamento = DQ.id_equip
-               WHERE
-                     IQ.deletar = 0 AND IQ.id_funcionario = ".$row['id_funcionario']." GROUP BY DQ.id_equip";
-               $resultado_equipamento = mysqli_query($conn, $query_equipamento); 
+                                          COUNT(*) AS quantidade, DQ.nome AS equipamento
+                                    FROM
+                                          manager_inventario_equipamento IQ
+                                    LEFT JOIN
+                                          manager_dropequipamentos DQ ON IQ.tipo_equipamento = DQ.id_equip
+                                    WHERE
+                                          IQ.deletar = 0 AND 
+                                          IQ.id_funcionario = '".$row['id_funcionario']."' GROUP BY DQ.id_equip";
+               $resultado_equipamento = $conn -> query($query_equipamento); 
 
-/*UM PEQUENO AJUSTE PARA ELIMINAR FUNCIONARIOS QUE NÃO POSSUEM EQUIPAMENTOS*/
-
-$verificar_funcio = "SELECT id_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = '".$row['id_funcionario']."'";
-$resulado_ver_funci = mysqli_query($conn, $verificar_funcio);
-$linha_ver = mysqli_fetch_assoc($resulado_ver_funci);
-if ($linha_ver['id_equipamento'] == NULL) {
-   $update_ver_funcio = "UPDATE manager_inventario_funcionario SET status = 9 WHERE id_funcionario = '".$row['id_funcionario']."'";
-   $resul = mysqli_query($conn, $update_ver_funcio) or die(mysqli_error($conn));
-}
       echo "<tr>
                <td class='fonte'>".$row['id_funcionario']."</td>
                <td class='fonte'>".$row['nome']."</td>
@@ -304,7 +239,7 @@ if ($linha_ver['id_equipamento'] == NULL) {
                <td class='fonte'>".$row['empresa']."</td>
                <td class='fonte'>";
 
-               while ($row_equip = mysqli_fetch_assoc($resultado_equipamento)) {
+               while ($row_equip = $resultado_equipamento -> fetch_assoc()) {
 
                   if($_SESSION["perfil"] == 3){
                      if($row_equip['equipamento'] === 'CPU'){
@@ -319,33 +254,35 @@ if ($linha_ver['id_equipamento'] == NULL) {
 
                echo "</td>";
 
-               if ($row['id_status'] == 4) {//ativo
-                  echo "<td class='fonte'><i class='fas fa-circle' style='color: green;'></i> ".$row['status']."</td>";
-               }
-               if ($row['id_status'] == 10) {//Ausente
-                  echo "<td class='fonte'><i class='fas fa-circle' style='color: blue;'></i> ".$row['status']."</td>";
-               }
+               switch ($row['id_status']) {
 
-               if ($row['id_status'] == 3) {//faltando termo
-                  echo "<td class='fonte'><i class='fas fa-circle' style='color: #f3b37c7a;'></i> ".$row['status']."";
-                  /* ----------- CONTADOR -----------  */                          
-                  if($historico_fataTermo['historico'] != 0){//se não conter nenhum historico não precisa aparecer a informação
-                     echo 
-                     "<div class='numeral' style='margin-left: 81px;'>
-                        <span class='contador'>
-                           <a href='inventario_edit.php?id=".$row['id_funcionario']."&page=1' title='".$historico_fataTermo['historico']." Mensagens no histórico'>
-                              ".$historico_fataTermo['historico']."
-                           </a>
-                        </span>
-                     </div>";
-                  } 
-                  /* ----------- FIM CONTADOR -----------  */ 
-                  echo "</td>";
-               }
+                  case '4':
+                     echo "<td class='fonte'><i class='fas fa-circle' style='color: green; margin-left: 12px;' title='".$row['status']."'></i></td>";
+                  break;
 
-               if ($row['id_status'] == 8) {//demitido
-                  echo "<td class='fonte'>
-                           <i class='fas fa-circle' style='color: black;'></i> ".$row['status'].""; 
+                  case '10':
+                     echo "<td class='fonte'><i class='fas fa-circle' style='color: blue; margin-left: 12px;' title='".$row['status']."'></i></td>";
+                  break;
+                  case '3':
+                     echo "<td class='fonte'><i class='fas fa-circle' style='color: #f3b37c7a; margin-left: 12px;' title='".$row['status']."'></i>";
+                     /* ----------- CONTADOR -----------  */                          
+                     if($historico_fataTermo['historico'] != 0){//se não conter nenhum historico não precisa aparecer a informação
+                        echo 
+                        "<div class='numeral'>
+                           <span class='contador'>
+                              <a href='inventario_edit.php?id=".$row['id_funcionario']."&page=1' title='".$historico_fataTermo['historico']." Mensagens no histórico'>
+                                 ".$historico_fataTermo['historico']."
+                              </a>
+                           </span>
+                        </div>";
+                     } 
+                     /* ----------- FIM CONTADOR -----------  */ 
+                     echo "</td>";
+                  break;
+                  case '8':
+                     echo "<td class='fonte'>
+                           <i class='fas fa-circle' style='color: black; margin-left: 12px;' title='".$row['status']."'></i>";
+
                            /* ----------- CONTADOR -----------  */                          
                            if($historico_demitidos['historico'] != 0){//se não conter nenhum historico não precisa aparecer a informação
                               echo 
@@ -358,14 +295,13 @@ if ($linha_ver['id_equipamento'] == NULL) {
                               </div>";
                            } 
                            /* ----------- FIM CONTADOR -----------  */                           
-                  echo "</td>";
-               }
+                     echo "</td>";
+                  break;
+                  case '9':
+                     echo "<td class='fonte'><i class='fas fa-circle' style='color: darkgray; margin-left: 12px;' title=".$row['status']."'></i></td>";
+                  break;
+                  }
 
-               if ($row['id_status'] == 9) {//sem equipamento
-                  echo "<td class='fonte'><i class='fas fa-circle' style='color: darkgray;'></i> ".$row['status']."</td>";
-               }
-
-               
          echo "<td class='fonte  acao'>";
          
 
@@ -393,7 +329,7 @@ $contador++;
                }//fim WHILE
 
             }//fim IF                         
-               mysqli_close($conn);
+$conn -> close();
                ?>
             </tbody>
         </table>

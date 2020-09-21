@@ -11,6 +11,40 @@
    
        header('location: error.php');
    }
+
+
+/* ------------------------------ limando os históricos ------------------------------ */
+ 
+//pegando os funcionarios que estão com o status diferente de 8(Demitido) e 3(Falta termo)
+
+$query_funcionario = "SELECT id_funcionario FROM manager_inventario_funcionario WHERE status NOT IN (8,3)";
+
+$result_funcionario = mysqli_query($conn, $query_funcionario);
+
+while($funcionario = mysqli_fetch_assoc($result_funcionario)){
+
+   $limpar = "SELECT id FROM manager_invent_historico WHERE id_funcionario = ".$funcionario['id_funcionario']."";
+   $result_limpar = mysqli_query($conn, $limpar);
+
+   while($limpar_historico = mysqli_fetch_assoc($result_limpar)){
+
+      $deletar = "UPDATE manager_invent_historico SET deletado = 1 WHERE id = ".$limpar_historico['id']."";
+      $result_deletar = mysqli_query($conn, $deletar) or die(mysqli_error($conn));
+      
+   }//fim while deletando
+
+}//fim while verificando usuário
+
+/*UM PEQUENO AJUSTE PARA ELIMINAR FUNCIONARIOS QUE NÃO POSSUEM EQUIPAMENTOS*/
+
+$verificar_funcio = "SELECT id_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = '".$row['id_funcionario']."'";
+$resulado_ver_funci = mysqli_query($conn, $verificar_funcio);
+$linha_ver = mysqli_fetch_assoc($resulado_ver_funci);
+if ($linha_ver['id_equipamento'] == NULL) {
+   $update_ver_funcio = "UPDATE manager_inventario_funcionario SET status = 9 WHERE id_funcionario = '".$row['id_funcionario']."'";
+   $resul = mysqli_query($conn, $update_ver_funcio) or die(mysqli_error($conn));
+}
+
    mysqli_close($conn);
    ?>
 <?php  require 'header.php'?><!--Chamando a Header-->
