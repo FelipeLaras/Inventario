@@ -2,13 +2,13 @@
 //aplicando para usar variavel em outro arquivo
 session_start();
 //chamando conexão com o bancoF
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-header('location: index.html');
+header('location: ../front/index.html');
 
 }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
-header('location: error.php');
+header('location: ../front/error.php');
 }
 ?>
 <?php require 'header.php' ?>
@@ -140,21 +140,6 @@ header('location: error.php');
                                     <i class="fas fa-print fa-2x"></i>
                                 </a>
                             </label>
-
-
-
-                            <!--RAMAL
-                            <label class="checkbox inline">
-                                <a href="javascript:;" class="icone" onclick="mostrar('ramal')" title="RAMAL">
-                                    <i class="fas fa-fax fa-2x"></i>
-                                </a>
-                            </label>
-                            ESCANENR
-                            <label class="checkbox inline">
-                                <a href="javascript:;" class="icone" onclick="mostrar('scan')" title="SCANNER">
-                                    <i class="fas fa-print fa-2x"></i>
-                                </a>
-                            </label>-->
                         </div>
                         <!--CAMPO ESCONDIDOS CPU-->
                         <?php

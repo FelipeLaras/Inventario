@@ -2,7 +2,7 @@
 session_start();
 
 //chamando o banco de dados
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 /*---------------------------------------------------------------------------------*/
 
 //trocando data
@@ -21,8 +21,8 @@ if($_POST['tipo'] == 1){
    /*VALIDAÇÃO DO FILE*/
    $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-   $result =  mysqli_query($conn, $sql_file);//aplicando a query
-   $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+   $result =  $conn -> query($sql_file);//aplicando a query
+   $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
    if($tipo_file != NULL){
            /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -47,8 +47,8 @@ if($_POST['tipo'] == 1){
        data_nota = '".$data."',
        deletar = 0
    WHERE
-       id_equipamento = '".$_POST['id_equip']."';";
-   $result_update_windows = mysqli_query($conn, $update_windows) or die(mysqli_error($conn));
+       id_equipamento = '".$_POST['id_equip']."'";
+   $result_update_windows = $conn -> query($update_windows);
 }//end teminando de salvar o WINDOWS
 
 
@@ -68,8 +68,8 @@ if($_POST['tipo'] == 2){
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
  
-    $result =  mysqli_query($conn, $sql_file);//aplicando a query
-    $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+    $result =  $conn -> query($sql_file);//aplicando a query
+    $row = $result -> fetch_array();//salvando o resultado em uma variavel
  
     if($tipo_file != NULL){
             /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -95,7 +95,7 @@ if($_POST['tipo'] == 2){
         deletar = 0
     WHERE
         id_equipamento = '".$_POST['id_equip']."';";
-    $result_update_office = mysqli_query($conn, $update_office) or die(mysqli_error($conn));
+    $result_update_office = $conn -> query($update_office);
  
  }//end teminando de salvar o OFFICE
 
@@ -116,8 +116,8 @@ if($_POST['tipo'] == 3){
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
  
-    $result =  mysqli_query($conn, $sql_file);//aplicando a query
-    $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+    $result =  $conn -> query($sql_file);//aplicando a query
+    $row = $result -> fetch_array();//salvando o resultado em uma variavel
  
     if($tipo_file != NULL){
             /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -151,15 +151,15 @@ if($_POST['tipo'] == 3){
                         '3', 
                         '".$data."')";
 
-    $result_termo = mysqli_query($conn, $update_termo) or die(mysqli_error($conn));
+    $result_termo = $conn -> query($update_termo);
 
     //Alterar o status do equipamento + funcionario
     $incluir_termo = "UPDATE manager_inventario_equipamento SET termo = 0 WHERE id_equipamento = ".$_POST['id_equip']."";
-    $result_termo = mysqli_query($conn, $incluir_termo) or die(mysqli_error($conn));
+    $result_termo = $conn -> query($incluir_termo);
 
     //alterando funcionario
     $status_funcionario = "UPDATE manager_inventario_funcionario SET status = 4 where id_funcionario = ".$_POST['id_fun']."";
-    $result_funcionario = mysqli_query($conn, $status_funcionario) or die(mysqli_error($conn));
+    $result_funcionario = $conn -> query($status_funcionario);
 
  }//end teminando de salvar o TERMO
 
@@ -169,4 +169,4 @@ if($_POST['tipo'] == 3){
  header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
 
  //fechando conexão com o banco de dados
- mysqli_close($conn);
+ $conn -> close($conn);

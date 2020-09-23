@@ -2,16 +2,19 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o bancoF
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-header('location: index.html');
+header('location: ../front/index.html');
 
 }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
-header('location: error.php');
+header('location: ../front/error.php');
 }
+
+require_once('header.php'); 
+require_once('../query/query_dropdowns.php');
+
 ?>
-<?php require 'header.php' ?>
 <div class="subnavbar">
     <div class="subnavbar-inner">
         <div class="container">
@@ -199,10 +202,8 @@ header('location: error.php');
 
                                         echo "<option value='".$_SESSION['departamento_cadastrado']."'>".$_SESSION['nome_departamento_cadastrado']."</option>";
                                         echo "<option value=''>---</option>";
-                                        //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                        $query_depart = "SELECT * from manager_dropdepartamento where deletar = 0;";
-                                        $resultado_depart = mysqli_query($conn, $query_depart);
-                                        while ($row_depart = mysqli_fetch_assoc($resultado_depart)) {
+
+                                        while ($row_depart = $resultado_depart -> fetch_assoc()) {
                                             echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
                                         }
 
@@ -218,18 +219,16 @@ header('location: error.php');
                                             echo "<select name='depart_funcionario' id='depart_funcionario' class='span2' readonly='readonly'>";
                                         }
 
-                                        $query_depart = "SELECT * from manager_dropdepartamento where deletar = 0 AND id_depart = '".$_SESSION['departamento_nao_cadastrado']."';";
-                                        $resultado_depart = mysqli_query($conn, $query_depart);
-                                        $row_depart = mysqli_fetch_assoc($resultado_depart);
+                                        $query_depart = "SELECT * from manager_dropdepartamento where deletar = 0 AND id_depart = '".$_SESSION['departamento_nao_cadastrado']."'";
+                                        $resultado_depart = $conn -> query($query_depart);
+                                        $row_depart = $resultado_depart -> fetch_assoc();
                                         echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
                                         unset($_SESSION['departamento_nao_cadastrado']);
                                     }else {                                        
 
                                         echo "<select name='depart_funcionario' id='depart_funcionario' class='span2' required >";echo "<option value=''>---</option>";
-                                        //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                        $query_depart = "SELECT * from manager_dropdepartamento where deletar = 0;";
-                                        $resultado_depart = mysqli_query($conn, $query_depart);
-                                        while ($row_depart = mysqli_fetch_assoc($resultado_depart)) {
+
+                                        while ($row_depart = $resultado_depart -> fetch_assoc()) {
                                             echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
                                         }
                                     } //final da verificação de cadastro de usuário
@@ -250,10 +249,8 @@ header('location: error.php');
                                         }
                                         
                                         echo "<option value='".$_SESSION['funcao_cadastrado']."'>".$_SESSION['nome_funcao_cadastrado']."</option>";
-                                        //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                        $query_funcao = "SELECT * from manager_dropfuncao where deletar = 0 order by nome ASC;";
-                                        $resultado_funcao = mysqli_query($conn, $query_funcao);
-                                        while ($row_funcao = mysqli_fetch_assoc($resultado_funcao)) {
+
+                                        while ($row_funcao = $resultado_funcao -> fetch_assoc()) {
                                             echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";
                                         }
 
@@ -271,8 +268,8 @@ header('location: error.php');
 
 
                                         $query_funcao = "SELECT * from manager_dropfuncao where deletar = 0 AND id_funcao = '".$_SESSION['funcao_nao_cadastrado']."';";
-                                        $resultado_funcao = mysqli_query($conn, $query_funcao);
-                                        $row_funcao = mysqli_fetch_assoc($resultado_funcao);
+                                        $resultado_funcao = $conn -> query($query_funcao);
+                                        $row_funcao = $resultado_funcao -> fetch_assoc();
                                         echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";
                                         unset($_SESSION['funcao_nao_cadastrado']);
                                     }else {
@@ -280,10 +277,8 @@ header('location: error.php');
                                         echo "<select name='funcao_funcionario' id='funcao_funcionario' class='span2' required >";
 
                                         echo "<option value=''>---</option>";
-                                        //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                        $query_funcao = "SELECT * from manager_dropfuncao where deletar = 0 order by nome ASC;";
-                                        $resultado_funcao = mysqli_query($conn, $query_funcao);
-                                        while ($row_funcao = mysqli_fetch_assoc($resultado_funcao)) {
+
+                                        while ($row_funcao = $resultado_funcao -> fetch_assoc()) {
                                             echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";
                                         }
                                     } //final da verificação de cadastro de usuário 
@@ -305,10 +300,8 @@ header('location: error.php');
                                         
                                         echo "<option value='".$_SESSION['empresa_cadastrado']."'>".$_SESSION['nome_empresa_cadastrado']."</option>";
                                         echo "<option value=''>---</option>";
-                                        //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                        $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 ;";
-                                        $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                        while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+
+                                        while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
                                             echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                         }
 
@@ -324,8 +317,8 @@ header('location: error.php');
                                         }
 
                                         $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 AND id_empresa = '".$_SESSION['empresa_nao_cadastrado']."';";
-                                        $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                        $row_empresa = mysqli_fetch_assoc($resultado_empresa);
+                                        $resultado_empresa = $conn -> query($query_empresa);
+                                        $row_empresa = $resultado_empresa -> fetch_assoc();
                                         echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                         unset($_SESSION['empresa_nao_cadastrado']);
                                     }else {    
@@ -333,10 +326,8 @@ header('location: error.php');
                                         echo "<select name='empresa_funcionario' id='empresa_funcionario' class='span2' required >";
 
                                         echo "<option value=''>---</option>";
-                                        //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                        $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 ;";
-                                        $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                        while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+
+                                        while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
                                             echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                         }
                                     } //final da verificação de cadastro de usuário 
@@ -444,10 +435,7 @@ header('location: error.php');
                                 <select id='t_cob' name='empresa_cpu' class='span2'>
                                     <option value=''>---</option>
                                     <?php                   
-                                        //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                        $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 order by nome ASC;";
-                                        $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                        while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+                                        while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
                                         echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                         }
                                     ?>
@@ -461,12 +449,9 @@ header('location: error.php');
                             <div class="controls">
                                 <select id='t_cob' name='locacao_cpu' class='span2'>
                                     <option value=''>---</option>
-                                    <?php                   
-                                        //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                        $query_empresa = "SELECT * from manager_droplocacao where deletar = 0 order by nome ASC;";
-                                        $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                        while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
-                                        echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
+                                    <?php
+                                        while ($row_locacao = $resultado_locacao -> fetch_assoc()) {
+                                        echo "<option value='".$row_locacao['id_empresa']."'>".$row_locacao['nome']."</option>";
                                         }
                                     ?>
                                 </select>
@@ -480,7 +465,7 @@ header('location: error.php');
                                     <?php
                                         //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                         $query_depart_cpu = "SELECT * from manager_dropdepartamento where deletar = 0 order by nome ASC;";
-                                        $resultado_depart_cpu = mysqli_query($conn, $query_depart_cpu);
+                                        $resultado_depart_cpu = $conn -> query($query_depart_cpu);
                                         while ($row_depart_cpu = mysqli_fetch_assoc($resultado_depart_cpu)) {
                                         echo "<option value='".$row_depart_cpu['id_depart']."'>".$row_depart_cpu['nome']."</option>";
                                         }
@@ -617,7 +602,7 @@ header('location: error.php');
                                                             if($_SESSION['office'] != NULL){
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                                 $query_office_cpu = "SELECT * from manager_dropoffice where deletar = 0  AND nome like '%".$_SESSION['office']."%';";
-                                                                $resultado_so_cpu = mysqli_query($conn, $query_office_cpu);
+                                                                $resultado_so_cpu = $conn -> query($query_office_cpu);
                                                                 $row_so_cpu = mysqli_fetch_assoc($resultado_so_cpu);
                                                                 echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
                                                                 unset($_SESSION['office']);
@@ -625,7 +610,7 @@ header('location: error.php');
                                                                 echo "<option value=''>---</option>";
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                                 $query_office_cpu = "SELECT * from manager_dropoffice where deletar = 0 order by nome ASC;";
-                                                                $resultado_so_cpu = mysqli_query($conn, $query_office_cpu);
+                                                                $resultado_so_cpu = $conn -> query($query_office_cpu);
                                                                 while ($row_so_cpu = mysqli_fetch_assoc($resultado_so_cpu)) {
                                                                     echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
                                                                 }
@@ -658,7 +643,7 @@ header('location: error.php');
                                                         <?php                   
                                                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                             $empresa_locacao_cpu = "SELECT * from manager_droplocacao where deletar = 0 order by nome ASC;";
-                                                            $result_empresa_local_cpu = mysqli_query($conn, $empresa_locacao_cpu);
+                                                            $result_empresa_local_cpu = $conn -> query($empresa_locacao_cpu);
                                                             while ($empresa_localCPU = mysqli_fetch_assoc($result_empresa_local_cpu)) {
                                                             echo "<option value='".$empresa_localCPU['id_empresa']."'>".$empresa_localCPU['nome']."</option>";
                                                             }
@@ -676,7 +661,7 @@ header('location: error.php');
                                                         <?php                   
                                                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                             $query_empresa_OfficeCPU = "SELECT * from manager_dropempresa where deletar = 0 order by nome ASC;";
-                                                            $resultado_empresa_OfficeCPU = mysqli_query($conn, $query_empresa_OfficeCPU);
+                                                            $resultado_empresa_OfficeCPU = $conn -> query($query_empresa_OfficeCPU);
                                                             while ($row_empresaOfficeCPU = mysqli_fetch_assoc($resultado_empresa_OfficeCPU)) {
                                                             echo "<option value='".$row_empresaOfficeCPU['id_empresa']."'>".$row_empresaOfficeCPU['nome']."</option>";
                                                             }
@@ -752,7 +737,7 @@ header('location: error.php');
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                                 $query_so_cpu = "SELECT * from manager_dropsistemaoperacional where deletar = 0 AND nome like '%".$_SESSION['so']."%' ;";
 
-                                                                $resultado_so_cpu = mysqli_query($conn, $query_so_cpu);
+                                                                $resultado_so_cpu = $conn -> query($query_so_cpu);
                                                                 $row_so_cpu = mysqli_fetch_assoc($resultado_so_cpu);
                                                                 echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
                                                                 unset($_SESSION['so']);
@@ -761,7 +746,7 @@ header('location: error.php');
                                                                 echo "<option value=''>---</option>";
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                                 $query_so_cpu = "SELECT * from manager_dropsistemaoperacional where deletar = 0 order by nome ASC;";
-                                                                $resultado_so_cpu = mysqli_query($conn, $query_so_cpu);
+                                                                $resultado_so_cpu = $conn -> query($query_so_cpu);
                                                                 while ($row_so_cpu = mysqli_fetch_assoc($resultado_so_cpu)) {
                                                                     echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
                                                                 }
@@ -891,7 +876,7 @@ header('location: error.php');
                         <?php                   
                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
                             $query_local_note = "SELECT * from manager_droplocacao where deletar = 0 order by nome ASC;";
-                            $resultado_local_note = mysqli_query($conn, $query_local_note);
+                            $resultado_local_note = $conn -> query($query_local_note);
                             while ($row_local_note = mysqli_fetch_assoc($resultado_local_note)) {
                             echo "<option value='".$row_local_note['id_empresa']."'>".$row_local_note['nome']."</option>";
                             }
@@ -909,7 +894,7 @@ header('location: error.php');
                         <?php
                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
                             $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 order by nome ASC;";
-                            $resultado_empresa = mysqli_query($conn, $query_empresa);
+                            $resultado_empresa = $conn -> query($query_empresa);
                             while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
                             echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                             }
@@ -925,7 +910,7 @@ header('location: error.php');
                         <?php
                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
                             $query_depart = "SELECT * from manager_dropdepartamento where deletar = 0 order by nome ASC;";
-                            $resultado_depart = mysqli_query($conn, $query_depart);
+                            $resultado_depart = $conn -> query($query_depart);
                             while ($row_depart = mysqli_fetch_assoc($resultado_depart)) {
                             echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
                             }
@@ -1019,7 +1004,7 @@ header('location: error.php');
                         <?php
                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
                             $query_situacao_note = "SELECT * from manager_dropsituacao where deletar = 0 order by nome ASC;";
-                            $resultado_situacao_note = mysqli_query($conn, $query_situacao_note);
+                            $resultado_situacao_note = $conn -> query($query_situacao_note);
                             while ($row_situacao_note = mysqli_fetch_assoc($resultado_situacao_note)) {    
                                 echo "<option value='".$row_situacao_note['id_situacao']."'>".$row_situacao_note['nome']."</option>";
                             }
@@ -1092,7 +1077,7 @@ header('location: error.php');
                                                     //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                     $query_office_note = "SELECT * from manager_dropoffice where deletar = 0 AND nome LIKE '%".$_SESSION['office_note']."%' ;";
 
-                                                    $resultado_office_note = mysqli_query($conn, $query_office_note);
+                                                    $resultado_office_note = $conn -> query($query_office_note);
                                                     $row_office_note = mysqli_fetch_assoc($resultado_office_note);
                                                     echo "<option value='".$row_office_note['id']."'>".$row_office_note['nome']."</option>";
                                                     unset($_SESSION['office_note']);
@@ -1100,7 +1085,7 @@ header('location: error.php');
                                                     echo "<option value=''>---</option>";
                                                     //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                     $query_office_note = "SELECT * from manager_dropoffice where deletar = 0 order by nome ASC;";
-                                                    $resultado_office_note = mysqli_query($conn, $query_office_note);
+                                                    $resultado_office_note = $conn -> query($query_office_note);
                                                     while ($row_office_note = mysqli_fetch_assoc($resultado_office_note)) {
                                                         echo "<option value='".$row_office_note['id']."'>".$row_office_note['nome']."</option>";
                                                     }
@@ -1133,7 +1118,7 @@ header('location: error.php');
                                             <?php                   
                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                 $local_office_noteOFFICE = "SELECT * from manager_droplocacao where deletar = 0 order by nome ASC;";
-                                                $result_office_noteOFFICE = mysqli_query($conn, $local_office_noteOFFICE);
+                                                $result_office_noteOFFICE = $conn -> query($local_office_noteOFFICE);
                                                 while ($row_local_noteOFFICE = mysqli_fetch_assoc($result_office_noteOFFICE)) {
                                                 echo "<option value='".$row_local_noteOFFICE['id_empresa']."'>".$row_local_noteOFFICE['nome']."</option>";
                                                 }
@@ -1151,7 +1136,7 @@ header('location: error.php');
                                             <?php                   
                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                 $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 order by nome ASC;";
-                                                $resultado_empresa = mysqli_query($conn, $query_empresa);
+                                                $resultado_empresa = $conn -> query($query_empresa);
                                                 while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
                                                 echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                                 }
@@ -1224,7 +1209,7 @@ header('location: error.php');
                                                 if ($_SESSION['so_note'] != NULL) {
                                                     //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                     $query_so_note = "SELECT * from manager_dropsistemaoperacional where deletar = 0 AND nome LIKE '%".$_SESSION['so_note'] ."%' ;";
-                                                    $resultado_so_note = mysqli_query($conn, $query_so_note);
+                                                    $resultado_so_note = $conn -> query($query_so_note);
                                                     $row_so_note = mysqli_fetch_assoc($resultado_so_note);
                                                     echo "<option value='".$row_so_note['id']."'>".$row_so_note['nome']."</option>";
                                                     unset($_SESSION['so_note']);
@@ -1232,7 +1217,7 @@ header('location: error.php');
                                                     echo "<option value=''>---</option>";
                                                     //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                     $query_so_note = "SELECT * from manager_dropsistemaoperacional where deletar = 0 order by nome ASC;";
-                                                    $resultado_so_note = mysqli_query($conn, $query_so_note);
+                                                    $resultado_so_note = $conn -> query($query_so_note);
                                                     while ($row_so_note = mysqli_fetch_assoc($resultado_so_note)) {
                                                         echo "<option value='".$row_so_note['id']."'>".$row_so_note['nome']."</option>";
                                                     }
@@ -1358,7 +1343,7 @@ header('location: error.php');
                                             <option value="">---</option>
                                             <?php
                                                 $query_ramal = "SELECT * from manager_droplocacao where deletar = 0 ORDER BY nome";
-                                                $resultado_ramal= mysqli_query($conn, $query_ramal);
+                                                $resultado_ramal= $conn -> query($query_ramal);
                                                 while ($row_ramal = mysqli_fetch_assoc($resultado_ramal)) {
                                                 echo "<option value='".$row_ramal['id_empresa']."'>".$row_ramal['nome']."</option>";
                                                 }
@@ -1371,7 +1356,7 @@ header('location: error.php');
                                             <option value="">---</option>
                                             <?php
                                                 $query_ramalE = "SELECT * from manager_dropempresa where deletar = 0 ORDER BY nome";
-                                                $resultado_ramalE= mysqli_query($conn, $query_ramalE);
+                                                $resultado_ramalE= $conn -> query($query_ramalE);
                                                 while ($row_ramalE = mysqli_fetch_assoc($resultado_ramalE)) {
                                                 echo "<option value='".$row_ramalE['id_empresa']."'>".$row_ramalE['nome']."</option>";
                                                 }
@@ -1447,7 +1432,7 @@ header('location: error.php');
                                             <?php                   
                                                 //BUSCANDO NO BANCO
                                                 $query_empresa_scan = "SELECT * from manager_dropempresa where deletar = 0 order by nome ASC;";
-                                                $resultado_empresa_scan = mysqli_query($conn, $query_empresa_scan);
+                                                $resultado_empresa_scan = $conn -> query($query_empresa_scan);
                                                 while ($row_empresa_scan = mysqli_fetch_assoc($resultado_empresa_scan)) {
                                                     echo "<option value='".$row_empresa_scan['id_empresa']."'>".$row_empresa_scan['nome']."</option>";
                                                 }
@@ -1467,7 +1452,7 @@ header('location: error.php');
                                             <?php                   
                                                 //BUSCANDO NO BANCO
                                                 $query_local_scan = "SELECT * from manager_droplocacao where deletar = 0 order by nome ASC;";
-                                                $resultado_local_scan = mysqli_query($conn, $query_local_scan);
+                                                $resultado_local_scan = $conn -> query($query_local_scan);
                                                 while ($row_local_scan = mysqli_fetch_assoc($resultado_local_scan)) {
                                                     echo "<option value='".$row_local_scan['id_empresa']."'>".$row_local_scan['nome']."</option>";
                                                 }
@@ -1484,7 +1469,7 @@ header('location: error.php');
                                             <?php
                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                 $query_situacao_note = "SELECT * from manager_dropsituacao where deletar = 0 AND id_situacao IN (4,5) order by nome ASC;";
-                                                $resultado_situacao_note = mysqli_query($conn, $query_situacao_note);
+                                                $resultado_situacao_note = $conn -> query($query_situacao_note);
                                                 while ($row_situacao_note = mysqli_fetch_assoc($resultado_situacao_note)) {    
                                                     echo "<option value='".$row_situacao_note['id_situacao']."'>".$row_situacao_note['nome']."</option>";
                                                 }

@@ -1,7 +1,7 @@
 <?php
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 /*-----------------------------------------------------------------------------------------*/
 
 //1º Alterando o cadastro do funcionario
@@ -14,10 +14,10 @@ if($_GET['inativar'] != NULL){
     WHERE
     id_equipamento = ".$_GET['id_equipamento']." limit 1";
 
-    $result_condenar= mysqli_query($conn, $update_condenar) or die(mysqli_error($conn));
+    $result_condenar= $conn -> query($update_condenar);
     /*-----------------------------------------------------------------------------------------*/
     //fechando a coneção com o banco de dados
-    mysqli_close($conn);
+    $conn -> close();
     /*-----------------------------------------------------------------------------------------*/
     header('location:msn_inativo.php?id_equip='.$_GET['id_equipamento'].'');
     exit;
@@ -32,7 +32,7 @@ if($_GET['inativar'] != NULL){
     WHERE
     id_funcionario = ".$_POST['id_funcionario']." limit 1";
 
-    $result_funcionario = mysqli_query($conn, $update_funcionario) or die(mysqli_error($conn));
+    $result_funcionario = $conn -> query($update_funcionario);
 }
     
 /*-----------------------------------------------------------------------------------------*/
@@ -57,7 +57,7 @@ if($_POST['tipo_equipamento'] == 8){//desktop
     WHERE
     id_equipamento = ".$_POST['id_equipamento']."";
 
-    $result_equip_cpu = mysqli_query($conn, $update_equip_cpu) or die(mysqli_error($conn));
+    $result_equip_cpu = $conn -> query($update_equip_cpu);
 
     //windows
     $update_cpu_so = "UPDATE manager_sistema_operacional
@@ -68,7 +68,7 @@ if($_POST['tipo_equipamento'] == 8){//desktop
     locacao = '".$_POST['locacao_cpu']."'
     WHERE
     id_equipamento = ".$_POST['id_equipamento']." ";
-    $result_cpu_so = mysqli_query($conn, $update_cpu_so) or die(mysqli_error($conn));
+    $result_cpu_so = $conn -> query($update_cpu_so);
 
     //office
     if($_POST['id_office'] != NULL){
@@ -82,7 +82,7 @@ if($_POST['tipo_equipamento'] == 8){//desktop
         WHERE
         id_equipamento = ".$_POST['id_equipamento']."";
         
-        $result_cpu_office = mysqli_query($conn, $update_cpu_office);
+        $result_cpu_office = $conn -> query($update_cpu_office);
     }//end IF OFFICE CPU
 }
     
@@ -104,7 +104,7 @@ if($_POST['tipo_equipamento'] == 9){//notebook
     WHERE
     id_equipamento = ".$_POST['id_equipamento']."";
 
-    $result_equip_note = mysqli_query($conn, $update_equip_note) or die(mysqli_error($conn));
+    $result_equip_note = $conn -> query($update_equip_note);
 
     //windows
     $update_cpu_so = "UPDATE manager_sistema_operacional
@@ -116,7 +116,7 @@ if($_POST['tipo_equipamento'] == 9){//notebook
     WHERE
     id_equipamento = ".$_POST['id_equipamento']."";
 
-    $result_cpu_so = mysqli_query($conn, $update_cpu_so) or die(mysqli_error($conn));
+    $result_cpu_so = $conn -> query($update_cpu_so);
 
     //office
     if($_POST['id_office'] != NULL){
@@ -129,7 +129,7 @@ if($_POST['tipo_equipamento'] == 9){//notebook
         empresa = '".$_POST['empresa_note_office']."'
         WHERE
         id_equipamento = ".$_POST['id_equipamento']."";
-        $result_cpu_office = mysqli_query($conn, $update_cpu_office);
+        $result_cpu_office = $conn -> query($update_cpu_office);
     }//end IF OFFICE NOTEBOOK
 }
     
@@ -144,12 +144,12 @@ if($_POST['tipo_equipamento'] == 5){//ramal
     WHERE
     id_equipamento = '".$_POST['id_equipamento']."'; ";
     
-    $result_equip_ramal = mysqli_query($conn, $update_equip_ramal) or die(mysqli_error($conn));
+    $result_equip_ramal = $conn -> query($update_equip_ramal);
 }
 
 /*-----------------------------------------------------------------------------------------*/
 //fechando a coneção com o banco de dados
-mysqli_close($conn);
+$conn -> close();
 
 /*-----------------------------------------------------------------------------------------*/
 //3º Voltando para a tela de edição

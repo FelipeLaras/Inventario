@@ -2,7 +2,7 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //data de hoje
 $data_hoje = date('d/m/Y');
 /*------------------------------------------------------------------------------------------------ */
@@ -30,8 +30,8 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
     if($_POST['nome_cpu'] == NULL){
             
         $existe_patrimonio_cadastrado = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['num_patrimonio_cpu']."%'";
-        $resultado_patrimonio = mysqli_query($conn, $existe_patrimonio_cadastrado);
-        $row_patrimonio = mysqli_fetch_assoc($resultado_patrimonio);
+        $resultado_patrimonio = $conn -> query($existe_patrimonio_cadastrado);
+        $row_patrimonio = $resultado_patrimonio -> fetch_assoc();
 
         if($row_patrimonio['patrimonio'] != NULL){//se encontrou um patrimio
             /*---FUNCIONARIO---*/
@@ -72,8 +72,8 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
         }//end IF = encontrando equipamento 
     }elseif($_POST['empresa_cpu'] == 0){
         $existe_patrimonio_cadastrado = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['num_patrimonio_cpu']."%'";
-        $resultado_patrimonio = mysqli_query($conn, $existe_patrimonio_cadastrado);
-        $row_patrimonio = mysqli_fetch_assoc($resultado_patrimonio);
+        $resultado_patrimonio = $conn -> query($existe_patrimonio_cadastrado);
+        $row_patrimonio = $resultado_patrimonio -> fetch_assoc();
 
         if($row_patrimonio['patrimonio'] != NULL){//se encontrou um patrimio
             /*---FUNCIONARIO---*/
@@ -116,8 +116,8 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
 
     /*---------------ANTES DE MAIS NDA IREMOS VERIFICAR SE JÁ NÃO ESTÁ CADASTRADO O EQUIPAMENTO---------------*/
     $verificar_cadastro = "SELECT * FROM manager_inventario_equipamento WHERE patrimonio like '".$_POST['num_patrimonio_cpu']."';";
-    $resultado_verificar_cadastro = mysqli_query($conn, $verificar_cadastro);
-    $row_verificar = mysqli_fetch_assoc($resultado_verificar_cadastro);
+    $resultado_verificar_cadastro = $conn -> query($verificar_cadastro);
+    $row_verificar = $resultado_verificar_cadastro -> fetch_assoc();
 
     if($row_verificar['deletar'] == 1){
          /*---VOLTANDO PARA A TELA - ERRO 4 EQUIPAMENTO CONDENADO---*/
@@ -132,8 +132,8 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
 
     //1º iremos salvar o funcionario
     $existe_funcionario = "SELECT * FROM manager_inventario_funcionario  WHERE cpf = '".$_POST['gols1']."';";
-    $result_funcionario = mysqli_query($conn, $existe_funcionario);
-    if($row_id_funcionario = mysqli_fetch_assoc($result_funcionario)){
+    $result_funcionario = $conn -> query($existe_funcionario);
+    if($row_id_funcionario = $result_funcionario -> fetch_assoc()){
         //se caso já exista um funcionario
         $update = "UPDATE manager_inventario_funcionario 
                     SET 
@@ -144,7 +144,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                     status = '4'
                     WHERE id_funcionario = '".$row_id_funcionario['id_funcionario']."';";
         
-        $result_funcionario = mysqli_query($conn, $update) or die(mysqli_error($conn));
+        $result_funcionario = $conn -> query($update);
         
         //salvando agora o equipamento
         $new_equipamento = "INSERT INTO manager_inventario_equipamento
@@ -185,7 +185,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                             '0',
                             '".$data_hoje."',
                             '1');";
-        $result_new_equipamento = mysqli_query($conn, $new_equipamento) or die(mysqli_error($conn));
+        $result_new_equipamento = $conn -> query($new_equipamento);
         
 
         //salvando a nota do windows
@@ -197,8 +197,8 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-        $result =  mysqli_query($conn, $sql_file);//aplicando a query
-        $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+        $result =  $conn -> query($sql_file);//aplicando a query
+        $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
         /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
         if($tipo_file != NULL){
@@ -248,12 +248,12 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                             '".$nome_db."',
                             '".$data_nota."')";
 
-        $result_new_windows = mysqli_query($conn, $new_windows) or die(mysqli_error($conn));
+        $result_new_windows = $conn -> query($new_windows);
 
         //montando uma query para pegar o id do windows e enviar para criar um termo
         $pegando_windows = "SELECT max(id) AS id FROM manager_sistema_operacional";
-        $result_windows = mysqli_query($conn, $pegando_windows);
-        $row_windows = mysqli_fetch_assoc($result_windows);
+        $result_windows = $conn -> query($pegando_windows);
+        $row_windows = $result_windows ->fetch_assoc();
 
         //salvando agora o office
 
@@ -268,8 +268,8 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
             /*VALIDAÇÃO DO FILE*/
             $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-            $result =  mysqli_query($conn, $sql_file);//aplicando a query
-            $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+            $result =  $conn -> query($sql_file);//aplicando a query
+            $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
              if($tipo_file != NULL){   
                 /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -318,12 +318,12 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                                 '".$caminho_db."',
                                 '".$nome_db."',
                                 '".$data_nota."')";
-            $result_new_office = mysqli_query($conn, $new_office) or die(mysqli_error($conn));
+            $result_new_office = $conn -> query($new_office);
 
             //montando uma query para pegar o id do windows e enviar para criar um termo
             $pegando_office = "SELECT max(id) AS id FROM manager_office";
-            $result_office = mysqli_query($conn, $pegando_office);
-            $row_office = mysqli_fetch_assoc($result_office);
+            $result_office = $conn -> query($pegando_office);
+            $row_office = $result_office -> fetch_assoc();
         }//end teminando de salvar o office
         
     }else{
@@ -346,12 +346,12 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                                         '".$data_hoje."',
                                         '".$_SESSION['id']."',
                                         '4')";
-        $resultado_new_funcionario = mysqli_query($conn, $insert_funcionario_new) or die(mysqli_error($conn));
+        $resultado_new_funcionario = $conn -> query($insert_funcionario_new);
 
         //pegando o ultimo id do funcionario para usar nos SQLs abaixos
         $ultimo_id_funcionario = "SELECT max(id_funcionario) AS id_funcionario FROM manager_inventario_funcionario";
-        $result_id_funcionario = mysqli_query($conn, $ultimo_id_funcionario);
-        $row_id_funcionario = mysqli_fetch_assoc($result_id_funcionario);
+        $result_id_funcionario = $conn -> query($ultimo_id_funcionario);
+        $row_id_funcionario = $result_id_funcionario -> fetch_assoc();
 
         //salvando agora o equipamento
         $new_equipamento = " INSERT INTO manager_inventario_equipamento
@@ -390,7 +390,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                                 '".$_POST['serie_cpu']."',
                                 '".$data_hoje."',
                                 '1');";
-        $result_new_equipamento = mysqli_query($conn, $new_equipamento);
+        $result_new_equipamento = $conn -> query($new_equipamento);
         
 
         //salvando a nota do windows
@@ -402,8 +402,8 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-        $result =  mysqli_query($conn, $sql_file);//aplicando a query
-        $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+        $result =  $conn -> query($sql_file);//aplicando a query
+        $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
         /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
         if ($row['type'] != NULL) {//se é arquivo valido       
@@ -450,13 +450,13 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                             '".$caminho_db."',
                             '".$nome_db."',
                             '".$data_nota."')";
-        $result_new_windows = mysqli_query($conn, $new_windows) or die(mysqli_error($conn));
+        $result_new_windows = $conn -> query($new_windows);
 
 
         //montando uma query para pegar o id do windows e enviar para criar um termo
         $pegando_windows = "SELECT max(id) AS id FROM manager_sistema_operacional";
-        $result_windows = mysqli_query($conn, $pegando_windows);
-        $row_windows = mysqli_fetch_assoc($result_windows);
+        $result_windows = $conn -> query($pegando_windows);
+        $row_windows = $result_windows ->fetch_assoc();
 
         //salvando agora o office
 
@@ -471,8 +471,8 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
             /*VALIDAÇÃO DO FILE*/
             $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-            $result =  mysqli_query($conn, $sql_file);//aplicando a query
-            $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+            $result =  $conn -> query($sql_file);//aplicando a query
+            $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
             /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
             if ($row['type'] != NULL) {//se é arquivo valido       
@@ -519,12 +519,12 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                                 '".$caminho_db."',
                                 '".$nome_db."',
                                 '".$data_nota."')";
-            $result_new_office = mysqli_query($conn, $new_office) or die(mysqli_error($conn));
+            $result_new_office = $conn -> query($new_office);
 
             //montando uma query para pegar o id do windows e enviar para criar um termo
             $pegando_office = "SELECT max(id) AS id FROM manager_office";
-            $result_office = mysqli_query($conn, $pegando_office);
-            $row_office = mysqli_fetch_assoc($result_office);
+            $result_office = $conn -> query($pegando_office);
+            $row_office = $result_office -> fetch_assoc();
         }//end teminando de salvar o office
     }
 
@@ -541,8 +541,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
     if($_POST['nome_notebook'] == NULL){
             
         $existe_patrimonio_cadastrado = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['num_patrimonio_notebook']."%'";
-        $resultado_patrimonio = mysqli_query($conn, $existe_patrimonio_cadastrado);
-        $row_patrimonio = mysqli_fetch_assoc($resultado_patrimonio);
+        $resultado_patrimonio = $conn -> query($existe_patrimonio_cadastrado);
+        $row_patrimonio = $resultado_patrimonio -> fetch_assoc();
 
         if($row_patrimonio['patrimonio'] != NULL){//se encontrou um patrimio
             /*---FUNCIONARIO---*/
@@ -582,8 +582,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
         }//end IF = encontrando equipamento 
     }elseif($_POST['empresa_notebook'] == 0){
         $existe_patrimonio_cadastrado = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['num_patrimonio_notebook']."%'";
-        $resultado_patrimonio = mysqli_query($conn, $existe_patrimonio_cadastrado);
-        $row_patrimonio = mysqli_fetch_assoc($resultado_patrimonio);
+        $resultado_patrimonio = $conn -> query($existe_patrimonio_cadastrado);
+        $row_patrimonio = $resultado_patrimonio -> fetch_assoc();
 
         if($row_patrimonio['patrimonio'] != NULL){//se encontrou um patrimio
            /*---FUNCIONARIO---*/
@@ -635,8 +635,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
 
     /*---------------ANTES DE MAIS ANDA IREMOS VERIFICAR SE JÁ NÃO ESTÁ CADASTRADO O EQUIPAMENTO---------------*/
     $verificar_cadastro = "SELECT * FROM manager_inventario_equipamento WHERE patrimonio like '".$_POST['num_patrimonio_notebook']."';";
-    $resultado_verificar_cadastro = mysqli_query($conn, $verificar_cadastro);
-    $row_verificar = mysqli_fetch_assoc($resultado_verificar_cadastro);
+    $resultado_verificar_cadastro = $conn -> query($verificar_cadastro);
+    $row_verificar = $resultado_verificar_cadastro -> fetch_assoc();
 
     if($row_verificar['deletar'] == 1){
          /*---VOLTANDO PARA A TELA - ERRO 4 EQUIPAMENTO CONDENADO---*/
@@ -651,8 +651,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
 
     //1º iremos salvar o funcionario
     $existe_funcionario = "SELECT * FROM manager_inventario_funcionario  WHERE cpf = '".$_POST['gols1']."';";
-    $result_funcionario = mysqli_query($conn, $existe_funcionario);
-    if($row_funcionario = mysqli_fetch_assoc($result_funcionario)){
+    $result_funcionario = $conn -> query($existe_funcionario);
+    if($row_funcionario = $result_funcionario -> fetch_assoc()){
         //se caso já exista um funcionario
         $update = "UPDATE manager_inventario_funcionario 
                     SET 
@@ -663,7 +663,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                     status = '3' 
                     WHERE id_funcionario = '".$row_funcionario['id_funcionario']."';";
         
-        $result_funcionario = mysqli_query($conn, $update) or die(mysqli_error($conn));
+        $result_funcionario = $conn -> query($update);
         
         //salvando agora o equipamento
         $new_equipamento = "INSERT INTO manager_inventario_equipamento
@@ -706,7 +706,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                 '".$observacao_note."',
                                 '".$data_hoje."',
                                 '1')";
-        $result_new_equipamento = mysqli_query($conn, $new_equipamento) or die(mysqli_error($conn));
+        $result_new_equipamento = $conn -> query($new_equipamento);
         
 
         //salvando a nota do windows
@@ -718,8 +718,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-        $result =  mysqli_query($conn, $sql_file);//aplicando a query
-        $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+        $result =  $conn -> query($sql_file);//aplicando a query
+        $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
         /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
         if($tipo_file != NULL){
@@ -766,12 +766,12 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                             '".$caminho_db."',
                             '".$nome_db."',
                             '".$data_nota."')";              
-        $result_new_windows = mysqli_query($conn, $new_windows) or die(mysqli_error($conn));
+        $result_new_windows = $conn -> query($new_windows);
 
         //montando uma query para pegar o id do windows e enviar para criar um termo
         $pegando_windows = "SELECT max(id) AS id FROM manager_sistema_operacional";
-        $result_windows = mysqli_query($conn, $pegando_windows);
-        $row_windows = mysqli_fetch_assoc($result_windows);
+        $result_windows = $conn -> query($pegando_windows);
+        $row_windows = $result_windows ->fetch_assoc();
 
         //salvando agora o office
 
@@ -786,8 +786,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
             /*VALIDAÇÃO DO FILE*/
             $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-            $result =  mysqli_query($conn, $sql_file);//aplicando a query
-            $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+            $result =  $conn -> query($sql_file);//aplicando a query
+            $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
             if($tipo_file != NULL){
                 /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -837,12 +837,12 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                 '".$caminho_db."',
                                 '".$nome_db."',
                                 '".$data_nota."')";
-            $result_new_office = mysqli_query($conn, $new_office) or die(mysqli_error($conn));
+            $result_new_office = $conn -> query($new_office);
 
              //montando uma query para pegar o id do windows e enviar para criar um termo
              $pegando_office = "SELECT max(id) AS id FROM manager_office";
-             $result_office = mysqli_query($conn, $pegando_office);
-             $row_office = mysqli_fetch_assoc($result_office);
+             $result_office = $conn -> query($pegando_office);
+             $row_office = $result_office -> fetch_assoc();
         }//end teminando de salvar o office
 
         //ENVIANDO PARA O TERMO EM PDF
@@ -873,7 +873,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                         '".$data_hoje."',
                                         '".$_SESSION['id']."',
                                         '3')";
-        $resultado_new_funcionario = mysqli_query($conn, $insert_funcionario_new) or die(mysqli_error($conn));
+        $resultado_new_funcionario = $conn -> query($insert_funcionario_new);
 
         /*------------*/
 
@@ -885,8 +885,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
 
         //pegando o ultimo id do funcionario para usar nos SQLs abaixos
         $ultimo_id_funcionario = "SELECT max(id_funcionario) AS id_funcionario  FROM manager_inventario_funcionario";
-        $result_id_funcionario = mysqli_query($conn, $ultimo_id_funcionario);
-        $row_funcionario = mysqli_fetch_assoc($result_id_funcionario);
+        $result_id_funcionario = $conn -> query($ultimo_id_funcionario);
+        $row_funcionario = $result_id_funcionario -> fetch_assoc();
 
         //salvando agora o equipamento
         $new_equipamento = "INSERT INTO manager_inventario_equipamento
@@ -929,7 +929,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                 '".$observacao_note."',
                                 '".$data_hoje."',
                                 '1')";
-        $result_new_equipamento = mysqli_query($conn, $new_equipamento);
+        $result_new_equipamento = $conn -> query($new_equipamento);
         
 
         //salvando a nota do windows
@@ -941,8 +941,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-        $result =  mysqli_query($conn, $sql_file);//aplicando a query
-        $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+        $result =  $conn -> query($sql_file);//aplicando a query
+        $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
         if($tipo_file != NULL){
             /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -991,7 +991,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                             '".$caminho_db."',
                             '".$nome_db."',
                             '".$data_nota."')";              
-        $result_new_windows = mysqli_query($conn, $new_windows) or die(mysqli_error($conn));
+        $result_new_windows = $conn -> query($new_windows);
 
 
 
@@ -1014,8 +1014,8 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
             /*VALIDAÇÃO DO FILE*/
             $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-            $result =  mysqli_query($conn, $sql_file);//aplicando a query
-            $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+            $result =  $conn -> query($sql_file);//aplicando a query
+            $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
             if($tipo_file != NULL){
                     /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -1064,12 +1064,12 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                 '".$caminho_db."',
                                 '".$nome_db."',
                                 '".$data_nota."')";
-            $result_new_office = mysqli_query($conn, $new_office) or die(mysqli_error($conn));
+            $result_new_office = $conn -> query($new_office);
 
              //montando uma query para pegar o id do windows e enviar para criar um termo
              $pegando_office = "SELECT max(id) AS id FROM manager_office";
-             $result_office = mysqli_query($conn, $pegando_office);
-             $row_office = mysqli_fetch_assoc($result_office);
+             $result_office = $conn -> query($pegando_office);
+             $row_office = $result_office -> fetch_assoc();
         }//end teminando de salvar o office
 
         //ENVIANDO PARA O TERMO EM PDF
@@ -1095,8 +1095,8 @@ if($_POST['numero_ramal0'] != NULL){
 
     //1º iremos salvar o funcionario
     $existe_funcionario = "SELECT * FROM manager_inventario_funcionario  WHERE cpf = '".$_POST['gols1']."';";
-    $result_funcionario = mysqli_query($conn, $existe_funcionario);
-    if($row_funcionario = mysqli_fetch_assoc($result_funcionario)){
+    $result_funcionario = $conn -> query($existe_funcionario);
+    if($row_funcionario = $result_funcionario -> fetch_assoc()){
 
         //se caso já exista um funcionario
         $update = "UPDATE manager_inventario_funcionario 
@@ -1108,14 +1108,14 @@ if($_POST['numero_ramal0'] != NULL){
                     status = '3' 
                     WHERE id_funcionario = '".$row_funcionario['id_funcionario']."';";
         
-        $result_funcionario = mysqli_query($conn, $update) or die(mysqli_error($conn));
+        $result_funcionario = $conn -> query($update);
 
         while($_POST['numero_ramal'.$contador_ramal.'']){
             
             /*---------------ANTES DE MAIS ANDA IREMOS VERIFICAR SE JÁ NÃO ESTÁ CADASTRADO O EQUIPAMENTO---------------*/
             $verificar_cadastro = "SELECT * FROM manager_inventario_equipamento WHERE numero =  '".$_POST['numero_ramal'.$contador_ramal.'']."';";
-            $resultado_verificar_cadastro = mysqli_query($conn, $verificar_cadastro);
-            $row_verificar = mysqli_fetch_assoc($resultado_verificar_cadastro);
+            $resultado_verificar_cadastro = $conn -> query($verificar_cadastro);
+            $row_verificar = $resultado_verificar_cadastro -> fetch_assoc();
 
             if($row_verificar['deletar'] == 1){
                 /*---VOLTANDO PARA A TELA - ERRO 4 EQUIPAMENTO CONDENADO---*/
@@ -1147,7 +1147,7 @@ if($_POST['numero_ramal0'] != NULL){
                                     '".$data_hoje."',
                                     '".$_SESSION['id']."',
                                     '1')";
-            $result_new_equipamento = mysqli_query($conn, $new_equipamento) or die(mysqli_error($conn));
+            $result_new_equipamento = $conn -> query($new_equipamento);
 
             //ENVIANDO PARA O TERMO EM PDF
            $_SESSION['numero_ramal'.$contador_ramal.''] = $_POST['numero_ramal'.$contador_ramal.''];
@@ -1181,19 +1181,19 @@ if($_POST['numero_ramal0'] != NULL){
                                         '".$data_hoje."',
                                         '".$_SESSION['id']."',
                                         '3')";
-        $resultado_new_funcionario = mysqli_query($conn, $insert_funcionario_new) or die(mysqli_error($conn));
+        $resultado_new_funcionario = $conn -> query($insert_funcionario_new);
 
         //pegando o ultimo id do funcionario para usar nos SQLs abaixos
         $ultimo_id_funcionario = "SELECT max(id_funcionario) AS id_funcionario  FROM manager_inventario_funcionario";
-        $result_id_funcionario = mysqli_query($conn, $ultimo_id_funcionario);
-        $row_id_funcionario = mysqli_fetch_assoc($result_id_funcionario);
+        $result_id_funcionario = $conn -> query($ultimo_id_funcionario);
+        $row_id_funcionario = $result_id_funcionario -> fetch_assoc();
 
         while($_POST['numero_ramal'.$contador_ramal.'']){
             
             /*---------------ANTES DE MAIS ANDA IREMOS VERIFICAR SE JÁ NÃO ESTÁ CADASTRADO O EQUIPAMENTO---------------*/
             $verificar_cadastro = "SELECT * FROM manager_inventario_equipamento WHERE ipdi =  '".$_POST['numero_ramal'.$contador_ramal.'']."';";
-            $resultado_verificar_cadastro = mysqli_query($conn, $verificar_cadastro);
-            $row_verificar = mysqli_fetch_assoc($resultado_verificar_cadastro);
+            $resultado_verificar_cadastro = $conn -> query($verificar_cadastro);
+            $row_verificar = $resultado_verificar_cadastro -> fetch_assoc();
 
             if($row_verificar['deletar'] == 1){
                 /*---VOLTANDO PARA A TELA - ERRO 4 EQUIPAMENTO CONDENADO---*/
@@ -1227,7 +1227,7 @@ if($_POST['numero_ramal0'] != NULL){
                                     '".$data_hoje."',
                                     '".$_SESSION['id']."',
                                     '1')";
-            $result_new_equipamento = mysqli_query($conn, $new_equipamento) or die(mysqli_error($conn));
+            $result_new_equipamento = $conn -> query($new_equipamento);
             //ENVIANDO PARA O TERMO EM PDF
             $_SESSION['numero_ramal'.$contador_ramal.''] = $_POST['numero_ramal'.$contador_ramal.''];
 
@@ -1251,8 +1251,8 @@ if($_POST['serie_scan'] != NULL){
 
     //1º iremos salvar o funcionario
     $existe_funcionario = "SELECT * FROM manager_inventario_funcionario  WHERE cpf = '".$_POST['gols1']."';";
-    $result_funcionario = mysqli_query($conn, $existe_funcionario);
-    if($row_funcionario = mysqli_fetch_assoc($result_funcionario)){
+    $result_funcionario = $conn -> query($existe_funcionario);
+    if($row_funcionario = $result_funcionario -> fetch_assoc()){
 
         //se caso já exista um funcionario
         $update = "UPDATE manager_inventario_funcionario 
@@ -1264,12 +1264,12 @@ if($_POST['serie_scan'] != NULL){
                     status = '4' 
                     WHERE id_funcionario = '".$row_funcionario['id_funcionario']."';";
         
-        $result_funcionario = mysqli_query($conn, $update) or die(mysqli_error($conn));
+        $result_funcionario = $conn -> query($update);
             
         /*---------------ANTES DE MAIS ANDA IREMOS VERIFICAR SE JÁ NÃO ESTÁ CADASTRADO O EQUIPAMENTO---------------*/
         $verificar_cadastro = "SELECT * FROM manager_inventario_equipamento WHERE serialnumber =  '".$_POST['serie_scan']."'";
-        $resultado_verificar_cadastro = mysqli_query($conn, $verificar_cadastro);
-        $row_verificar = mysqli_fetch_assoc($resultado_verificar_cadastro);
+        $resultado_verificar_cadastro = $conn -> query($verificar_cadastro);
+        $row_verificar = $resultado_verificar_cadastro -> fetch_assoc();
 
         if($row_verificar['deletar'] == 1){
             /*---VOLTANDO PARA A TELA - ERRO 4 EQUIPAMENTO CONDENADO---*/
@@ -1315,7 +1315,7 @@ $new_equipamento .= "
         '".$data_hoje."',
         '1');";
 
-        $result_new_equipamento = mysqli_query($conn, $new_equipamento) or die(mysqli_error($conn));
+        $result_new_equipamento = $conn -> query($new_equipamento);
 
         //salvando nota fical caso tenha
 
@@ -1329,8 +1329,8 @@ $new_equipamento .= "
              /*VALIDAÇÃO DO FILE*/
              $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
  
-             $result =  mysqli_query($conn, $sql_file);//aplicando a query
-             $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+             $result =  $conn -> query($sql_file);//aplicando a query
+             $row = $result -> fetch_array();//salvando o resultado em uma variavel
  
              if($tipo_file != NULL){
                      /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -1351,7 +1351,7 @@ $new_equipamento .= "
             $nota_scan = "INSERT INTO manager_inventario_anexo (id_equipamento, usuario, tipo_anexo, caminho, nome, data_criacao)
                            VALUE 
                         ((SELECT MAX(id_equipamento) FROM manager_inventario_equipamento), '".$_SESSION['id']."', '".$tipo_file."', '".$caminho_db."', '".$nome_db."', '".$data_hoje."')";
-            $result_scan = mysqli_query($conn, $nota_scan) or die(mysqli_error($conn));
+            $result_scan = $conn -> query($nota_scan);
         }//end IF arquivo nota
 
         //finalizando manda msn falando que salvou com sucesso!
@@ -1377,17 +1377,17 @@ $new_equipamento .= "
                                         '".$data_hoje."',
                                         '".$_SESSION['id']."',
                                         '4')";
-        $resultado_new_funcionario = mysqli_query($conn, $insert_funcionario_new) or die(mysqli_error($conn));
+        $resultado_new_funcionario = $conn -> query($insert_funcionario_new);
 
         //pegando o ultimo id do funcionario para usar nos SQLs abaixos
         $ultimo_id_funcionario = "SELECT max(id_funcionario) AS id_funcionario  FROM manager_inventario_funcionario";
-        $result_id_funcionario = mysqli_query($conn, $ultimo_id_funcionario);
-        $row_id_funcionario = mysqli_fetch_assoc($result_id_funcionario);
+        $result_id_funcionario = $conn -> query($ultimo_id_funcionario);
+        $row_id_funcionario = $result_id_funcionario -> fetch_assoc();
             
         /*---------------ANTES DE MAIS ANDA IREMOS VERIFICAR SE JÁ NÃO ESTÁ CADASTRADO O EQUIPAMENTO---------------*/
         $verificar_cadastro = "SELECT * FROM manager_inventario_equipamento WHERE serialnumber =  '".$_POST['serie_scan']."'";
-        $resultado_verificar_cadastro = mysqli_query($conn, $verificar_cadastro);
-        $row_verificar = mysqli_fetch_assoc($resultado_verificar_cadastro);
+        $resultado_verificar_cadastro = $conn -> query($verificar_cadastro);
+        $row_verificar = $resultado_verificar_cadastro -> fetch_assoc();
 
         if($row_verificar['deletar'] == 1){
             /*---VOLTANDO PARA A TELA - ERRO 4 EQUIPAMENTO CONDENADO---*/
@@ -1432,7 +1432,7 @@ $new_equipamento .= "
 
         '".$data_hoje."',
         '1');";
-       $result_new_equipamento = mysqli_query($conn, $new_equipamento) or die(mysqli_error($conn));
+       $result_new_equipamento = $conn -> query($new_equipamento);
 
        //salvando nota fical caso tenha
 
@@ -1446,8 +1446,8 @@ $new_equipamento .= "
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-        $result =  mysqli_query($conn, $sql_file);//aplicando a query
-        $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+        $result =  $conn -> query($sql_file);//aplicando a query
+        $row = $result -> fetch_array();//salvando o resultado em uma variavel
 
         if($tipo_file != NULL){
                 /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -1468,7 +1468,7 @@ $new_equipamento .= "
        $nota_scan = "INSERT INTO manager_inventario_anexo (id_equipamento, tipo_anexo, caminho, nome, data_criacao)
                       VALUE 
                    ((SELECT MAX(id_equipamento) FROM manager_inventario_equipamento), '".$tipo_file."', '".$caminho_db."', '".$nome_db."', '".$data_hoje."')";
-       $result_scan = mysqli_query($conn, $nota_scan) or die(mysqli_error($conn));
+       $result_scan = $conn -> query($nota_scan);
    }//end IF arquivo nota
 
        //finalizando manda msn falando que salvou com sucesso!
@@ -1477,6 +1477,6 @@ $new_equipamento .= "
 }//finalizando SCANNER
 
 //fechando o banco de dados
-mysqli_close($conn);
+$conn -> close();
 
 ?>

@@ -2,74 +2,77 @@
    //aplicando para usar varialve em outro arquivo
    session_start();
    //chamando conexão com o banco
-   require 'conexao.php';
+   require_once('../conexao/conexao.php');
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif ($_SESSION["perfil"] != 0 AND $_SESSION["perfil"] != 1) {
    
-       header('location: error.php');
+      header('location: ../front/error.php');
    }
-   ?>
-<?php  require 'header.php'?><!--Chamando a Header-->
+
+   require_once('header.php')
+
+?>
+<!--Chamando a Header-->
 <div class="subnavbar">
-   <div class="subnavbar-inner">
-      <div class="container">
-         <ul class="mainnav">
-            <li class="active">
-               <a href="contracts.php"><i class="icon-folder-close"></i>
-               <span>Contratos</span>
-               </a>
-            </li>
-            <li>
-               <a href="error.php"><i class="icon-list-alt"></i>
-               <span>Relatórios</span>
-               </a>
-            </li>
-         </ul>
-      </div>
-   </div>
+    <div class="subnavbar-inner">
+        <div class="container">
+            <ul class="mainnav">
+                <li class="active">
+                    <a href="contracts.php"><i class="icon-folder-close"></i>
+                        <span>Contratos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="error.php"><i class="icon-list-alt"></i>
+                        <span>Relatórios</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <div class="widget ">
-   <div class="widget-header">
-      <h3>
-         <i class="icon-lithe icon-home"></i> 
-         <a href="manager.php">Home</a> / Contratos         
-      </h3>
-      <div id="novo_usuario">
-         <a class="btn btn-default btn-xs botao" href="contracts_add.php" title="Adicionar novo funcionário"> 
-            <i class='btn-icon-only icon-plus' style="margin-left: -3px"> </i>
-         </a>
-      </div>
-   </div>   
+    <div class="widget-header">
+        <h3>
+            <i class="icon-lithe icon-home"></i>
+            <a href="manager.php">Home</a> / Contratos
+        </h3>
+        <div id="novo_usuario">
+            <a class="btn btn-default btn-xs botao" href="contracts_add.php" title="Adicionar novo funcionário">
+                <i class='btn-icon-only icon-plus' style="margin-left: -3px"> </i>
+            </a>
+        </div>
+    </div>
 </div>
-      <div class="container">
-         <div class="row">
-            <table id="example" class="table table-striped table-bordered" style="width:98%">
-               <thead>
-                  <tr>
-                     <th class="titulo">Nome</th>
-                     <th class="titulo">CNPJ</th>
-                     <th class="titulo">Numero Contrato</th>
-                     <th class="titulo">Tipo</th>
-                     <th class="titulo">Tipo de Cobrança</th>
-                     <th class="titulo">Departamento</th>
-                     <th class="titulo">Data</th>
-                     <th class="titulo">Ação</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <?php
+<div class="container">
+    <div class="row">
+        <table id="example" class="table table-striped table-bordered" style="width:98%">
+            <thead>
+                <tr>
+                    <th class="titulo">Nome</th>
+                    <th class="titulo">CNPJ</th>
+                    <th class="titulo">Numero Contrato</th>
+                    <th class="titulo">Tipo</th>
+                    <th class="titulo">Tipo de Cobrança</th>
+                    <th class="titulo">Departamento</th>
+                    <th class="titulo">Data</th>
+                    <th class="titulo">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
                      //conectando com o bando de dados
                      //criando a pesquisa 
                      $query = "SELECT * FROM manager_contracts WHERE deleted = 0"; //0 = ativo, 1 = desativado
                      //Criando a pesquisa para contagem  
                      
                      //aplicando a regra e organizando na tela
-                     if ($resultado = mysqli_query($conn, $query)){
+                     if ($resultado = $conn -> query($query)){
                          
-                             while($row = mysqli_fetch_assoc($resultado)){
+                             while($row = $resultado -> fetch_assoc()){
                                  
                                  echo "<tr>
                                          <td class='fonte'>".$row['name']."</td>
@@ -109,13 +112,13 @@
                              }
                          }
                          
-                     mysqli_close($conn);
+                     $conn -> close();
                      ?>
-               </tbody>
-            </table>
-         </div>
-      </div>
-   </div>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
 </div>
 <!-- Le javascript
    ================================================== -->
@@ -124,7 +127,7 @@
 <script src="js/tabela2.js"></script>
 <script src="java.js"></script>
 <script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>   
+<script src="js/dataTables.bootstrap4.min.js"></script>
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </body>

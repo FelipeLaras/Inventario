@@ -1,5 +1,5 @@
 <?php
-	require 'conexao.php';
+	require_once('../conexao/conexao.php');
 
 	//Recebendo as Variais
 	$nome = $_POST['firstname'];
@@ -12,18 +12,18 @@
 	//Montando a query de validação
 	$query_valid = "SELECT profile_mail AS mail FROM manager_profile WHERE profile_mail like '".$mail."'";
 	//Aplicando a query
-	$result_valid = mysqli_query($conn, $query_valid);
+	$result_valid = $conn -> query($query_valid);
 	//Recebendo o resultado
-	$rom_valid = mysqli_fetch_assoc($result_valid);
+	$rom_valid = $result_valid -> fetch_assoc();
 	//montando a regra de validação
 	if ($rom_valid['mail'] != NULL) {
-		header('location: alert_usuario.html');
+		header('location: ../front/alert_usuario.html');
 		exit;
 	}
 	#FIM
 
 	#ENVIO DE EMAIL
-	require 'PHPMailer/PHPMailerAutoload.php';
+	require_once('../PHPMailer/PHPMailerAutoload.php');
 	
 	//variaveis de conf. envio
 	$smtp = "smtp.gmail.com";//servidor usado para envio
@@ -110,10 +110,10 @@
 	$Mailer->AddAddress($destinatario);
 	
 	if($Mailer->Send()){
-		header('location: alert_envio.html');
+		header('location: ../front/alert_envio.html');
 	}else{
 		echo "Erro no envio do e-mail: " . $Mailer->ErrorInfo;
 	}
 //fechando a conexão com o banco
-mysqli_close($conn);
+$conn -> close();
 ?>

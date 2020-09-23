@@ -1,17 +1,8 @@
 <?php
 //conexao banco
-include 'conexao.php';
-//funcao
-$funcao = "SELECT id_funcao, nome FROM manager_dropfuncao WHERE deletar = 0 ORDER BY nome ASC";
-$result_funcao = mysqli_query($conn, $funcao);
+require_once('../conexao/conexao.php');
+require_once('../query/query_dropdowns.php');
 
-//departamento
-$depart = "SELECT id_depart, nome FROM manager_dropdepartamento WHERE deletar = 0 ORDER BY nome ASC";
-$result_depart = mysqli_query($conn, $depart);
-
-//empresa
-$empresa = "SELECT id_empresa, nome FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
-$result_empresa = mysqli_query($conn, $empresa);
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +61,7 @@ $result_empresa = mysqli_query($conn, $empresa);
 				<select id="inputState" class="form-control" name="funcao" style="width: 286px;">
 					<option selected>Selecione...</option>
 					<?php
-						while($row_funcao = mysqli_fetch_assoc($result_funcao)){
+						while($row_funcao = $resultado_funcao -> fetch_assoc()){
 							echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";	
 						}
 					?>
@@ -83,7 +74,7 @@ $result_empresa = mysqli_query($conn, $empresa);
 				<select id="inputState" class="form-control" name="departamento" style="width: 286px;">
 					<option selected>Selecione...</option>
 					<?php
-						while($row_depart = mysqli_fetch_assoc($result_depart)){
+						while($row_depart = $resultado_depart -> fetch_assoc()){
 							echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";	
 						}
 					?>
@@ -96,7 +87,7 @@ $result_empresa = mysqli_query($conn, $empresa);
 				<select id="inputState" class="form-control" name="empresa" style="width: 286px;">
 					<option selected>Selecione...</option>
 					<?php
-						while($row_empresa = mysqli_fetch_assoc($result_empresa)){
+						while($row_empresa = $resultado_empresa -> fetch_assoc()){
 							echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";	
 						}
 					?>

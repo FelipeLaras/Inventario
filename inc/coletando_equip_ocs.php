@@ -1,9 +1,9 @@
 <?php
 //chamando a base do OCS
-include 'conexao_ocs.php';
+require_once('../conexao/conexao_ocs.php');
 
 //chamando a base do manager
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //dominio servopa
 $dominio = 'servopa.local';
@@ -38,7 +38,7 @@ $query_ocs = "SELECT
             LEFT JOIN 
                 storages S ON H.ID = S.HARDWARE_ID
                 ";
-$resultado_ocs = mysqli_query($conn_ocs, $query_ocs);
+$resultado_ocs = $conn_ocs -> query($query_ocs);
 
 //funcão de conversão de dados HD
 function HD($size){
@@ -54,7 +54,7 @@ function RAM($size){
 /*----------------------------excluindo os dados da tabela manager_ocs_equip-------------------------------------*/
 
 $drop_table = "DROP TABLE manager_ocs_equip";
-$resultado_drop = mysqli_query($conn, $drop_table) or die(mysqli_error($conn));
+$resultado_drop = $conn -> query($drop_table);
 
 /*----------------------------criando os dados da tabela manager_ocs_equip----------------------------------------*/
 
@@ -75,11 +75,11 @@ $create_table = "CREATE TABLE `manager`.`manager_ocs_equip` (
     `office` VARCHAR(255) NULL,
     `chave_office` VARCHAR(30) NULL,
     PRIMARY KEY (`id`))";
-$resultado_create = mysqli_query($conn, $create_table) or die(mysqli_error($conn));
+$resultado_create = $conn -> query($create_table);
 
 /*----------------------------inserindo os dados na base manager--------------------------------------------------*/
 
-while($row_ocs = mysqli_fetch_assoc($resultado_ocs)){    
+while($row_ocs = $resultado_ocs -> fetch_assoc()){    
     
     //convertendo antes de salvar
     $valbytes = $row_ocs['hd'];    
@@ -115,13 +115,13 @@ while($row_ocs = mysqli_fetch_assoc($resultado_ocs)){
     '".$row_ocs['office']."',
     '".$row_ocs['chave_office']."')";
 
-    $resultado_manager = mysqli_query($conn, $update_manager);
+    $resultado_manager = $conn -> query($update_manager);
 
 }//end WHILE
 
 /*------------------------------------------------FIM----------------------------------------------------------------*/
 
 //FECHANDO AS CONEXÕES
-mysqli_close($conn);
-mysqli_close($conn_ocs);
+$conn -> close($conn);
+$conn_ocs -> close($conn_ocs);
 ?>

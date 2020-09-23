@@ -2,16 +2,16 @@
 //chamar a sessão
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-    header('location: index.html');
+    header('location: ../front/index.html');
 }elseif ($_SESSION["perfil"] == 2) {
-    header('location: error.php');
+    header('location: ../front/error.php');
 }
 
 //chamando a header
-require 'header.php'
+require_once('header.php');
 ?>
 
 <!--Chamando a Header-->
@@ -65,7 +65,7 @@ require 'header.php'
 <!-- /widget-header -->
 <h3 style="color: red;">
     <div class="titulo_check">
-        <font style="vertical-align: inherit;" style="margin-top">
+        <font style="vertical-align: inherit;">
             <i class="fas fa-clipboard-list"></i> CHEK-LIST!
         </font>
     </div>
@@ -75,11 +75,11 @@ require 'header.php'
         <div id="formulario">
             <form id='edit-profile' class='form-horizontal' action='form_checklist.php' method='post'
                 style="margin-left: -12%" autocomplete="off" target="_blank">
-                <input name='id_fun' value='<?php echo $_GET['id_fun'] ?>' style='display: none' />
+                <input name='id_fun' value='<?= $_GET['id_fun'] ?>' style='display: none' />
                 <div class="control-group">
                     <div class="controls">
                         <h5>1-) Chek-List do funcionário:</h5>
-                        <p class="subtitulo"><?php echo $_GET['nome'] ?></p>
+                        <p class="subtitulo"><?= $_GET['nome'] ?></p>
                     </div>
                 </div>
                 <div class="control-group">
@@ -110,9 +110,9 @@ require 'header.php'
                                     manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
                                     WHERE 
                                     id_funcionario = ".$_GET['id_fun']."";
-                                    $result_check = mysqli_query($conn, $equip_check);
+                                    $result_check = $conn -> query($equip_check);
 
-                                    while($linha_check = mysqli_fetch_assoc($result_check)){
+                                    while($linha_check = $result_check -> fetch_assoc()){
                                         if($linha_check['tipo_equipamento'] == 3){
                                             echo "
                                             <li class='li_equip'>

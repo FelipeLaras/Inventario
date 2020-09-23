@@ -1,11 +1,11 @@
 <?php
-	require 'conexao.php';
+	require_once('../conexao/conexao.php');
 
 	//Recebendo as Variais
 	$mail = $_POST['username'];
 
 	#ENVIO DE EMAIL
-	require 'PHPMailer/PHPMailerAutoload.php';
+	require_once('../PHPMailer/PHPMailerAutoload.php');
 	
 	//variaveis de conf. envio
 	$smtp = "smtp.gmail.com";//servidor usado para envio
@@ -84,10 +84,10 @@
 	$Mailer->AddAddress($destinatario);
 	
 	if($Mailer->Send()){
-		header('location: alert_forget_envio.html');
+		header('location: ../front/alert_forget_envio.html');
 	}else{
 		echo "Erro no envio do e-mail: " . $Mailer->ErrorInfo;
 	}
 //Fechando a conexão com o banco
-mysqli_close($conn);
+$conn->close();
 ?>

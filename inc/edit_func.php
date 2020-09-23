@@ -3,7 +3,7 @@
 session_start();
 
 //conexão com o banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //data de hoje
 
@@ -15,9 +15,9 @@ if ($_POST['inativar'] != NULL) {
 	/*_______________________________________________________________________*/
 	//verifciando se o usuário possui equipamentos antes de ser desativado
 	$query_validacao = "SELECT id_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = '".$_POST['id_funcionario']."'";
-	$resultado_validacao = mysqli_query($conn, $query_validacao);
+	$resultado_validacao = $conn -> query($query_validacao);
 
-	if ($row_valid = mysqli_fetch_assoc($resultado_validacao)) {
+	if ($row_valid = $resultado_validacao -> fetch_assoc()) {
 		/*se ecnontrar algum equipamento volta para a tela informando 
 		que deve tirar todos os equipamento primeiros*/
 		header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&id_equip='.$row_valid['id_equipamento'].'');
@@ -25,7 +25,7 @@ if ($_POST['inativar'] != NULL) {
 	}else{
 		$update = "UPDATE manager_inventario_funcionario SET deletar = 1 where id_funcionario = '".$_POST['id_funcionario']."'";
 
-		$resultado_update = mysqli_query($conn,$update) or die(mysqli_error($conn));
+		$resultado_update = $conn -> query($update);
 
 		header('location: msn_inativo.php');
 	}
@@ -42,7 +42,7 @@ if ($_POST['inativar'] != NULL) {
 						WHERE 
 							id_funcionario = '".$_POST['id_funcionario']."'";
 
-	$resultado = mysqli_query($conn, $query_edit_func) or die(mysqli_error($conn));
+	$resultado = $conn -> query($query_edit_func);
 
 	header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'');
 }
@@ -54,10 +54,10 @@ $log_query = "INSERT manager_log (id_funcionario, data_alteracao, usuario, tipo_
 						'".$data."',
 						'".$_SESSION["id"]."',
 						'0')";
-$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+$result_log = $conn -> query($log_query);
 
 /*_________________________________ FECHANDO O BANCO ______________________________________*/
 
-mysqli_close($conn);
+$conn -> close();
 
 ?>

@@ -2,10 +2,10 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
  }
 /*Esta regra não deixa que os perfils que seja diferente do administrador possa alterar dados dos usuários que não seja apenas o seu proprio perfil*/
 if ($_SESSION["perfil"] == 0) {
@@ -32,16 +32,16 @@ $query_edit_user = "SELECT
                   	WHERE 
 					  	MP.id_profile = ".$usuario_edit."";
 //aplicando a query
-$resultado_edit = mysqli_query($conn, $query_edit_user);
+$resultado_edit = $conn -> query($query_edit_user);
 //salvando em uma variavel
-$row_edit = mysqli_fetch_assoc($resultado_edit);
+$row_edit = $resultado_edit -> fetch_assoc();
 
 #trocando string do profile por ID
 $query_profile = "SELECT type_profile AS profile 
 					FROM manager_profile_type WHERE type_name LIKE '".$row_edit['perfil']."'";
 
-$resultado_profile = mysqli_query($conn, $query_profile);
-$row_profile = mysqli_fetch_assoc($resultado_profile);
+$resultado_profile = $conn -> query($query_profile);
+$row_profile = $resultado_profile -> fetch_assoc();
 
 ?>
 
@@ -109,12 +109,12 @@ $row_profile = mysqli_fetch_assoc($resultado_profile);
 								<option value='".$row_profile['profile']."'>".$row_edit['perfil']."</option>";
 
 								$query_perfil = "SELECT * FROM manager_profile_type";
-				                $resultado_perfil = mysqli_query($conn, $query_perfil);
-				                while ($row_perfil = mysqli_fetch_assoc($resultado_perfil)) {
+				                $resultado_perfil = $conn -> query($query_perfil);
+				                while ($row_perfil = $resultado_perfil -> fetch_assoc()) {
 
 				                   echo "<option value='".$row_perfil['type_profile']."'>".$row_perfil['type_name']."</option>";
 				                 }
-				                 mysqli_close($conn);			                 
+				                 $conn -> close($conn);			                 
 						echo	"</select>
 						</div>
 						<div class='field'>

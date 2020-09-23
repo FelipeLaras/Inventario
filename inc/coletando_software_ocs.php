@@ -1,9 +1,9 @@
 <?php
 //chamando a base do OCS
-include 'conexao_ocs.php';
+require_once('../conexao/conexao_ocs.php');
 
 //chamando a base do manager
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //variaveis globais
 
@@ -22,12 +22,12 @@ FROM
     accountinfo AI ON SO.HARDWARE_ID = AI.HARDWARE_ID
         LEFT JOIN
     hardware H ON SO.HARDWARE_ID = H.ID";
-$resultado_ocs = mysqli_query($conn_ocs, $query_ocs);
+$resultado_ocs = $conn_ocs -> query($query_ocs);
 
 /*----------------------------excluindo os dados da tabela manager_ocs_equip-------------------------------------*/
 
 $drop_table = "DROP TABLE ocs_software";
-$resultado_drop = mysqli_query($conn, $drop_table) or die(mysqli_error($conn));
+$resultado_drop = $conn -> query($drop_table);
 
 /*----------------------------criando os dados da tabela manager_ocs_equip----------------------------------------*/
 
@@ -38,11 +38,11 @@ $create_table = "CREATE TABLE `manager`.`ocs_software` (
     `data_instalacao` DATETIME NULL,
     `data_last_agente` DATETIME NULL,
     PRIMARY KEY (`id`));";
-$resultado_create = mysqli_query($conn, $create_table) or die(mysqli_error($conn));
+$resultado_create = $conn -> query($create_table);
 
 /*----------------------------inserindo os dados na base manager--------------------------------------------------*/
 
-while($row_ocs = mysqli_fetch_assoc($resultado_ocs)){  
+while($row_ocs = $resultado_ocs -> fetch_assoc()){  
 
     //pegando data de isntalação zerada e trocando para a data do agente
     if($row_ocs['data_instalacao'] == $data_zerada){
@@ -57,14 +57,14 @@ while($row_ocs = mysqli_fetch_assoc($resultado_ocs)){
     VALUES 
     ('".$row_ocs['patrimonio']."','".$row_ocs['software']."','".$sem_horario."','".$row_ocs['data_agente']."');";
 
-    $resultado_manager = mysqli_query($conn, $update_manager);
+    $resultado_manager = $conn -> query($update_manager);
 }//end WHILE
 
 /*------------------------------------------------FIM----------------------------------------------------------------*/
 
 //FECHANDO AS CONEXÕES
-mysqli_close($conn);
-mysqli_close($conn_ocs);
+$conn -> close($conn);
+$conn_ocs -> close();
 
 echo "Processo executado e finalizado!"
 ?>

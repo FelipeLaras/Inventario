@@ -1,56 +1,41 @@
 <?php
 //aplicando para usar varialve em outro arquivo
 session_start();
-//chamando conexão com o banco
-require 'conexao.php';
+
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif ($_SESSION["perfil"] != 0) {
-       header('location: error.php');
-   }
-?>
-<!DOCTYPE html>
-<html>
-    <?php  require 'header.php'?><!--Chamando a Header-->
-    <div class="subnavbar">
-      <div class="subnavbar-inner">
-        <div class="container">
-          <ul class="mainnav">
-            <li class="active">
-              <a href="manager_conf.php"><i class="icon-user"></i>
-                <span>Usuários</span>
-              </a>
-            </li>
-            <li>
-              <a href='manager_drop.php'><i class='icon-list-alt'></i>
-                <span>Drop-Downs</span>
-              </a>
-            </li>
-            <!--
-            <li>
-              <a href="#"><i class="icon-facetime-video"></i>
-                <span>App Tour</span>
-              </a>
-            </li>
-            <li>
-              <a href="#"><i class="icon-bar-chart"></i>
-                <span>Charts</span>
-              </a>
-            </li>
-            <li>
-              <a href="#"><i class="icon-code"></i>
-                <span>Shortcodes</span>
-              </a>
-            </li>-->
-          </ul>
-        </div> 
-      </div>
-    </div>
-    <?php
+       header('location: ../front/error.php');
+}
 
-    $id = $_SESSION['id_user'];
+$id = $_SESSION['id_user'];
+   
+require_once('../conexao/conexao.php');   
+require_once('header.php');
+
+?>
+<!--Chamando a Header-->
+<div class="subnavbar">
+    <div class="subnavbar-inner">
+        <div class="container">
+            <ul class="mainnav">
+                <li class="active">
+                    <a href="manager_conf.php"><i class="icon-user"></i>
+                        <span>Usuários</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='manager_drop.php'><i class='icon-list-alt'></i>
+                        <span>Drop-Downs</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<?php
 
     if ($id == 0) {//Ativado     
     echo "<div class='accordion' id='accordion2'>
@@ -85,15 +70,16 @@ if($_SESSION["perfil"] == NULL){
             </div>
           </div>";
     }
-    mysqli_close($conn);
+    $conn -> close();
     ?>
-    <!-- Le javascript
-    ================================================== --> 
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery-1.7.2.min.js"></script> 
-    <script src="js/excanvas.min.js"></script> 
-    <script src="js/chart.min.js" type="text/javascript"></script> 
-    <script src="js/bootstrap.js"></script>
-    <script src="js/base.js"></script> 
-  </body>
+<!-- Le javascript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/excanvas.min.js"></script>
+<script src="js/chart.min.js" type="text/javascript"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/base.js"></script>
+</body>
+
 </html>

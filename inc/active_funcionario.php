@@ -1,6 +1,7 @@
 <?php
 //chamando o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
+
 //iniciando as sessões
 session_start();
 

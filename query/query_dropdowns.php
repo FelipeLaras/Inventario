@@ -19,8 +19,11 @@ $query_empresa = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY n
 $resultado_empresa = $conn -> query($query_empresa);
 
 //status
-$query_statusFun = "SELECT * from manager_dropstatus WHERE deletar = 0 order by nome ASC;";
+$query_statusFun = "SELECT * from manager_dropstatus WHERE deletar = 0 ORDER BY nome ASC";
 $resultado_statusFun = $conn -> query($query_statusFun);
 
+//localização
+$query_locacao = "SELECT * from manager_droplocacao where deletar = 0 ORDER BY nome ASC";
+$resultado_locacao = $conn -> query($query_locacao);
 
 ?>

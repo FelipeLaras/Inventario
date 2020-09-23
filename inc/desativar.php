@@ -2,7 +2,8 @@
 //abrindo a sessão
 session_start();
 //banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
+
 //pegando id 
 $id = $_GET['id'];
 
@@ -10,16 +11,16 @@ $id = $_GET['id'];
 $query_profile = "SELECT id_profile AS id, profile_deleted AS deletar 
 					FROM manager_profile WHERE id_profile = ".$id."";
 //aplicando a query no banco
-$result_profile = mysqli_query($conn, $query_profile);
+$result_profile = $conn -> query($query_profile);
 //salvando o resultado numa array
-$row_profile = mysqli_fetch_assoc($result_profile);
+$row_profile = $result_profile -> fetch_assoc();
 //verificando se está ativo = desativa ou desativa = ativa
 // 0 ativado, 1 desativado
 if ($row_profile['deletar'] == 0) {//desativando
 	$query_desativar = "UPDATE manager_profile SET profile_deleted = 1
 						WHERE id_profile = ".$id." LIMIT 1 ";
-	$result_desativar = mysqli_query($conn, $query_desativar);
-	$row_desativar = mysqli_fetch_assoc($result_desativar);
+	$result_desativar = $conn -> query($query_desativar);
+	$row_desativar = $result_desativar -> fetch_assoc();
 
 	$_SESSION['id_user'] = 1;
 
@@ -28,13 +29,13 @@ if ($row_profile['deletar'] == 0) {//desativando
 }else{//ativando
 	$query_desativar = "UPDATE manager_profile SET profile_deleted = 0
 						WHERE id_profile = ".$id." LIMIT 1 ";
-	$result_desativar = mysqli_query($conn, $query_desativar);
+	$result_desativar = $conn -> query($query_desativar);
 
-	$row_desativar = mysqli_fetch_assoc($result_desativar);
+	$row_desativar = $result_desativar -> fetch_assoc();
 
 	$_SESSION['id_user'] = 0;
 
 	header('location: alert_drop_user.php');
 }
-mysqli_close($conn);
+$conn -> close();
 ?>
