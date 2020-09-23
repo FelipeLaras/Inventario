@@ -1,8 +1,7 @@
 <?php
 //aplicando para usar varialve em outro arquivo
 session_start();
-//chamando conexão com o banco
-require 'conexao.php';
+
 //Aplicando a regra de login
 if ($_SESSION["perfil"] == NULL) {
     header('location: index.html');
@@ -10,10 +9,11 @@ if ($_SESSION["perfil"] == NULL) {
     header('location: error.php');
 }
 
+require_once('header.php'); 
+require_once('conexao.php');
+require_once('query_dropdowns.php')
+
 ?>
-<!DOCTYPE html>
-<html>
-<?php require 'header.php'; ?>
 <div class="subnavbar">
     <div class="subnavbar">
         <div class="subnavbar-inner">
@@ -74,70 +74,59 @@ if ($_SESSION["perfil"] == NULL) {
             <div class="tab-content">
                 <!--COLABORADOR-->
                 <div class="tab-pane active" id="colaborador">
-                    <form id="edit-profile" class="form-horizontal" action="relatorio_func.php" method="GET" autocomplete='off'>
+                    <form id="edit-profile" class="form-horizontal" action="relatorio_func.php" method="GET"
+                        autocomplete='off'>
                         <div class="control-group">
                             <label class="control-label required">Função:</label>
                             <div class="controls">
-                                <?php
-                                echo "<select id='t_cob' name='funcao_funcionario' class='span2'>                            
-                                            <option value=''>---</option>";
-                                //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                $query_funcao = "SELECT * from manager_dropfuncao WHERE deletar = 0 order by nome ASC;";
-                                $resultado_funcao = mysqli_query($conn, $query_funcao);
-                                while ($row_funcao = mysqli_fetch_assoc($resultado_funcao)) {
-                                    echo "<option value='" . $row_funcao['id_funcao'] . "'>" . $row_funcao['nome'] . "</option>";
-                                }
-                                echo "</select>";
-                                ?>
+                                <select id='t_cob' name='funcao_funcionario' class='span2'>                            
+                                    <option value=''>---</option>
+                                    <?php
+                                        while ($row_funcao = $resultado_funcao -> fetch_assoc()) {
+                                            echo "<option value='" . $row_funcao['id_funcao'] . "'>" . $row_funcao['nome'] . "</option>";
+                                        }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label required">Departamento:</label>
                             <div class="controls">
-                                <?php
-                                echo "<select id='t_cob' name='depart_funcionario' class='span2'>                            
-                                            <option value=''>---</option>";
-                                //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                $query_depart = "SELECT * from manager_dropdepartamento WHERE deletar = 0 order by nome ASC;";
-                                $resultado_depart = mysqli_query($conn, $query_depart);
-                                while ($row_depart = mysqli_fetch_assoc($resultado_depart)) {
-                                    echo "<option value='" . $row_depart['id_depart'] . "'>" . $row_depart['nome'] . "</option>";
-                                }
-                                echo "</select>";
-                                ?>
+                                <select id='t_cob' name='depart_funcionario' class='span2'>                            
+                                    <option value=''>---</option>
+                                    <?php
+                                        while ($row_depart = $resultado_depart -> fetch_assoc()) {
+                                            echo "<option value='" . $row_depart['id_depart'] . "'>" . $row_depart['nome'] . "</option>";
+                                        }
+                                    ?>
+                                </select>
                             </div>
                         </div>
 
                         <div class="control-group">
                             <label class="control-label required">Empresa/Filial:</label>
                             <div class="controls">
-                                <?php
-                                echo "<select id='t_cob' name='empresa_funcionario' class='span2'>
-                                            <option value=''>---</option>";
-                                //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                $query_empresa = "SELECT * from manager_dropempresa WHERE deletar = 0 order by nome ASC;";
-                                $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
-                                    echo "<option value='" . $row_empresa['id_empresa'] . "'>" . $row_empresa['nome'] . "</option>";
-                                }
-                                echo "</select>";
-                                ?>
+                                <select id='t_cob' name='empresa_funcionario' class='span2'>
+                                    <option value=''>---</option>
+                                    <?php
+                                        while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
+                                            echo "<option value='" . $row_empresa['id_empresa'] . "'>" . $row_empresa['nome'] . "</option>";
+                                        }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label required">Status:</label>
                             <div class="controls">
-                                <?php
-                                echo "<select id='t_cob' name='status_funcionario' class='span2'>
-                                            <option value=''>---</option>";
-                                //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                $query_statusFun = "SELECT * from manager_dropstatus WHERE deletar = 0 order by nome ASC;";
-                                $resultado_statusFun = mysqli_query($conn, $query_statusFun);
-                                while ($row_statusFun = mysqli_fetch_assoc($resultado_statusFun)) {
-                                    echo "<option value='" . $row_statusFun['id_status'] . "'>" . $row_statusFun['nome'] . "</option>";
-                                }
-                                echo "</select>";
-                                ?>
+                                <select id='t_cob' name='status_funcionario' class='span2'>
+                                    <option value=''>---</option>
+                                    <?php
+                                        while ($row_statusFun = $resultado_statusFun -> fetch_assoc()) {
+                                            echo "<option value='" . $row_statusFun['id_status'] . "'>" . $row_statusFun['nome'] . "</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <!--Campos Escondidos-->
@@ -150,21 +139,20 @@ if ($_SESSION["perfil"] == NULL) {
                 <!--EQUIPAMENTOS-->
                 <div class="tab-pane" id="equipamento">
 
-                    <form id="edit-profile" class="form-horizontal" action="relatorio_equip.php" method="GET" autocomplete='off'>
+                    <form id="edit-profile" class="form-horizontal" action="relatorio_equip.php" method="GET"
+                        autocomplete='off'>
                         <div class="control-group">
                             <label class="control-label required">Tipo de equipamento:</label>
                             <div class="controls">
-                                <?php
-                                echo "<select id='t_cob' name='equipamento' class='span2'>
-                                            <option value=''>---</option>";
-                                //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                $query_equip = "SELECT * from manager_dropequipamentos WHERE deletar = 0 order by nome ASC;";
-                                $resultado_equip = mysqli_query($conn, $query_equip);
-                                while ($row_equip = mysqli_fetch_assoc($resultado_equip)) {
-                                    echo "<option value='" . $row_equip['id_equip'] . "'>" . $row_equip['nome'] . "</option>";
-                                }
-                                echo "</select>";
-                                ?>
+
+                                <select id='t_cob' name='equipamento' class='span2'>
+                                    <option value=''>---</option>
+                                    <?php 
+                                        while ($row_equip = $resultado_equip -> fetch_assoc()) { 
+                                            echo "<option value='" . $row_equip['id_equip'] . "'>" . $row_equip['nome'] . "</option>"; 
+                                        } 
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <div class="control-group">
@@ -192,7 +180,8 @@ if ($_SESSION["perfil"] == NULL) {
                 <!--VIGENCIA-->
                 <div class="tab-pane" id="vigencia">
 
-                    <form id="edit-profile" class="form-horizontal" action="relatorio_vigencia.php" method="GET" autocomplete='off'>
+                    <form id="edit-profile" class="form-horizontal" action="relatorio_vigencia.php" method="GET"
+                        autocomplete='off'>
                         <div class="control-group">
                             <label class="control-label">Tipo de equipamento:</label>
                             <div class="controls">
@@ -435,11 +424,13 @@ if ($_SESSION["perfil"] == NULL) {
                             <div class="controls">
                                 <ul id="data_vigencia">
                                     <li class="li_data">
-                                        <input type="date" name="di" id="data_inicial" class="span2" style="width: 130px;" />
+                                        <input type="date" name="di" id="data_inicial" class="span2"
+                                            style="width: 130px;" />
                                     </li>
                                     <span id="li_texto">Até</span>
                                     <li class="li_data">
-                                        <input type="date" name="df" id="data_final" class="span2" style="width: 130px;" />
+                                        <input type="date" name="df" id="data_final" class="span2"
+                                            style="width: 130px;" />
                                     </li>
                                 </ul>
                             </div>
@@ -472,26 +463,26 @@ if ($_SESSION["perfil"] == NULL) {
 
 <!--MOSTRAR CAMPO ICONE-->
 <script>
-    function mostrar(id) {
+function mostrar(id) {
+    document.getElementById(id).style.display = 'block';
+}
+
+function fechar(id) {
+    if (document.getElementById(id).style.display == 'block') {
+        document.getElementById(id).style.display = 'none';
+    } else {
         document.getElementById(id).style.display = 'block';
     }
-
-    function fechar(id) {
-        if (document.getElementById(id).style.display == 'block') {
-            document.getElementById(id).style.display = 'none';
-        } else {
-            document.getElementById(id).style.display = 'block';
-        }
-    }
+}
 </script>
 <!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript">
-    // INICIO FUNÇÃO DE MASCARA MAIUSCULA
-    function maiuscula(z) {
-        v = z.value.toUpperCase();
-        z.value = v;
-    }
-    //FIM DA FUNÇÃO MASCARA MAIUSCULA
+// INICIO FUNÇÃO DE MASCARA MAIUSCULA
+function maiuscula(z) {
+    v = z.value.toUpperCase();
+    z.value = v;
+}
+//FIM DA FUNÇÃO MASCARA MAIUSCULA
 </script>
 <?php mysqli_close($conn); ?>
 
