@@ -1,23 +1,22 @@
 <?php
-   //aplicando para usar varialve em outro arquivo
-   session_start();
-   //chamando conexão com o banco
-   require 'conexao.php';
-   //Aplicando a regra de login
-   if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
-   
-  }elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
-       header('location: error.php');
-   }   
+//aplicando para usar varialve em outro arquivo
+session_start();
+//chamando conexão com o banco
+require_once('../conexao/conexao.php');
+//Aplicando a regra de login
+if($_SESSION["perfil"] == NULL){  
+  header('location: ../front/index.html');
 
-   //sessão global para envio de id_usuario para historico 
-   $_SESSION['id_funcionario_historico'] = $_GET['id'];
- 
-   ?>
-<!DOCTYPE html>
-<html>
-<?php  require 'header.php';?>
+}elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
+    header('location: ../front/error.php');
+}   
+
+//sessão global para envio de id_usuario para historico 
+$_SESSION['id_funcionario_historico'] = $_GET['id'];
+
+require_once('header.php');
+
+?>
 <div class="subnavbar">
     <div class="subnavbar-inner">
         <div class="container">

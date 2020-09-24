@@ -3,14 +3,16 @@
 session_start();
 /*------------------------------------------------------------------------------------------------------------------*/
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
+require_once('header.php');
+require_once('../query/query.php');
 /*------------------------------------------------------------------------------------------------------------------*/
 //Aplicando a regra de login
 if ($_SESSION["perfil"] == NULL) {
-   header('location: index.html');
+   header('location: ../front/index.html');
 } elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
 
-   header('location: error.php');
+   header('location: ../front/error.php');
 }
 /*------------------------------------------------------------------------------------------------------------------*/
 //chamandos todos os equipamento do tipo (notebooks, desktops, ramais)
@@ -92,114 +94,13 @@ if ($_GET['status'] != NULL) {
    $equipamentos .= "AND MIE.tipo_equipamento IN (9 , 5, 8)";
 }
 
-$resultado_equip = mysqli_query($conn, $equipamentos);
+$resultado_equip = $conn->query($equipamentos);
 
 
 //contagem equipamentos alterados
 $cont = "SELECT COUNT(id) AS quantidade FROM manager_comparacao_ocs";
-$result_count = mysqli_query($conn, $cont);
-$row_count = mysqli_fetch_assoc($result_count);
-
-//contagem de status
-//query para a contagem dos itens ativos, faltaTermo e demitido.
-
-/*------------------------------------FALTA TERMO-----------------------------------------*/
-$query_f = "SELECT 
-         COUNT(MIF.status) AS faltaTermo
-         FROM
-         manager_inventario_funcionario MIF
-         LEFT JOIN
-         manager_inventario_equipamento MIE ON MIE.id_funcionario = MIF.id_funcionario
-         WHERE
-         MIF.status = 3 AND 
-         MIE.tipo_equipamento in (9 , 5) AND
-         MIF.deletar = 0";
-$resultado_f = mysqli_query($conn, $query_f);
-$row_f = mysqli_fetch_assoc($resultado_f);
-
-/*------------------------------------ATIVOS-----------------------------------------*/
-
-$query_a = "SELECT
-         COUNT(MIF.status) AS ativo
-         FROM
-         manager_inventario_funcionario MIF
-         LEFT JOIN
-         manager_inventario_equipamento MIE ON MIE.id_funcionario = MIF.id_funcionario
-         WHERE
-         MIF.status = 4 AND
-         MIE.tipo_equipamento in (9 , 5, 8) AND
-         MIF.deletar = 0";
-$resultado_a = mysqli_query($conn, $query_a);
-$row_a = mysqli_fetch_assoc($resultado_a);
-
-/*---------------------------------DEMITIDOS--------------------------------------------*/
-
-$query_d = "SELECT 
-         COUNT(MIF.status) AS demitido
-         FROM
-         manager_inventario_funcionario MIF
-         LEFT JOIN
-         manager_inventario_equipamento MIE ON MIE.id_funcionario = MIF.id_funcionario
-         WHERE
-         MIF.status = 8 AND
-         MIE.tipo_equipamento in (9 , 5, 8) AND
-         MIF.deletar = 0";
-$resultado_d = mysqli_query($conn, $query_d);
-$row_d = mysqli_fetch_assoc($resultado_d);
-
-/*---------------------------------SEM EQUIPAMENTOS--------------------------------------------*/
-
-$query_Squip = "SELECT 
-         COUNT(MIF.status) AS sem_equip
-         FROM
-         manager_inventario_funcionario MIF
-         LEFT JOIN
-         manager_inventario_equipamento MIE ON MIE.id_funcionario = MIF.id_funcionario
-         WHERE
-         MIF.status = 9 AND
-         MIE.tipo_equipamento in (9 , 5, 8) AND
-         MIF.deletar = 0";
-$resultado_Squip = mysqli_query($conn, $query_Squip);
-$row_Squip = mysqli_fetch_assoc($resultado_Squip);
-
-/*---------------------------------SCANNER--------------------------------------------*/
-
-$query_scanner = "SELECT 
-         COUNT(MIE.id_equipamento) AS scanner
-         FROM
-         manager_inventario_equipamento MIE
-         WHERE
-            MIE.deletar = 0 AND 
-            MIE.tipo_equipamento = 10 ";
-$resultado_scanner = mysqli_query($conn, $query_scanner);
-$row_scanner = mysqli_fetch_assoc($resultado_scanner);
-
-/*---------------------------------DISPONIVEIS--------------------------------------------*/
-
-$query_disponivel = "SELECT 
-         COUNT(MIE.id_equipamento) AS disponivel
-         FROM
-         manager_inventario_equipamento MIE
-         WHERE
-            MIE.deletar = 0 AND 
-            MIE.status IN (6, 10) AND
-            MIE.tipo_equipamento IN (8,9)";
-$resultado_disponivel = mysqli_query($conn, $query_disponivel);
-$row_disponivel = mysqli_fetch_assoc($resultado_disponivel);
-
-/*---------------------------------CONDENADOS--------------------------------------------*/
-
-$query_condenados = "SELECT 
-         COUNT(MIE.id_equipamento) AS condenados
-         FROM
-         manager_inventario_equipamento MIE
-         WHERE
-            MIE.deletar = 1 AND
-            MIE.tipo_equipamento IN (8 , 9)";
-$resultado_condenados = mysqli_query($conn, $query_condenados);
-$row_condenados = mysqli_fetch_assoc($resultado_condenados);
-
-require 'header.php';
+$result_count = $conn->query($cont);
+$row_count = $result_count->fetch_assoc();
 
 ?>
 
@@ -370,7 +271,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
          <tbody>
             <?php
             //aplicando a query
-            while ($row_equip = mysqli_fetch_assoc($resultado_equip)) {
+            while ($row_equip = $resultado_equip->fetch_assoc()) {
                echo "<tr>";
                if ($row_equip['id_tipo_equipamento'] == 5) { #RAMAL
                   echo "<td class='fonte'>" . $row_equip['modelo'] . "</td>";
@@ -420,7 +321,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
                //STATUS
                if ($row_equip['id_fun_status'] == 9) { //SEM EQUIPAMENTO
                   $upt = "UPDATE manager_inventario_funcionario SET status = 4 WHERE id_funcionario = " . $row_equip['id_funcionario'] . "";
-                  $result_upt = mysqli_query($conn, $upt);
+                  $result_upt = $conn->query($upt);
                   echo "<script type='text/javascript'>window.location.reload()</script>";
                }
 
@@ -676,9 +577,9 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
                                           <select class='span2' style='margin-top: -40px; margin-left: 50px;' name='id_status' required>
                                              <option value=''>---</option>";
                $status = "SELECT id_status, nome FROM manager_dropstatusequipamento WHERE id_status in (6,10)";
-               $result_status = mysqli_query($conn, $status);
+               $result_status = $conn->query($status);
 
-               while ($row_status = mysqli_fetch_assoc($result_status)) {
+               while ($row_status = $result_status->fetch_assoc()) {
                   echo "<option value='" . $row_status['id_status'] . "'>" . $row_status['nome'] . "</option>";
                }
                echo "
@@ -698,7 +599,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
             </div>
          </div>
          "; //end tabela
-            } //end while
+      } //end while
             ?>
          </tbody>
       </table>

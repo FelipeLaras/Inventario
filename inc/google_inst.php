@@ -2,7 +2,7 @@
     //aplicando para usar variavel em outro arquivo
     session_start();
     //chamando conexão com o banco
-    require 'pesquisa_condb.php';
+    require_once('../conexao/pesquisa_condb.php');
 
     //data de hoje
     $date = date('d/m/Y');
@@ -19,7 +19,7 @@
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT tipo_arquivo FROM google_validacao_arquivo WHERE tipo_arquivo LIKE '".$tipo_file."'";//query de validação 
 
-        $result =  mysqli_query($conn_db, $sql_file);//aplicando a query
+        $result =  $conn_db->query($sql_file);//aplicando a query
         $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 
         /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -40,7 +40,7 @@
         
          $inst_replace = str_replace("\\", "/", $inst);
 
-         $result = mysqli_query($conn_db, $inst_replace) or die(mysqli_error($conn_db));   
+         $result = $conn_db->query($inst_replace);  
 
     }else{
         //SALVANDO A INFORMAÇÃO
@@ -48,11 +48,11 @@
         
         $inst_replace = str_replace("\\", "/", $inst);
 
-        $result = mysqli_query($conn_db, $inst_replace) or die(mysqli_error($conn_db));        
+        $result = $conn_db->query($inst_replace);       
     }
 
-    header('location:msn_google_s.php');//indo para a tela informando que o mesmo foi salvo
+    header('location: msn_google_s.php');//indo para a tela informando que o mesmo foi salvo
 
-    mysqli_close($conn_db);//fechando banco pesquisa(google)
+    $conn_db->close();//fechando banco pesquisa(google)
 
 ?> 

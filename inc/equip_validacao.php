@@ -2,8 +2,7 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o bancoF
-require 'conexao.php';
-/*------------------------------------------------------------------------------------------------ */
+require_once('../conexao/conexao.php');
 
 //1º vamos validar o CPF
 
@@ -24,10 +23,10 @@ if ($_POST['gols1'] != NULL) {
     LEFT JOIN manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
     LEFT JOIN manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
     LEFT JOIN manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa WHERE MIF.cpf = '".$_POST['gols1']."'";
-    $resultado_cpf = mysqli_query($conn, $existe_cpf_cadastrado);
+    $resultado_cpf = $conn->query($existe_cpf_cadastrado);
 
     //iniciando a validação
-    if($row_cpf = mysqli_fetch_assoc($resultado_cpf)){
+    if($row_cpf = $resultado_cpf->fetch_assoc()){
 
         if($row_cpf['deletar'] == 1){
             /*--- VOLTANDO PARA A TELA - ERRO 1 FUNCIONÁRIO DESATIVADO ---*/
@@ -57,5 +56,5 @@ if ($_POST['gols1'] != NULL) {
 /*------------------------------------------------------------------------------------------------ */
 
 //fechando o banco de dados
-mysqli_close($conn);
+$conn->close();
 ?>

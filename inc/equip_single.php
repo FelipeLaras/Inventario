@@ -2,8 +2,7 @@
     //abre as sessões
     session_start();
     //chama banco de dados
-    include "conexao.php";
-
+    require_once('../conexao/conexao.php');
 
     /*##########    CPU    ##########*/
 
@@ -11,9 +10,9 @@
 
         /*1º vamos ver se o equipamento não está cadastrado */
         $query_verificando = "SELECT patrimonio, deletar FROM manager_inventario_equipamento WHERE patrimonio = ".$_POST['gols2']."";
-        $result_verificando = mysqli_query($conn, $query_verificando);
+        $result_verificando = $conn->query($query_verificando);
 
-        if($row_verificando = mysqli_fetch_assoc($result_verificando)){
+        if($row_verificando = $result_verificando->fetch_assoc()){
             if($row_verificando['deletar'] == 1){
                 header('location: add_equip_single.php?error=4');//Erro equipamento já cadastrado porém condenado
                 exit;
@@ -25,9 +24,9 @@
 
         /*2º buscar as informações */
         $query_equip = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['gols2']."%'";
-        $result_equip = mysqli_query($conn, $query_equip);
+        $result_equip = $conn->query($query_equip);
 
-        if($row_equip = mysqli_fetch_assoc($result_equip)){//montando as sessões
+        if($row_equip = $result_equip->fetch_assoc()){//montando as sessões
             //equipamento
             $_SESSION['numero_patrimonio'] = $row_equip['patrimonio'];
             $_SESSION['dominio'] = $row_equip['dominio'];
@@ -62,9 +61,9 @@
 
         /*1º vamos ver se o equipamento não está cadastrado */
         $query_verificando = "SELECT patrimonio, deletar FROM manager_inventario_equipamento WHERE patrimonio = ".$_POST['gols3']."";
-        $result_verificando = mysqli_query($conn, $query_verificando);
+        $result_verificando = $conn->query($query_verificando);
 
-        if($row_verificando = mysqli_fetch_assoc($result_verificando)){
+        if($row_verificando = $result_verificando->fetch_assoc()){
             if($row_verificando['deletar'] == 1){
                 header('location: add_equip_single.php?error=4');//Erro equipamento já cadastrado porém condenado
                 exit;
@@ -76,7 +75,7 @@
 
         /*2º buscar as informações */
         $query_equip = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['gols3']."%'";
-        $result_equip = mysqli_query($conn, $query_equip);
+        $result_equip = $conn->query($query_equip);
 
         if($row_equip = mysqli_fetch_assoc($result_equip)){//montando as sessões
             //equipamento
@@ -109,5 +108,5 @@
 
 
     //fim
-    mysqli_close($conn);
+$conn->close();
 ?>

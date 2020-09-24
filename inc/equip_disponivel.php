@@ -2,79 +2,21 @@
    //aplicando para usar varialve em outro arquivo
    session_start();
    /*------------------------------------------------------------------------------------------------------------------*/
-   //chamando conexão com o banco
-   require 'conexao.php';
-   /*------------------------------------------------------------------------------------------------------------------*/
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
    
-       header('location: error.php');
+       header('location: ../front/error.php');
    }
-/*------------------------------------------------------------------------------------------------------------------*/
-//chamandos todos os equipamento do tipo (notebooks, desktops, ramais)
-$equipamentos = "SELECT 
-MIE.id_equipamento,
-MIE.status AS id_status,
-MDST.nome AS status,
-MDEQ.nome AS tipo_equipamento,
-MIE.tipo_equipamento AS id_tipo_equipamento,
-MIE.numero AS ramal,
-MIE.patrimonio,
-MIE.ip,
-MDD.nome AS departamento,
-MDLB.nome AS locacao,
-MDE.nome AS empresa,
-MSO.id AS id_so,
-MDSO.nome AS versao_so,
-MSO.serial AS serial_so,
-MDE.nome AS empresa_so,
-MDL.nome AS locacao_so,
-MSO.data_nota AS data_nota_so,
-MSO.file_nota AS file_nota_so,
-MSO.file_nota_nome AS file_nome_so,
-MO.id AS id_office,
-MDO.nome AS versao_office,
-MO.serial AS serial_office,
-MDE.nome AS empresa_office,
-MDLA.nome AS locacao_office,
-MO.data_nota AS data_nota_office,
-MO.file_nota AS file_nota_office,
-MO.file_nota_nome AS file_nome_office
-FROM
-manager_inventario_equipamento MIE
-    LEFT JOIN
-manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
-    LEFT JOIN
-manager_dropempresa MDE ON MIE.filial = MDE.id_empresa
-    LEFT JOIN
-manager_dropdepartamento MDD ON MIE.departamento = MDD.id_depart
-    LEFT JOIN
-manager_office MO ON MIE.id_equipamento = MO.id_equipamento
-    LEFT JOIN
-manager_sistema_operacional MSO ON MIE.id_equipamento = MSO.id_equipamento
-    LEFT JOIN
-manager_dropoffice MDO ON MO.versao = MDO.id
-    LEFT JOIN
-manager_dropsistemaoperacional MDSO ON MSO.versao = MDSO.id
-    LEFT JOIN
-manager_droplocacao MDL ON MSO.locacao = MDL.id_empresa
-    LEFT JOIN
-manager_droplocacao MDLA ON MO.locacao = MDLA.id_empresa
-    LEFT JOIN
-manager_droplocacao MDLB ON MIE.locacao = MDLB.id_empresa
-   LEFT JOIN
-manager_dropstatusequipamento MDST ON MIE.status = MDST.id_status
 
-WHERE
-MIE.deletar = 0 AND 
-MIE.tipo_equipamento IN (9, 5, 8) AND
-MIE.status IN (6, 10)";
-$resultado_equip = mysqli_query($conn, $equipamentos);
+require_once('../conexao/conexao.php');
+require_once('header.php');
+require_once('query.php');
+
+
 ?>
-<?php  require 'header.php'?>
 <!--Chamando a Header-->
 <div class="subnavbar">
     <div class="subnavbar-inner">
@@ -165,7 +107,7 @@ $resultado_equip = mysqli_query($conn, $equipamentos);
             <tbody>
                 <?php
 //aplicando a query
-while ($row_equip = mysqli_fetch_assoc($resultado_equip)) {
+while ($row_equip = $resultadoEquipDisponivel -> fetch_assoc()) {
 
    empty($row_equip['data_nota_so']) ? $data_so = "semNota" : $data_so = $row_equip['data_nota_so'];//data nota do sistema operacional 
 
@@ -303,17 +245,9 @@ while ($row_equip = mysqli_fetch_assoc($resultado_equip)) {
                               <div class='controls'>
                                  <select class='span2' style='margin-top: -40px; margin-left: 61px;' name='id_funcionario' required>
                                     <option value=''>---</option>";
-                                    $status = "SELECT 
-                                    id_funcionario, 
-                                    nome 
-                                    FROM manager_inventario_funcionario 
-                                    WHERE 
-                                    deletar = 0 order by nome ASC";
-                                    $result_status = mysqli_query($conn, $status);
-
-                                    while($row_status = mysqli_fetch_assoc($result_status)){
-                                       echo "<option value='".$row_status['id_funcionario']."'>".$row_status['nome']."</option>";
-                                    }                                             
+                                          while($row_status = $result_status -> fetch_assoc()){
+                                             echo "<option value='".$row_status['id_funcionario']."'>".$row_status['nome']."</option>";
+                                          }                                             
                                     echo"
                                  </select>
                               </div>
@@ -423,5 +357,4 @@ function fechar(id) {
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </body>
-
 </html>

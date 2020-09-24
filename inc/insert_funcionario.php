@@ -3,7 +3,7 @@
     session_start();
 
     //chamando o banco de dados
-    include 'conexao.php';
+    require_once('../conexao/conexao.php');
 
     //data hoje
     $data_hoje = date('d/m/Y');
@@ -11,8 +11,8 @@
     /*---------------------- VERIFICANDO SE O CPF JÁ NÃO ESTA CADASTRADO----------------------*/
 
     $select_fun = "SELECT id_funcionario, cpf FROM manager_inventario_funcionario WHERE cpf = '".$_POST['cpf']."'";
-    $resultado_select = mysqli_query($conn, $select_fun);
-    $linha_select = mysqli_fetch_assoc($resultado_select);
+    $resultado_select = $conn->query($select_fun);
+    $linha_select = $resultado_select->fetch_assoc();
     
     //aplicando a regra caso tenha um funcionario
     if($linha_select['cpf'] != NULL){
@@ -20,7 +20,7 @@
 
         $updateFuncionario = "UPDATE manager_inventario_funcionario SET usuario = '".$_SESSION['id']."', cpf = '".$_POST['cpf']."', nome = '".$_POST['nome']."', funcao = '".$_POST['funcao']."', departamento = '".$_POST['departamento']."', empresa = '".$_POST['empresa']."', data_cadastro = '".$data_hoje."', status = '9' WHERE id_funcionario = '".$linha_select['id_funcionario']."'";
 
-        $resultupdate = mysqli_query($conn, $updateFuncionario) or die(mysqli_error($conn));
+        $resultupdate = $conn->query($updateFuncionario);
 
     }else{        
         /*---------------------- SALVANDO O FUNCIONARIO ----------------------*/
@@ -43,14 +43,14 @@
                             '".$_POST['empresa']."',
                             '".$data_hoje."',
                             '9')";
-        $result_fun = mysqli_query($conn, $insert_fun) or die(mysqli_error($conn));
+        $result_fun = $conn->query($insert_fun);
     }
-    //fechando o banco
-    mysqli_close($conn);
+//fechando o banco
+$conn->close();
    
+require_once('header.php')
+
 ?>
-<html>
-<?php  require 'header.php'?>
 <div class="widget widget-nopad" style='margin-top: 23px;'>
     <div class="widget-header"> <i class="icon-user"></i>
         <h3>Novo Cadastro</h3>

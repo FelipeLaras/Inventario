@@ -1,26 +1,25 @@
 <?php
     //chamando manager
-    require 'conexao.php';
-    /*---------------------------------------------------------------------*/
+    require_once('../conexao/conexao.php');
     //chamando ocsweb
-    require 'conexao_ocs.php';
+    require_once('../conexao/conexao_ocs.php');
     /*---------------------------------------------------------------------*/
 
     //1º vamos salvar no OCS
     //pegando o patrimonio
     $buscar_patrimonio = "SELECT patrimonio FROM manager_inventario_equipamento WHERE id_equipamento = ".$_POST['id_equip'].";";
-    $result_patrimonio = mysqli_query($conn, $buscar_patrimonio);
-    $patrimonio = mysqli_fetch_assoc($result_patrimonio);
+    $result_patrimonio = $conn->query($buscar_patrimonio);
+    $patrimonio = $result_patrimonio->fetch_assoc();
 
     //pegando o hardware_id
     $buscando_harwareID = "SELECT HARDWARE_ID FROM accountinfo WHERE TAG = '".$patrimonio['patrimonio']."'";
-    $result_harwareID= mysqli_query($conn_ocs, $buscando_harwareID);
-    $harwareID = mysqli_fetch_assoc($result_harwareID);
+    $result_harwareID= $conn_ocs->query($buscando_harwareID);
+    $harwareID = $result_harwareID->fetch_assoc();
 
     //pegando o nome office
     $office = "SELECT nome FROM manager_dropoffice where id = ".$_POST['tipo_office']."";
-    $result_office= mysqli_query($conn, $office);
-    $office_row = mysqli_fetch_assoc($result_office);
+    $result_office= $conn->query($office);
+    $office_row = $result_office->fetch_assoc();
 
     //juntando todos os ingredientes acimas e fazendo o bolo!!
     $inserindo_ocs = "INSERT INTO ocsweb.officepack 
@@ -28,7 +27,7 @@
         VALUES
         ('".$harwareID['HARDWARE_ID']."', '".$office_row['nome']."', '".$_POST['serial_office']."',0)";
 
-    $resultado_ocs = mysqli_query($conn_ocs, $inserindo_ocs) or die(mysqli_error($conn_ocs));
+    $resultado_ocs = $conn_ocs->query($inserindo_ocs) or die(mysqli_error($conn_ocs));
 
     /*---------------------------------------------------------------------*/
     //2º agora vamos salvar no MANAGER
@@ -44,7 +43,7 @@
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-    $result =  mysqli_query($conn, $sql_file);//aplicando a query
+    $result =  $conn->query($sql_file);//aplicando a query
     $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 
     if($tipo_file != NULL){
@@ -82,13 +81,13 @@
             '".$caminho_db."',
             '".$nome_db."',
             '".$data_nota."')";
-    $result_new_office = mysqli_query($conn, $new_office) or die(mysqli_error($conn));
+    $result_new_office = $conn->query($new_office) or die(mysqli_error($conn));
 
 /*---------------------------------------------------------------------*/
 //fechando o banco manager
-mysqli_close($conn);
+$conn->close();
 //fechando o banco OCS
-mysqli_close($conn_ocs);
+$conn_ocs->close();
 //Voltando para a tela
 header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&tipo='.$_POST['tipo_equipamento'].'&msn=2');
 ?>

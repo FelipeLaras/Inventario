@@ -1,82 +1,24 @@
 <?php
-   /*------------------------------------------------------------------------------------------------------------------*/
-
-   //aplicando para usar varialve em outro arquivo
-   session_start();
-   /*------------------------------------------------------------------------------------------------------------------*/
-   //chamando conexão com o banco
-   require 'conexao.php';
-   /*------------------------------------------------------------------------------------------------------------------*/
-   //Aplicando a regra de login
-   if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
-   
-   }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
-   
-       header('location: error.php');
-   }
 /*------------------------------------------------------------------------------------------------------------------*/
-//chamandos todos os equipamento do tipo (notebooks, desktops, ramais)
-$equipamentos = "SELECT 
-MIF.id_funcionario,
-MIE.id_equipamento,
-MDEQ.nome AS tipo_equipamento,
-MIE.tipo_equipamento AS id_tipo_equipamento,
-MIE.numero AS ramal,
-MIE.patrimonio,
-MIE.ip,
-MIF.nome AS responsavel,
-MIF.cpf,
-MDD.nome AS departamento,
-MDLB.nome AS locacao,
-MDE.nome AS empresa,
-MSO.id AS id_so,
-MDSO.nome AS versao_so,
-MSO.serial AS serial_so,
-MDE.nome AS empresa_so,
-MDL.nome AS locacao_so,
-MSO.data_nota AS data_nota_so,
-MSO.file_nota AS file_nota_so,
-MSO.file_nota_nome AS file_nome_so,
-MO.id AS id_office,
-MDO.nome AS versao_office,
-MO.serial AS serial_office,
-MDE.nome AS empresa_office,
-MDLA.nome AS locacao_office,
-MO.data_nota AS data_nota_office,
-MO.file_nota AS file_nota_office,
-MO.file_nota_nome AS file_nome_office
-FROM
-manager_inventario_equipamento MIE
-    LEFT JOIN
-manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
-    LEFT JOIN
-manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
-    LEFT JOIN
-manager_dropempresa MDE ON MIE.filial = MDE.id_empresa
-    LEFT JOIN
-manager_dropdepartamento MDD ON MIE.departamento = MDD.id_depart
-    LEFT JOIN
-manager_office MO ON MIE.id_equipamento = MO.id_equipamento
-    LEFT JOIN
-manager_sistema_operacional MSO ON MIE.id_equipamento = MSO.id_equipamento
-    LEFT JOIN
-manager_dropoffice MDO ON MO.versao = MDO.id
-    LEFT JOIN
-manager_dropsistemaoperacional MDSO ON MSO.versao = MDSO.id
-    LEFT JOIN
-manager_droplocacao MDL ON MSO.locacao = MDL.id_empresa
-LEFT JOIN
-manager_droplocacao MDLA ON MO.locacao = MDLA.id_empresa
-LEFT JOIN
-manager_droplocacao MDLB ON MIE.locacao = MDLB.id_empresa
 
-WHERE
-MIE.deletar = 1 AND MIE.tipo_equipamento IN (9 , 5, 8)";
-$resultado_equip = mysqli_query($conn, $equipamentos);
+//aplicando para usar varialve em outro arquivo
+session_start();
+/*------------------------------------------------------------------------------------------------------------------*/
+//Aplicando a regra de login
+if($_SESSION["perfil"] == NULL){  
+   header('location: index.html');
+
+}elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
+
+      header('location: error.php');
+}
+
+/*------------------------------------------------------------------------------------------------------------------*/
+require_once('../conexao/conexao.php');
+require_once('../query/query.php');
+require_once('header.php');
+
 ?>
-<?php  require 'header.php'?>
-<!--Chamando a Header-->
 <div class="subnavbar">
     <div class="subnavbar-inner">
         <div class="container">
@@ -154,7 +96,7 @@ $resultado_equip = mysqli_query($conn, $equipamentos);
             <tbody>
                 <?php
 //aplicando a query
-while ($row_equip = mysqli_fetch_assoc($resultado_equip)) {
+while ($row_equip = $resultado_equip -> fetch_assoc()) {
   
    //se for desktop
    if($row_equip['id_tipo_equipamento'] == 8){//desktop

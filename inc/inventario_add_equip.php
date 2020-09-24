@@ -1,7 +1,7 @@
 <?php 
 session_start(); 
 //incluindo o banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 /*______________________________________________________________________________________________*/
 //VALIDAÇÃO EQUIPAMENTO
 
@@ -37,9 +37,9 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 		if($_FILES['file_nota_celular'.$cont_equip.''] != NULL){
 
 			$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['file_nota_celular'.$cont_equip.'']['name']."'";
-			$resultNomeFile = mysqli_query($conn, $queryNomeFile);
+			$resultNomeFile = $conn->query($queryNomeFile);
 			
-			if($nomeFile = mysqli_fetch_assoc($resultNomeFile)){
+			if($nomeFile = $resultNomeFile->fetch_assoc()){
 		
 				header('location: inventario_equip_add.php?error=2');
 		
@@ -82,7 +82,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 									'".$_POST['status_celular'.$cont_equip.'']."')
 									";
 		
-		$resultado_equipamento = mysqli_query($conn, $insert_equipamento) or die(mysqli_error($conn));
+		$resultado_equipamento = $conn->query($insert_equipamento);
 
 		if (isset($_POST['acessorio_celular'.$cont_equip.''])) {
 
@@ -91,7 +91,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 			foreach ($idAcessorioCelular as $IdCelular) {
 				//montando a query
 				$query_acessorios = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUES ((select max(id_equipamento) from manager_inventario_equipamento),'".$IdCelular."')";
-				$resultado_acessrios = mysqli_query($conn, $query_acessorios) or die(mysqli_error($conn));
+				$resultado_acessrios = $conn->query($query_acessorios);
 			}
 		}
 
@@ -108,7 +108,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 			/*VALIDAÇÃO DO FILE*/
 			$sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 	
-			$result =  mysqli_query($conn, $sql_file);//aplicando a query
+			$result =  $conn->query($sql_file);//aplicando a query
 			$row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 	
 			/*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -142,7 +142,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 							'".$nome_db."',
 							'4',
 							'".$_POST['data_nota_celular'.$cont_equip.'']."')";
-			$resultado_file_nota = mysqli_query($conn, $bd_nota) or die(mysqli_error($conn));
+			$resultado_file_nota = $conn->query($bd_nota);
 		}//FIM IF salvando file nota
 
 
@@ -163,12 +163,10 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 	if($_FILES['file_nota_tablet'.$cont_equip.''] != NULL){
 
 		$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['file_nota_tablet'.$cont_equip.'']['name']."'";
-		$resultNomeFile = mysqli_query($conn, $queryNomeFile);
-		
-		if($nomeFile = mysqli_fetch_assoc($resultNomeFile)){
-	
-			header('location: inventario_equip_add.php?error=2');
-	
+		$resultNomeFile = $conn->query($queryNomeFile);
+
+		if($nomeFile = $resultNomeFile->fetch_assoc()){	
+			header('location: inventario_equip_add.php?error=2');	
 			exit;
 		}
 	}
@@ -207,7 +205,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 										'".$_POST['status_tablet'.$cont_equip.'']."'
 										)";
 
-		$resultado_equipamento_tablet = mysqli_query($conn, $insert_equipamento_tablet) or die(mysqli_error($conn));
+		$resultado_equipamento_tablet = $conn->query($insert_equipamento_tablet);
 
 		if (isset($_POST['acessorio_tablet'.$cont_equip.''])) {
 
@@ -216,7 +214,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 			foreach ($idAcessorioTablet as $IdTablet) {
 				//montando a query
 				$query_acessorios_tablet = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUES ((select max(id_equipamento) from manager_inventario_equipamento),'".$IdTablet."')";
-				$resultado_acessrios_tablet = mysqli_query($conn, $query_acessorios_tablet) or die(mysqli_error($conn));
+				$resultado_acessrios_tablet = $conn->query($query_acessorios_tablet);
 			}
 
 		}
@@ -232,7 +230,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 			/*VALIDAÇÃO DO FILE*/
 			$sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 	
-			$result =  mysqli_query($conn, $sql_file);//aplicando a query
+			$result =  $conn->query($sql_file);//aplicando a query
 			$row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 	
 			/*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -266,7 +264,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 							'".$nome_db."',
 							'4',
 							'".$_POST['data_nota_tablet'.$cont_equip.'']."')";
-			$resultado_file_nota = mysqli_query($conn, $bd_nota) or die(mysqli_error($conn));
+			$resultado_file_nota = $conn->query($bd_nota);
 		}//FIM IF salvando file nota
 
 		//SOMANDO MAIS 1 PARA PEGAR OS PROXIMOS APARELHOS
@@ -275,7 +273,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 }
 /*______________________________________________________________________________________________*/
 /*SALVANDO CHIP*/
-$cont_equip_chip=0;
+$cont_equip_chip = 0;
 
 if ($_POST['imei_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALVA-LOS
 	//data de criação apenas informar quando o chip se tornar diferente de virgem
@@ -285,7 +283,6 @@ if ($_POST['imei_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALV
 	}else{
 		$date_chip = $date;
 	}
-
 
 	while ($_POST['imei_chip'.$cont_equip_chip.''] != NULL) {
 		
@@ -318,7 +315,7 @@ if ($_POST['imei_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALV
 									'---', 
 									'".$_POST['status_chip'.$cont_equip_chip.'']."')";
 
-		$resultado_equipamento_chip = mysqli_query($conn, $query_equipamento_chip) or die(mysqli_error($conn));
+		$resultado_equipamento_chip = $conn->query($query_equipamento_chip);
 	//SOMANDO MAIS 1 PARA PEGAR OS PROXIMOS APARELHOS
 		$cont_equip_chip++;
 	}
@@ -345,10 +342,10 @@ if ($_POST['modelo_modem'] != NULL) {
 							'".$_POST['imei_modem']."', 
 							'".$date."')";
 
-		$resultado_modem = mysqli_query($conn, $query_modem) or die(mysqli_error($conn));
+		$resultado_modem = $conn->query($query_modem);
 	}
 
 
-mysqli_close($conn);
+$conn->close();
 header('location: msn_equipamento.php?msn=3');
 ?>

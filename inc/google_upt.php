@@ -2,19 +2,20 @@
    //aplicando para usar variavel em outro arquivo
    session_start();
    //chamando conexão com o banco
-  require 'conexao.php';
+  require_once('../conexao/conexao.php');
+  require_once('../conexao/pesquisa_condb.php');
+  require_once('header.php');
 
-  require 'pesquisa_condb.php';
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 2) AND ($_SESSION["perfil"] != 4)) {
    
-       header('location: error.php');
+       header('location: ../front/error.php');
    } 
 
-   require 'header.php'  
+  
 ?>
 <script src="ckeditor/ckeditor.js"></script>
 <body>
@@ -62,8 +63,8 @@
                     if ($_GET['id_pesquisa'] != NULL) {
                       
                       $query = "SELECT titulo from google WHERE cod_tabela = ".$_GET['id_pesquisa']."";
-                      $result_titulo = mysqli_query($conn_db, $query);
-                      $row_titulo = mysqli_fetch_assoc($result_titulo);
+                      $result_titulo = $conn_db->query($query);
+                      $row_titulo = $result_titulo->fetch_assoc();
                       echo "<input type='text' name='titulo' id='gols1' class='cpfcnpj span2' onkeydown='javascript: fMasc( this, mCPF );'' value='".$row_titulo['titulo']."'>";
                     }else{
                       echo "<input type='text' name='titulo' id='gols1' class='cpfcnpj span2' onkeydown='javascript: fMasc( this, mCPF );'' >";
@@ -87,8 +88,8 @@
                         if ($_GET['id_pesquisa'] != NULL){
 
                         $query_body = "SELECT body from google WHERE cod_tabela = ".$_GET['id_pesquisa']."";
-                        $result_body = mysqli_query($conn_db, $query_body);
-                        $row_body = mysqli_fetch_assoc($result_body);
+                        $result_body = $conn_db->query($query_body);
+                        $row_body = $result_body->fetch_assoc();
                         echo "<textarea id='txtArtigo' name='txtArtigo'>".$row_body['body']."</textarea>";
                         }else{
                         echo "<textarea id='txtArtigo' name='txtArtigo'></textarea>";
@@ -98,8 +99,7 @@
                       ?>
 
                       </div>
-                      <input type="text" name="cod_tabela" style="display:none;" value=" <?php 
-                      echo $_GET['id_pesquisa']; ?>  " />
+                      <input type="text" name="cod_tabela" style="display:none;" value=" <?= $_GET['id_pesquisa']; ?>  " />
 
                 <script src="ckeditor/ckeditor.js"> 
                 </script>

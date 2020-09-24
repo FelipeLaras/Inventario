@@ -1,7 +1,7 @@
 <?php
 //chamando o banco de dados
 
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 if($_POST['programa'] == 1){//Windows
 
@@ -16,7 +16,7 @@ if($_POST['programa'] == 1){//Windows
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-    $result =  mysqli_query($conn, $sql_file);//aplicando a query
+    $result =  $conn -> query($sql_file);//aplicando a query
     $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 
     if($tipo_file != NULL){
@@ -35,7 +35,7 @@ if($_POST['programa'] == 1){//Windows
 
     //salvando agora o office no banco
     $edit_win = "UPDATE manager_sistema_operacional SET file_nota = '".$caminho_db."', file_nota_nome = '".$nome_db."', data_nota = '".$_POST['data_nota']."' WHERE id = ".$_POST['id_win']." ";
-    $result_edit_win = mysqli_query($conn, $edit_win) or die(mysqli_error($conn));
+    $result_edit_win = $conn -> query($edit_win);
    
     header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
 }//end IF windows
@@ -57,7 +57,7 @@ if($_POST['programa'] == 2){//Office
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-    $result =  mysqli_query($conn, $sql_file);//aplicando a query
+    $result =  $conn -> query($sql_file);//aplicando a query
     $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 
     if($tipo_file != NULL){
@@ -76,7 +76,7 @@ if($_POST['programa'] == 2){//Office
 
     //salvando agora o office no banco
     $edit_off = "UPDATE manager_office SET file_nota = '".$caminho_db."', file_nota_nome = '".$nome_db."', data_nota = '".$_POST['data_nota']."' WHERE id = ".$_POST['id_win']." ";
-    $result_edit_off = mysqli_query($conn, $edit_off) or die(mysqli_error($conn));
+    $result_edit_off = $conn -> query($edit_off);
     
     header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
 }//end IF windows
@@ -97,7 +97,7 @@ if($_POST['programa'] == 3){//Termo
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-    $result =  mysqli_query($conn, $sql_file);//aplicando a query
+    $result =  $conn -> query($sql_file);//aplicando a query
     $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 
     if($tipo_file != NULL){
@@ -116,7 +116,7 @@ if($_POST['programa'] == 3){//Termo
 
     //salvando agora o termo no banco
     $edit_termo = "UPDATE manager_inventario_anexo SET caminho = '".$caminho_db."', nome = '".$nome_db."', data_criacao = '".$_POST['data_nota']."' WHERE id_anexo = ".$_POST['id_win']." ";
-    $result_edit_termo = mysqli_query($conn, $edit_termo) or die(mysqli_error($conn));
+    $result_edit_termo = $conn -> query($edit_termo);
 
     header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
 }//end IF windows
@@ -124,5 +124,5 @@ if($_POST['programa'] == 3){//Termo
 
 /*------------------------------------------------------------------------------------------------------------*/
 //fechando o banco de dados
-mysqli_close($conn);
+$conn -> close();
 ?>

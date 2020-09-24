@@ -2,7 +2,7 @@
 //sessão
 session_start();
 //banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 //DATA DE HOJE
 $data_hoje = date('d/m/Y');
 
@@ -54,7 +54,7 @@ if($cpu != NULL){
                                 '".$_POST['serie_cpu']."',
                                 '6',
                                 '".$data_hoje."')";
-    if($result_equipamento_cpu = mysqli_query($conn, $query_equipamento_cpu)){
+    if($result_equipamento_cpu = $conn->query($query_equipamento_cpu)){
         echo "Salvou equipamento</br>";
     }else{
         printf("Erro equipamento: ".mysqli_error($conn));
@@ -73,7 +73,7 @@ if($cpu != NULL){
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-        if($result =  mysqli_query($conn, $sql_file)){
+        if($result =  $conn->query($sql_file)){
             echo "Salvou Nota Office";
         }else{
             printf("Erro Nota Office: ".mysqli_error($conn));
@@ -119,12 +119,12 @@ if($cpu != NULL){
         '".$caminho_db."',
         '".$nome_db."',
         '".$_POST['data_nota_office_cpu']."')";
-        if($result_cpu_office = mysqli_query($conn, $query_cpu_office)){
+        if($result_cpu_office = $conn->query($query_cpu_office)){
             echo "Salvou Office</br>";
 
             //pegando o ultimo valor para usar na hora de enviar o modelo
             $query_idOffice = "SELECT max(id) as id FROM manager_office";
-            $result_idOffice = mysqli_query($conn, $query_idOffice);
+            $result_idOffice = $conn->query($query_idOffice);
             $idOffice = mysqli_fetch_assoc($result_idOffice);
 
         }else{
@@ -144,7 +144,7 @@ if($cpu != NULL){
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação
         
-        if($result =  mysqli_query($conn, $sql_file)){
+        if($result =  $conn->query($sql_file)){
             echo "Salvou Nota Windows</br>";
         }else{
             printf("Erro Nota Windows: ".mysqli_error($conn));
@@ -190,7 +190,7 @@ if($cpu != NULL){
                                                         '".$nome_db."',
                                                         '".$_POST['data_nota_so_cpu']."')"; 
 
-    if($result_cpu_windows = mysqli_query($conn, $query_cpu_windows)){
+    if($result_cpu_windows = $conn->query($query_cpu_windows)){
         echo "Salvou Windows</br>";
     }else{
         echo $query_cpu_windows;
@@ -199,7 +199,7 @@ if($cpu != NULL){
 
     //pegando o ultimo valor para usar na hora de enviar o modelo
     $query_idWindows = "SELECT max(id) as id FROM manager_sistema_operacional";
-    $result_idWindows = mysqli_query($conn, $query_idWindows);
+    $result_idWindows = $conn->query($query_idWindows);
     $idWindows = mysqli_fetch_assoc($result_idWindows);
 
 
@@ -246,7 +246,7 @@ if($notebook != NULL){
                                 '".$_POST['serie_notebook']."',
                                 '6',
                                 '".$data_hoje."')";
-    if($resultado_equipamento_note = mysqli_query($conn, $query_equipamento_note)){
+    if($resultado_equipamento_note = $conn->query($query_equipamento_note)){
         echo "Salvou equipamento Notebook</br>";
     }else{
         printf("Erro equipamento Notebook: ".mysqli_error($conn));
@@ -265,7 +265,7 @@ if($notebook != NULL){
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-        if($result =  mysqli_query($conn, $sql_file)){
+        if($result =  $conn->query($sql_file)){
             echo "Salvou Nota Office notebook";
         }else{
             printf("Erro Nota Office notebook: ".mysqli_error($conn));
@@ -311,12 +311,12 @@ if($notebook != NULL){
         '".$caminho_db."',
         '".$nome_db."',
         '".$_POST['data_office_note']."')";
-        if($result_note_office = mysqli_query($conn, $query_note_office)){
+        if($result_note_office = $conn->query($query_note_office)){
             echo "Salvou Office note</br>";
 
             //pegando o ultimo valor para usar na hora de enviar o modelo
             $query_idOffice = "SELECT max(id) as id FROM manager_office";
-            $result_idOffice = mysqli_query($conn, $query_idOffice);
+            $result_idOffice = $conn->query($query_idOffice);
             $idOffice = mysqli_fetch_assoc($result_idOffice);
 
         }else{
@@ -336,7 +336,7 @@ if($notebook != NULL){
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação
         
-        if($result =  mysqli_query($conn, $sql_file)){
+        if($result =  $conn->query($sql_file)){
             echo "Salvou Nota Windows note</br>";
         }else{
             printf("Erro Nota Windows note: ".mysqli_error($conn));
@@ -385,7 +385,7 @@ if($notebook != NULL){
                                                         '".$caminho_db."',
                                                         '".$nome_db."',
                                                         '".$_POST['data_so_note']."')";
-    if($result_cpu_windows = mysqli_query($conn, $query_note_windows)){
+    if($result_cpu_windows = $conn->query($query_note_windows)){
         echo "Salvou Windows note</br>";
     }else{
         echo $query_cpu_windows;
@@ -394,7 +394,7 @@ if($notebook != NULL){
 
     //pegando o ultimo valor para usar na hora de enviar o modelo
     $query_idWindows = "SELECT max(id) as id FROM manager_sistema_operacional";
-    $result_idWindows = mysqli_query($conn, $query_idWindows);
+    $result_idWindows = $conn->query($query_idWindows);
     $idWindows = mysqli_fetch_assoc($result_idWindows);
 
 
@@ -406,7 +406,7 @@ if($notebook != NULL){
 if($_POST['serie_scan']){
     //1º verificar se já existe o scanner
     $queryVerificar = "SELECT id_equipamento FROM manager_inventario_equipamento WHERE serialnumber = '".$_POST['serie_scan']."'";
-    $resultVerificar = mysqli_query($conn, $queryVerificar);
+    $resultVerificar = $conn->query($queryVerificar);
 
     if($linhaVerificar = mysqli_fetch_assoc($resultVerificar)){
         header('location: add_equip_single.php?error=5');//Erro Equpamento já cadastrado
@@ -446,7 +446,7 @@ if($_POST['serie_scan']){
                                                         '".$_POST['data_contrato_scan']."',
                                                         '1',
                                                         '".$_POST['patrimonio_scan']."')";
-    $aplicandoSalvamento = mysqli_query($conn, $salvandoEquipamento);
+    $aplicandoSalvamento = $conn->query($salvandoEquipamento);
 
     //3º salvando a nota fiscal
     //FILE
@@ -460,7 +460,7 @@ if($_POST['serie_scan']){
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação
         
-        if($result =  mysqli_query($conn, $sql_file)){
+        if($result =  $conn->query($sql_file)){
             echo "Salvou Nota Scanner</br>";
         }else{
             printf("Erro Nota Scanner: ".mysqli_error($conn));
@@ -485,7 +485,7 @@ if($_POST['serie_scan']){
 
         //coletando o id do equipamento
         $queryIdEquipamento = "SELECT max(id_equipamento) id_equipamento FROM manager_inventario_equipamento";
-        $resultadoIdEquipamento = mysqli_query($conn, $queryIdEquipamento);
+        $resultadoIdEquipamento = $conn->query($queryIdEquipamento);
         $linhaIdEquipamento = mysqli_fetch_assoc($resultadoIdEquipamento);
         
         //salvando
@@ -505,7 +505,7 @@ if($_POST['serie_scan']){
                                         '".$nome_db."',
                                         '4',
                                         '$data_hoje')";
-        $resultadoNotaScanner = mysqli_query($conn, $notaScaner)or die(mysqli_error($conn));                           
+        $resultadoNotaScanner = $conn->query($notaScaner);                           
 
     }//END ANEXO
 
@@ -513,5 +513,5 @@ if($_POST['serie_scan']){
 }//fim salvando scanner
 
 //fechando o banco de dados
-mysqli_close($conn);
+$conn->close();
 ?>

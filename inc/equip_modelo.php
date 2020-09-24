@@ -3,15 +3,17 @@
 session_start();
 
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
+require_once('../query/query.php');
+require_once('../query/query_dropdowns.php');
 
 /*--------------------------------------------------------------------*/
 //VALIDANDO SE TEM NOTA FISCAL
 
 $queryNota = "SELECT numero_nota FROM manager_sistema_operacional WHERE id = '".$_GET['id_win']."'";
-$resultadoNota = mysqli_query($conn, $queryNota);
+$resultadoNota = $conn->query($queryNota);
 
-$rowNota = mysqli_fetch_assoc($resultadoNota);
+$rowNota = $resultadoNota->fetch_assoc();
 
 if($rowNota['numero_nota'] === "semNota"){
   $queryWhere = "MSO.id = ".$_GET['id_win']."";
@@ -19,40 +21,13 @@ if($rowNota['numero_nota'] === "semNota"){
   $queryWhere = "MSO.numero_nota = (SELECT numero_nota FROM manager_sistema_operacional WHERE id = '".$_GET['id_win']."')";
 }
 
-/*--------------------------------------------------------------------*/
 
-//1º vamos coletar todas as informações que iremos usar no termo
-
-//Windows
+$query_windows .= $queryWhere;
+$result_windows = $conn->query($query_windows);
+$windows_row = $result_windows->fetch_assoc();
 
 $somando = 0;
 
-$windows = "SELECT
-            MDE.nome AS empresa,
-            MDL.nome AS locacao,
-            MSO.numero_nota,
-            MSO.data_nota,
-            MDSO.nome AS windows,
-            MSO.fornecedor,
-            MIE.patrimonio,
-            MIE.departamento,
-            MIF.nome
-            FROM
-            manager_sistema_operacional MSO
-                LEFT JOIN
-            manager_droplocacao MDL ON MSO.locacao = MDL.id_empresa
-                LEFT JOIN
-            manager_dropsistemaoperacional MDSO ON MSO.versao = MDSO.id
-                LEFT JOIN
-            manager_inventario_equipamento MIE ON MSO.id_equipamento = MIE.id_equipamento
-                LEFT JOIN
-            manager_dropempresa MDE ON MIE.filial = MDE.id_empresa
-                LEFT JOIN
-            manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
-            WHERE ".$queryWhere."";
-
-$result_windows = mysqli_query($conn, $windows);
-$windows_row = mysqli_fetch_assoc($result_windows);
 
 $body = "
 <!DOCTYPE html>
@@ -103,22 +78,11 @@ $body = "
         <th colspan='2'>Departamento</th>
       </tr>";
         //trazendo os dados do usuário
-
-            $user_windows = "SELECT 
-            MIE.patrimonio, MDD.nome AS departamento, MIF.nome
-        FROM
-            manager_inventario_equipamento MIE
-                LEFT JOIN
-            manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
-                LEFT JOIN
-            manager_dropdepartamento MDD ON MIE.departamento = MDD.id_depart
-                LEFT JOIN
-            manager_sistema_operacional MSO ON MIE.id_equipamento = MSO.id_equipamento
-        WHERE ".$queryWhere."";
+        $query_equipamento .= $queryWhere;
         
-            $result_user_windows = mysqli_query($conn, $user_windows);
+        $result_user_windows = $conn->query($query_equipamento);
             
-        while($windows_user = mysqli_fetch_assoc($result_user_windows)){
+        while($windows_user = $result_user_windows->fetch_assoc()){
                 $body .="          
                 <tr>
                     <td class='user font'>".$windows_user['patrimonio']."</td>
@@ -161,5 +125,5 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-mysqli_close($conn);
+$conn->close();
 ?>

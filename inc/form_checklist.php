@@ -3,10 +3,9 @@
 session_start();
 
 //chasmando o banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //data de hoje
-
 $data = date('d/m/Y G:i:s');
 
 /*------------------------ LIBERANDO OS EQUIPAMENTOS PARA DISVINCULAR DE UM FUNCIONÁRIO ------------------------*/
@@ -28,7 +27,7 @@ if($_POST['id_equip'] != NULL){
 						'".$data."',
 						'".$_SESSION["id"]."',
 						'1')";
-		$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+		$result_log = $conn->query($log_query)
 	}
 	
 	$liberar_equip .= "'')";
@@ -38,21 +37,21 @@ if($_POST['id_equip'] != NULL){
 
 	//Preparando para montar o log de todos os equipamentos
 	$show = "SELECT id_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = ".$_POST['id_fun']."";
-	$result_show = mysqli_query($conn, $show);
+	$result_show = $conn->query($show);
 
-	while($row_show = mysqli_fetch_assoc($result_show)){
+	while($row_show = $result_show->fetch_assoc()){
 
 		$log_query = "INSERT manager_log (id_equipamento, data_alteracao, usuario, tipo_alteracao)
 				VALUES ('".$row_show['id_equipamento']."',
 						'".$data."',
 						'".$_SESSION["id"]."',
 						'1')";
-		$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+		$result_log = $conn->query($log_query);
 	}
 
 }
 
-$result_liberado = mysqli_query($conn, $liberar_equip) or die(mysqli_error($conn));
+$result_liberado = $conn->query($liberar_equip);
 //Fim query
 
 /*-------------------------------------------- MONTANDO O CHEC-LIST ------------------------------------------*/
@@ -76,9 +75,9 @@ $fun = "SELECT
         WHERE
             MIF.id_funcionario = ".$_POST['id_fun']."";
 
-$result_fun = mysqli_query($conn, $fun);
+$result_fun = $conn->query($fun);
 
-$row_fun = mysqli_fetch_assoc($result_fun);
+$row_fun = $result_fun->fetch_assoc();
 
 
 //2º pegando a informação do equipamento
@@ -120,12 +119,10 @@ $equip = "SELECT
 
             $equip .= "'') AND MIE.tipo_equipamento NOT IN (8 , 10) AND MIE.deletar = 0";
         }else{
-            $equip .= "MIE.id_funcionario = ".$_POST['id_fun']." AND 
-                        MIE.tipo_equipamento NOT IN (8 , 10) AND
-                        MIE.deletar = 0";
+            $equip .= "MIE.id_funcionario = ".$_POST['id_fun']." AND MIE.tipo_equipamento NOT IN (8 , 10) AND MIE.deletar = 0";
         }
 
-$result_equip = mysqli_query($conn, $equip);
+$result_equip = $conn->query($equip);
 
 
 // 3º montando o corpo do check-list
@@ -243,7 +240,7 @@ $html = "
         </div>";
 
         $number = '1';
-		while ($row_equi = mysqli_fetch_assoc($result_equip)) {
+		while ($row_equi = $result_equip->fetch_assoc()) {
 
 				
 
@@ -337,9 +334,9 @@ $html = "
 													WHERE
 														mia.id_equipamento = ".$row_equi['id_equipamento']."";					
 
-								$resultado_acessorios = mysqli_query($conn, $query_acessorios);
+								$resultado_acessorios = $conn->query($query_acessorios);
 								
-								while ($row_acessorios = mysqli_fetch_assoc($resultado_acessorios)) {
+								while ($row_acessorios = $resultado_acessorios->fetch_assoc()) {
 										$html .="<tr>
 												<td colspan='2'>(&nbsp; &nbsp;)".$row_acessorios['nome']."</td>
 											</tr>";
@@ -440,5 +437,5 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-mysqli_close($conn);
+$conn->close();
 ?>

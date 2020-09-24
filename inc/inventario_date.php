@@ -2,7 +2,7 @@
 //iniciando a sessão
 session_start();
 //Banco de Dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //limitador de caracteres
 $limit_caracter = 24;
@@ -24,15 +24,15 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 
 	//deletar
 	$drop_anexo = "UPDATE manager_inventario_anexo SET deletar = '1' WHERE id_anexo = ".$_POST['id_anexo']."";
-	$result_drop = mysqli_query($conn, $drop_anexo ) or die(mysqli_error($conn));
+	$result_drop = $conn->query($drop_anexo );
 
 	//altera o estatus do equipamento termo
 	$alter_equip = "UPDATE manager_inventario_equipamento SET termo = '1' WHERE id_funcionario = ".$_POST['id_funcionario']."";
-	$resultado_equip = mysqli_query($conn, $alter_equip );
+	$resultado_equip = $conn->query($alter_equip );
 	
 	//altera o estatus do equipamento termo
 	$alter_funcio = "UPDATE manager_inventario_funcionario SET status = '3' WHERE id_funcionario = ".$_POST['id_funcionario']."";
-	$resultado_funcio = mysqli_query($conn, $alter_funcio );
+	$resultado_funcio = $conn->query($alter_funcio );
 
 
 	/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
@@ -47,7 +47,7 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 							'".$dataLog."',
 							'".$_SESSION["id"]."',
 							'7')";
-	$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+	$result_log = $conn->query($log_query);
 
 /*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -74,23 +74,23 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 							termo = '1',
 							liberado_rh = '0'
 						WHERE id_equipamento = ".$list_equip."";
-				$resultado_update = mysqli_query($conn,$update_vigencia) or die(mysqli_error($conn));
+				$resultado_update = $conn->query($update_vigencia);
 
 				//alterando estatus do funcionario
 				$update_status ="UPDATE  manager_inventario_funcionario 
 						SET status = '4'
 						WHERE id_funcionario = ".$_POST['id_funcionario']."";
-				$resultado_status = mysqli_query($conn,$update_status) or die(mysqli_error($conn));
+				$resultado_status = $conn->query($update_status);
 
 				//Salvando a observação
 				$insert_obs = "INSERT INTO manager_inventario_obs (id_equipamento, id_status, obs, usuario, data_criacao) 
 				VALUES ('".$list_equip."', '".$_POST['status_equip']."', '".$_POST['obs']."','".$_SESSION['id']."', '".$data_hoje."')";
-				$resultado_insert = mysqli_query($conn, $insert_obs) or die(mysqli_error($conn));
+				$resultado_insert = $conn->query($insert_obs);
 
 				//salvando o histórico em manager_data_vigência
 				$historico_vigencia = "INSERT INTO manager_data_vigencia (id_equipamento, id_funcionario, id_usuario, data_vigencia)
 				VALUES ('".$list_equip."', '".$_POST['id_funcionario']."', '".$_SESSION['id']."','".$data_hoje."')";
-				$result_historico = mysqli_query($conn, $historico_vigencia) or die(mysqli_error($conn));
+				$result_historico = $conn->query($historico_vigencia);
 
 
 			}else{
@@ -102,17 +102,17 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 							termo = '1',
 							liberado_rh = '0'
 						WHERE id_equipamento = ".$list_equip."";
-				$resultado_update = mysqli_query($conn,$update_vigencia) or die(mysqli_error($conn));
+				$resultado_update = $conn->query($update_vigencia);
 
 				//Salvando a observação
 				$insert_obs = "INSERT INTO manager_inventario_obs (id_equipamento, id_status, obs, usuario, data_criacao) 
 				VALUES ('".$list_equip."', '".$_POST['status_equip']."', '".$_POST['obs']."','".$_SESSION['id']."', '".$data_hoje."')";
-				$resultado_insert = mysqli_query($conn, $insert_obs) or die(mysqli_error($conn));
+				$resultado_insert = $conn->query($insert_obs);
 
 				//salvando o histórico em manager_data_vigência
 				$historico_vigencia = "INSERT INTO manager_data_vigencia (id_equipamento, id_funcionario, id_usuario, data_vigencia)
 				VALUES ('".$list_equip."', '".$_POST['id_funcionario']."', '".$_SESSION['id']."','".$data_hoje."')";
-				$result_historico = mysqli_query($conn, $historico_vigencia) or die(mysqli_error($conn));
+				$result_historico = $conn->query($historico_vigencia);
 
 			}//Fim  IF validando se tem usuário
 
@@ -130,7 +130,7 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 									'".$dataLog."',
 									'".$_SESSION["id"]."',
 									'4')";
-			$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+			$result_log = $conn->query($log_query);
 
 		/*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -147,14 +147,14 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 							termo = '1',
 							liberado_rh = '0'
 						WHERE id_equipamento = ".$_POST['id_equipamento']."";
-			$resultado_update = mysqli_query($conn,$update_vigencia) or die(mysqli_error($conn));
+			$resultado_update = $conn->query($update_vigencia);
 
 			//alterando funcionário
 			$update_funcionario = "UPDATE manager_inventario_funcionario
 										SET status = 3
 									WHERE
 										id_funcionario = ".$_POST['list_fun']."";
-			$result_funcionario = mysqli_query($conn, $update_funcionario) or die(mysqli_error($conn));
+			$result_funcionario = $conn->query($update_funcionario);
 
 
 			//Salvando a observação
@@ -170,12 +170,12 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 								'".$_POST['status_equip']."', 
 								'".$_POST['obs']."',
 								'".$data_hoje."')";
-			$resultado_insert = mysqli_query($conn, $insert_obs) or die(mysqli_error($conn));
+			$resultado_insert = $conn->query($insert_obs);
 
 			//salvando o histórico em manager_data_vigência
 			$historico_vigencia = "INSERT INTO manager_data_vigencia (id_equipamento, id_funcionario, id_usuario, data_vigencia)
 			VALUES ('".$_POST['id_equipamento']."', '".$_POST['id_funcionario']."', '".$_SESSION['id']."','".$data_hoje."')";
-			$result_historico = mysqli_query($conn, $historico_vigencia) or die(mysqli_error($conn));
+			$result_historico = $conn->query($historico_vigencia);
 
 			/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
 
@@ -190,7 +190,7 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 									'".$dataLog."',
 									'".$_SESSION["id"]."',
 									'5')";
-			$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+			$result_log = $conn->query($log_query);
 
 			/*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -205,17 +205,17 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 							termo = '1',
 							liberado_rh = '0'
 						WHERE id_equipamento = ".$_POST['id_equipamento']."";
-			$resultado_update = mysqli_query($conn,$update_vigencia) or die(mysqli_error($conn));
+			$resultado_update = $conn->query($update_vigencia);
 
 			//Salvando a observação
 			$insert_obs = "INSERT INTO manager_inventario_obs (id_equipamento, usuario, id_status, obs, data_criacao) 
 			VALUES ('".$_POST['id_equipamento']."', '".$_SESSION['id']."', '".$_POST['status_equip']."', '".$_POST['obs']."','".$data_hoje."')";
-			$resultado_insert = mysqli_query($conn, $insert_obs) or die(mysqli_error($conn));
+			$resultado_insert = $conn->query($insert_obs);
 
 			//salvando o histórico em manager_data_vigência
 			$historico_vigencia = "INSERT INTO manager_data_vigencia (id_equipamento, id_funcionario, id_usuario, data_vigencia)
 			VALUES ('".$_POST['id_equipamento']."', '".$_POST['id_funcionario']."', '".$_SESSION['id']."','".$data_hoje."')";
-			$result_historico = mysqli_query($conn, $historico_vigencia) or die(mysqli_error($conn));
+			$result_historico = $conn->query($historico_vigencia);
 		}//FIm IF validando usuário		
 
 		/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
@@ -230,7 +230,7 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 								'".$dataLog."',
 								'".$_SESSION["id"]."',
 								'4')";
-		$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+		$result_log = $conn->query($log_query);
 
 		/*_________________________________ FECHANDO O BANCO ______________________________________*/
 		
@@ -249,7 +249,7 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 		/*VALIDAÇÃO DO FILE*/
 		$sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-		$result =  mysqli_query($conn, $sql_file);//aplicando a query
+		$result =  $conn->query($sql_file);//aplicando a query
 		$row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 
 		/*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -274,7 +274,7 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 		echo $insert_bd_file;
 
 		//aplicando a query
-		$resultado_insert_file = mysqli_query($conn, $insert_bd_file) or die(mysqli_error($conn));
+		$resultado_insert_file = $conn->query($insert_bd_file);
 	}//end IF salvando cheklist
 
 }//end IF
@@ -288,7 +288,7 @@ if($_POST['list_fun'] != NULL){
 
 /*------------------------------------------------------------------------------------------------------------------------------------------*/
 
-mysqli_close($conn);
+$conn->close();
 
 
 switch ($_POST['drop']) {

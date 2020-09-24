@@ -2,23 +2,22 @@
 
 session_start();
    //chamando conexão com o banco
-   require 'conexao.php';
+   require_once('../conexao/conexao.php');
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-        header('location: index.html');
+        header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
-       header('location: error.php');
+       header('location: ../front/error.php');
    }
 
-require 'header.php';
-require 'conexao.php';
+require_once('header.php');
 
 //salvando equipamento no funcionário
 
 $queryInFunEquip = "UPDATE manager_inventario_equipamento SET id_funcionario = '".$_GET['id_funcio']."', status = 1 WHERE id_equipamento = '".$_GET['id_equip']."'";
 
-$resultIncFunEquip = mysqli_query($conn, $queryInFunEquip) or die(mysqli_error($conn));
+$resultIncFunEquip = $conn->query($queryInFunEquip);
 
 
 
@@ -38,13 +37,13 @@ $queryDisponiveis = "SELECT
                         MIE.status IN (6 , 10)
                             AND MIE.tipo_equipamento IN (1 , 3, 4, 2)
                         ORDER BY MDE.nome ASC";
-$resultadoDisponiveis = mysqli_query($conn, $queryDisponiveis);
+$resultadoDisponiveis = $conn->query($queryDisponiveis);
 
 //Trazendo o funcionário
 
 $queryFuncionario = "SELECT nome FROM manager_inventario_funcionario WHERE id_funcionario = ".$_GET['id_funcio']."";
-$resultadoFuncionario = mysqli_query($conn, $queryFuncionario);
-$linhaFuncionario = mysqli_fetch_assoc($resultadoFuncionario);
+$resultadoFuncionario = $conn->query($queryFuncionario);
+$linhaFuncionario = $resultadoFuncionario->fetch_assoc();
 ?>
 <!--MENSAGEM-->
 <div class="container">
@@ -84,9 +83,6 @@ $linhaFuncionario = mysqli_fetch_assoc($resultadoFuncionario);
 			</div> <!-- /span12 -->
 		</div> <!-- /row -->
     </div>
-
-
-
 <!--OUTROS EQUIPAMENTO-->
     <div class="container" style="display: none" id='equipamentos'>
         <div class="row">
@@ -116,7 +112,7 @@ $linhaFuncionario = mysqli_fetch_assoc($resultadoFuncionario);
                                         </thead>
                                         <tbody>
                                             <?php
-                                                while($linhaDiponiveis = mysqli_fetch_assoc($resultadoDisponiveis)){
+                                                while($linhaDiponiveis = $resultadoDisponiveis->fetch_assoc()){
                                                     echo '<tr>
                                                             <td><input type="checkbox" name="equipamento[]" value='.$linhaDiponiveis['id_equipamento'].'></td>
                                                             <td>'.$linhaDiponiveis['id_equipamento'].'</td>
@@ -151,8 +147,6 @@ $linhaFuncionario = mysqli_fetch_assoc($resultadoFuncionario);
                                                 }, 4000);  
                                                 }
                                             </script>';
-                                            
-
                                         ?>
                                     </div>
                                 </form>
@@ -178,7 +172,6 @@ function plus(){
     }else{
         document.getElementById('equipamentos').style.display = "block";
     }
-
 }
 
 function finsh(){
@@ -200,7 +193,6 @@ function finsh(){
         $('#example').DataTable(
 
             {
-
                 "aLengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
                 "iDisplayLength": 5
             }

@@ -1,7 +1,7 @@
 <?php
 //chamando o banco de dados
 
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 
 /*------------------------------------------------------------------ */
 
@@ -13,7 +13,7 @@ SET
 WHERE
     id_equipamento = ".$_POST['id_equip']."";
 
-$result_update = mysqli_query($conn, $update_office) or die(mysqli_error($conn));
+$result_update = $conn->query($update_office);
 
 /*------------------------------------------------------------------ */
 //2º voltando para a tela de edição
@@ -21,5 +21,5 @@ header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST
 
 /*------------------------------------------------------------------ */
 //fechando o banco de dados
-mysqli_close($conn);
+$conn->close();
 ?>

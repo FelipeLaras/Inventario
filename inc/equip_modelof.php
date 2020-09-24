@@ -3,15 +3,16 @@
 session_start();
 
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
+require_once('../query/query.php');
 
 /*--------------------------------------------------------------------*/
 //VALIDANDO SE TEM NOTA FISCAL
 
 $queryNota = "SELECT numero_nota FROM manager_office WHERE id = '".$_GET['id_off']."'";
-$resultadoNota = mysqli_query($conn, $queryNota);
+$resultadoNota = $conn->query($queryNota);
 
-$rowNota = mysqli_fetch_assoc($resultadoNota);
+$rowNota = $resultadoNota->fetch_assoc();
 
 if($rowNota['numero_nota'] === "semNota"){
   $queryWhere = "MO.id = ".$_GET['id_off']."";
@@ -22,36 +23,12 @@ if($rowNota['numero_nota'] === "semNota"){
 //1º vamos coletar todas as informações que iremos usar no termo
 
 //Office
-
 $somando = 0;
 
-$windows = "SELECT 
-MDE.nome AS empresa,
-MDL.nome AS locacao,
-MO.numero_nota,
-MO.data_nota,
-MDO.nome AS windows,
-MO.fornecedor,
-MIE.patrimonio,
-MIE.departamento,
-MIF.nome
-FROM
-manager_office MO
-    LEFT JOIN
-manager_dropempresa MDE ON MO.empresa = MDE.id_empresa
-    LEFT JOIN
-manager_droplocacao MDL ON MO.locacao = MDL.id_empresa
-    LEFT JOIN
-manager_dropoffice MDO ON MO.versao = MDO.id
-    LEFT JOIN
-manager_inventario_equipamento MIE ON MO.id_equipamento = MIE.id_equipamento
-    LEFT JOIN
-manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
+$query_office .= $queryWhere;
 
-WHERE ".$queryWhere."";
-
-$result_windows = mysqli_query($conn, $windows);
-$windows_row = mysqli_fetch_assoc($result_windows);
+$result_windows = $conn->query($query_office);
+$windows_row = $result_windows->fetch_assoc();
 
 $data_nota = $windows_row['data_nota'];
 
@@ -116,9 +93,9 @@ $body = "
                 LEFT JOIN
             manager_office MO ON MIE.id_equipamento = MO.id_equipamento    
             WHERE ".$queryWhere."";
-            $result_user_windows = mysqli_query($conn, $user_windows);
+            $result_user_windows = $conn->query($user_windows);
         
-        while($windows_user = mysqli_fetch_assoc($result_user_windows)){
+        while($windows_user = $result_user_windows->fetch_assoc()){
                 $body .="          
                 <tr>
                     <td class='user font'>".$windows_user['patrimonio']."</td>
@@ -162,5 +139,5 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-mysqli_close($conn);
+$conn->close();
 ?>

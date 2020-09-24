@@ -3,7 +3,7 @@
 session_start();
 
 //chamando o banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //DATA DE HOJE PARA COLOCAR NO CAMPO DATA_CADASTRO E OBSERVAÇÃO
 date_default_timezone_set('America/Sao_Paulo');
@@ -27,7 +27,7 @@ if($_POST['tipo_equipamento'] == 1 ){
 	data_nota = '".$data_nota."',
 	valor = '".$_POST['valor_cel']."'
 	WHERE id_equipamento ='".$_POST['id_equipamento']."'";
-	$resultado = mysqli_query($conn, $update) or die(mysqli_error($conn));
+	$resultado = $conn->query($update);
 	
 	/*----------------------SALVANDO ACESSÓRIOS DO CELULAR---------------------- */
 
@@ -36,13 +36,13 @@ if($_POST['tipo_equipamento'] == 1 ){
 		//VERIFICANDO SE JÁ ESTÁ CADASTRADO AO EQUIPAMENTO
 		$verificar_acessorio = "SELECT id_equipamento, tipo_acessorio FROM manager_inventario_acessorios 
 		WHERE  id_equipamento = ".$_POST['id_equipamento']." AND tipo_acessorio = ".$tipo_acessario."";
-		$result_verificar = mysqli_query($conn, $verificar_acessorio);
-		$row_verificar = mysqli_fetch_assoc($result_verificar);
+		$result_verificar = $conn->query($verificar_acessorio);
+		$row_verificar = $result_verificar->fetch_assoc();
 
 		if(empty($row_verificar['id_equipamento'])){//insert
 
 			$insert_acessorios = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUES (".$_POST['id_equipamento'].", ".$tipo_acessario.")";
-			$result_insertA = mysqli_query($conn, $insert_acessorios) or die(mysqli_error($conn));
+			$result_insertA = $conn->query($insert_acessorios);
 			
 		}//end IF insert
 
@@ -56,7 +56,7 @@ if($_POST['tipo_equipamento'] == 1 ){
 		$deletar_acessorios .= $tipo_acessario.",";
 	}
 	$deletar_acessorios .= "'')";
-	$result_deletarA = mysqli_query($conn, $deletar_acessorios ) or die(mysqli_error($conn));
+	$result_deletarA = $conn->query($deletar_acessorios );
 
 	/*----------------------OBSERVAÇÃO DO CELULAR---------------------- */
 
@@ -67,13 +67,13 @@ if($_POST['tipo_equipamento'] == 1 ){
 						'".$date."',
 						'".$_SESSION["id"]."',
 						'0')";
-		$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+		$result_log = $conn->query($log_query);
 
 	}else{		
 		//inserindo a observação do equipamento
 		$insert = "INSERT INTO manager_inventario_obs (id_equipamento, id_status, obs, data_criacao, usuario)
 		VALUES ('".$_POST['id_equipamento']."', '".$_POST['status_equip']."', '".$_POST['obs_cel']."', '".$date."','".$_SESSION['id']."')";
-		$resultado_insert = mysqli_query($conn, $insert) or die(mysqli_error($conn));
+		$resultado_insert = $conn->query($insert);
 	}
 
 	
@@ -89,7 +89,7 @@ if($_POST['tipo_equipamento'] == 1 ){
 							'".$dataLog."',
 							'".$_SESSION["id"]."',
 							'0')";
-	$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+	$result_log = $conn->query($log_query);
 
 	/*_________________________________ FECHANDO O BANCO ______________________________________*/
 }//end IF celular
@@ -115,7 +115,7 @@ if($_POST['tipo_equipamento'] == 2){
 	data_nota = '".$data_nota."',
 	valor = '".$_POST['valor_cel']."'
 	WHERE id_equipamento ='".$_POST['id_equipamento']."'";
-	$resultado = mysqli_query($conn, $update) or die(mysqli_error($conn));
+	$resultado = $conn->query($update);
 	
 	/*----------------------SALVANDO ACESSÓRIOS DO TABLET---------------------- */
 
@@ -124,13 +124,13 @@ if($_POST['tipo_equipamento'] == 2){
 		//VERIFICANDO SE JÁ ESTÁ CADASTRADO AO EQUIPAMENTO
 		$verificar_acessorio = "SELECT id_equipamento, tipo_acessorio FROM manager_inventario_acessorios 
 		WHERE  id_equipamento = ".$_POST['id_equipamento']." AND tipo_acessorio = ".$tipo_acessario."";
-		$result_verificar = mysqli_query($conn, $verificar_acessorio);
+		$result_verificar = $conn->query($verificar_acessorio);
 		$row_verificar = mysqli_fetch_assoc($result_verificar);
 
 		if(empty($row_verificar['id_equipamento'])){//insert
 
 			$insert_acessorios = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUES (".$_POST['id_equipamento'].", ".$tipo_acessario.")";
-			$result_insertA = mysqli_query($conn, $insert_acessorios) or die(mysqli_error($conn));
+			$result_insertA = $conn->query($insert_acessorios);
 			
 		}//end IF insert
 
@@ -144,7 +144,7 @@ if($_POST['tipo_equipamento'] == 2){
 		$deletar_acessorios .= $tipo_acessario.",";
 	}
 	$deletar_acessorios .= "'')";
-	$result_deletarA = mysqli_query($conn, $deletar_acessorios ) or die(mysqli_error($conn));
+	$result_deletarA = $conn->query($deletar_acessorios );
 
 	/*----------------------OBSERVAÇÃO DO TABLET---------------------- */
 
@@ -155,13 +155,13 @@ if($_POST['tipo_equipamento'] == 2){
 						'".$date."',
 						'".$_SESSION["id"]."',
 						'0')";
-		$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+		$result_log = $conn->query($log_query);
 
 	}else{
 		//inserindo a observação do equipamento
 		$insert = "INSERT INTO manager_inventario_obs (id_equipamento, id_status, obs, data_criacao, usuario)
 		VALUES ('".$_POST['id_equipamento']."', '".$_POST['status_equip']."', '".$_POST['obs_cel']."', '".$date."', '".$_SESSION['id']."')";
-		$resultado_insert = mysqli_query($conn, $insert) or die(mysqli_error($conn));
+		$resultado_insert = $conn->query($insert);
 	}		
 
 	/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
@@ -176,7 +176,7 @@ if($_POST['tipo_equipamento'] == 2){
 							'".$dataLog."',
 							'".$_SESSION["id"]."',
 							'0')";
-	$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+	$result_log = $conn->query($log_query);
 
 	/*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -196,7 +196,7 @@ if($_POST['tipo_equipamento'] == 3){
 	status ='".$_POST['status_chip']."',
 	filial = '".$_POST['empresa_chip']."'
 	WHERE id_equipamento ='".$_POST['id_equipamento']."'";
-	$resultado = mysqli_query($conn, $update) or die(mysqli_error($conn));
+	$resultado = $conn->query($update);
 
 	/*----------------------OBSERVAÇÃO DO CHIP---------------------- */
 	
@@ -207,14 +207,14 @@ if($_POST['tipo_equipamento'] == 3){
 						'".$date."',
 						'".$_SESSION["id"]."',
 						'0')";
-		$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+		$result_log = $conn->query($log_query);
 
 	}else{
 		//inserindo a observação do equipamento
 		$insert = "INSERT INTO manager_inventario_obs (id_equipamento, id_status, obs, data_criacao, usuario)
 		VALUES ('".$_POST['id_equipamento']."', '".$_POST['status_chip']."', '".$_POST['obs_chip']."', '".$date."', '".$_SESSION['id']."')";
 
-		$result_insert = mysqli_query($conn, $insert) or die(mysqli_error($conn));
+		$result_insert = $conn->query($insert);
 	}		
 
 	/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
@@ -229,7 +229,7 @@ if($_POST['tipo_equipamento'] == 3){
 							'".$dataLog."',
 							'".$_SESSION["id"]."',
 							'0')";
-	$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+	$result_log = $conn->query($log_query);
 
 	/*_________________________________ FECHANDO O BANCO ______________________________________*/
 }//end IF CHIP
@@ -245,5 +245,5 @@ if($_POST['page'] == 2){
 }
 
 //fechando o banco de dados
-mysqli_close($conn);
+$conn->close();
 ?>

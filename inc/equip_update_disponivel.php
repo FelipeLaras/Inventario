@@ -2,8 +2,7 @@
     session_start();
 
     //chamando o banco de dados
-    include 'conexao.php';
-    /*-------------------------------------------------------------------------------------*/
+    require_once('../conexao/conexao.php');
 
     //pegando a data de hoje
     $data_hoje = date('d/m/Y');
@@ -21,7 +20,7 @@
         WHERE 
             id_equipamento = '".$_POST['id_equip']."'";
 
-    $result_funcionario = mysqli_query($conn, $update_funcionario) or die(mysqli_error($conn));
+    $result_funcionario = $conn->query($update_funcionario);
 
     }else{
         //2º vamos incluir um funcionario no equipamento e trocar o status 
@@ -33,7 +32,7 @@
         WHERE 
             id_equipamento = '".$_POST['id_equip']."'";
 
-        $result_funcionario_new = mysqli_query($conn, $update_new_funcionario) or die(mysqli_error($conn));
+        $result_funcionario_new = $conn->query($update_new_funcionario);
 
     }    
   
@@ -50,12 +49,12 @@
                             '".$_SESSION['id']."',
                             '".$data_hoje."'
                             )";
-    $result_vigencia = mysqli_query($conn, $data_vigencia) or die(mysqli_error($conn));
+    $result_vigencia = $conn->query($data_vigencia);
     
     /*-------------------------------------------------------------------------------------*/
 
     //fechando a conexão com o banco de dados
-    mysqli_close($conn);
+    $conn->close();
 
     /*-------------------------------------------------------------------------------------*/
 
