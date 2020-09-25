@@ -31,7 +31,7 @@
                 <div class="nav-collapse">
                     <ul class="nav pull-right">
                         <li class="">
-                            <a href="sing-get.html" class="">
+                            <a href="front/sing-get.html" class="">
                                 Você não tem uma conta?
                             </a>
                         </li>

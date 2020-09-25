@@ -12,7 +12,7 @@
 	//Montando a query de validação
 	$query_valid = "SELECT profile_mail AS mail FROM manager_profile WHERE profile_mail like '".$mail."'";
 	//Aplicando a query
-	$result_valid = $conn->mysqli_query($query_valid);
+	$result_valid = $conn->query($query_valid);
 	//Recebendo o resultado
 	$rom_valid = mysqli_fetch_assoc($result_valid);
 	//montando a regra de validação
