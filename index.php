@@ -25,7 +25,7 @@
                <span class="icon-bar"></span>
             </a>
             <a class="brand" href="index.php">
-               <img src="fd_logo.png" id="logo">
+               <img src="img/fd_logo.png" id="logo">
             </a>
             <div class="nav-collapse">
                <ul class="nav pull-right">
