@@ -9,8 +9,6 @@ if($_SESSION["perfil"] == NULL){
    }elseif ($_SESSION["perfil"] != 0) {
        header('location: ../front/error.php');
 }
-
-$id = $_SESSION['id_user'];
    
 require_once('../conexao/conexao.php');   
 require_once('header.php');
@@ -37,7 +35,7 @@ require_once('header.php');
 </div>
 <?php
 
-    if ($id == 0) {//Ativado     
+    if ($_GET['id'] == 0) {//Ativado     
     echo "<div class='accordion' id='accordion2'>
             <div class='accordion-group'>
               <div class='accordion-heading'>
