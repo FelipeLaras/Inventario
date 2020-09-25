@@ -80,7 +80,7 @@ require_once('header.php')
             <div id="notepad">
                <div class="span6">           
                   <div id="teste">
-                     <img src="img/home_inventario.png" class="home_img"/>
+                     <img src="../img/home_inventario.png" class="home_img"/>
                   </div>
                </div>
             </div>

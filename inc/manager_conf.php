@@ -158,7 +158,7 @@ require_once('../query/query_dropdowns.php');
                         <option value=''>---</option>
                         <?php
                         //query buscando os perfis
-                        while ($row_perfil = $$resultado_perfil->fetch_assoc()) {
+                        while ($row_perfil = $resultado_perfil->fetch_assoc()) {
                             echo "<option value='".$row_perfil['type_profile']."'>".$row_perfil['type_name']."</option>";
                         }
                             $conn->close();

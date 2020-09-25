@@ -192,7 +192,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
         $tipo_file = $_FILES['file_nota_so_cpu']['type'];//Pegando qual é a extensão do arquivo
         $nome_db = $_FILES['file_nota_so_cpu']['name'];
         $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_nota_so_cpu']['name'];//caminho onde será salvo o FILE
-        $caminho_db = "documentos/tecnicos/".$_FILES['file_nota_so_cpu']['name'];//pasta onde está o FILE para salvar no Bando de dados
+        $caminho_db = "../documentos/tecnicos/".$_FILES['file_nota_so_cpu']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -263,7 +263,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
             $tipo_file = $_FILES['file_nota_office_cpu']['type'];//Pegando qual é a extensão do arquivo
             $nome_db = $_FILES['file_nota_office_cpu']['name'];
             $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_nota_office_cpu']['name'];//caminho onde será salvo o FILE
-            $caminho_db = "documentos/tecnicos/".$_FILES['file_nota_office_cpu']['name'];//pasta onde está o FILE para salvar no Bando de dados
+            $caminho_db = "../documentos/tecnicos/".$_FILES['file_nota_office_cpu']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
             /*VALIDAÇÃO DO FILE*/
             $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -397,7 +397,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
         $tipo_file = $_FILES['file_nota_so_cpu']['type'];//Pegando qual é a extensão do arquivo
         $nome_db = $_FILES['file_nota_so_cpu']['name'];
         $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_nota_so_cpu']['name'];//caminho onde será salvo o FILE
-        $caminho_db = "documentos/tecnicos/".$_FILES['file_nota_so_cpu']['name'];//pasta onde está o FILE para salvar no Bando de dados
+        $caminho_db = "../documentos/tecnicos/".$_FILES['file_nota_so_cpu']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -466,7 +466,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
             $tipo_file = $_FILES['file_nota_office_cpu']['type'];//Pegando qual é a extensão do arquivo
             $nome_db = $_FILES['file_nota_office_cpu']['name'];
             $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_nota_office_cpu']['name'];//caminho onde será salvo o FILE
-            $caminho_db = "documentos/tecnicos/".$_FILES['file_nota_office_cpu']['name'];//pasta onde está o FILE para salvar no Bando de dados
+            $caminho_db = "../documentos/tecnicos/".$_FILES['file_nota_office_cpu']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
             /*VALIDAÇÃO DO FILE*/
             $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -713,7 +713,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
         $tipo_file = $_FILES['file_so_note']['type'];//Pegando qual é a extensão do arquivo
         $nome_db = $_FILES['file_so_note']['name'];
         $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_so_note']['name'];//caminho onde será salvo o FILE
-        $caminho_db = "documentos/tecnicos/".$_FILES['file_so_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
+        $caminho_db = "../documentos/tecnicos/".$_FILES['file_so_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -781,7 +781,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
             $tipo_file = $_FILES['file_office_note']['type'];//Pegando qual é a extensão do arquivo
             $nome_db = $_FILES['file_office_note']['name'];
             $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_office_note']['name'];//caminho onde será salvo o FILE
-            $caminho_db = "documentos/tecnicos/".$_FILES['file_office_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
+            $caminho_db = "../documentos/tecnicos/".$_FILES['file_office_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
             /*VALIDAÇÃO DO FILE*/
             $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -936,7 +936,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
         $tipo_file = $_FILES['file_so_note']['type'];//Pegando qual é a extensão do arquivo
         $nome_db = $_FILES['file_so_note']['name'];
         $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_so_note']['name'];//caminho onde será salvo o FILE
-        $caminho_db = "documentos/tecnicos/".$_FILES['file_so_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
+        $caminho_db = "../documentos/tecnicos/".$_FILES['file_so_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -999,7 +999,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
         $tipo_file = $_FILES['file_office_note']['type'];//Pegando qual é a extensão do arquivo
         $nome_db = $_FILES['file_office_note']['name'];
         $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_office_note']['name'];//caminho onde será salvo o FILE
-        $caminho_db = "documentos/tecnicos/".$_FILES['file_office_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
+        $caminho_db = "../documentos/tecnicos/".$_FILES['file_office_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
         //salvando agora o office
 
@@ -1009,7 +1009,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
             $tipo_file = $_FILES['file_office_note']['type'];//Pegando qual é a extensão do arquivo
             $nome_db = $_FILES['file_office_note']['name'];
             $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_office_note']['name'];//caminho onde será salvo o FILE
-            $caminho_db = "documentos/tecnicos/".$_FILES['file_office_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
+            $caminho_db = "../documentos/tecnicos/".$_FILES['file_office_note']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
             /*VALIDAÇÃO DO FILE*/
             $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -1324,7 +1324,7 @@ $new_equipamento .= "
              $tipo_file = $_FILES['file_nota_scan']['type'];//Pegando qual é a extensão do arquivo
              $nome_db = $_FILES['file_nota_scan']['name'];
              $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_nota_scan']['name'];//caminho onde será salvo o FILE
-             $caminho_db = "documentos/tecnicos/".$_FILES['file_nota_scan']['name'];//pasta onde está o FILE para salvar no Bando de dados
+             $caminho_db = "../documentos/tecnicos/".$_FILES['file_nota_scan']['name'];//pasta onde está o FILE para salvar no Bando de dados
  
              /*VALIDAÇÃO DO FILE*/
              $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -1441,7 +1441,7 @@ $new_equipamento .= "
         $tipo_file = $_FILES['file_nota_scan']['type'];//Pegando qual é a extensão do arquivo
         $nome_db = $_FILES['file_nota_scan']['name'];
         $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_nota_scan']['name'];//caminho onde será salvo o FILE
-        $caminho_db = "documentos/tecnicos/".$_FILES['file_nota_scan']['name'];//pasta onde está o FILE para salvar no Bando de dados
+        $caminho_db = "../documentos/tecnicos/".$_FILES['file_nota_scan']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
         /*VALIDAÇÃO DO FILE*/
         $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 

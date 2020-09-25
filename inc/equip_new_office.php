@@ -38,7 +38,7 @@
     $tipo_file = $_FILES['file_nota']['type'];//Pegando qual é a extensão do arquivo
     $nome_db = $_FILES['file_nota']['name'];
     $caminho = "/var/www/html/ti/documentos/tecnicos/".$_FILES['file_nota']['name'];//caminho onde será salvo o FILE
-    $caminho_db = "documentos/tecnicos/".$_FILES['file_nota']['name'];//pasta onde está o FILE para salvar no Bando de dados
+    $caminho_db = "../documentos/tecnicos/".$_FILES['file_nota']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 

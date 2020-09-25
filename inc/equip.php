@@ -203,19 +203,16 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
 
 
 <div class="container">
-   <!--botões para chamar os status-->
-   <div id='botoes_status_tec'>
+   <!-- <div id='botoes_status_tec'>
       <ul class='list-group list-group-horizontal tec_1'>
          <li class='list-group-item tec'>
             <a class='btn btn-default btn-xs ' href='equip.php?status=4' title='Termos Ativos'>
-               <!--botão que confirma que o termo já foi anexado ao funcionário-->
                <i class='far fa-check-circle' style='color:green'></i>
             </a>
             <span>Ativo(s): <?= $row_a["ativo"]; ?></span>
          </li>
 
          <li class='list-group-item tec'>
-            <!--botão que informa ao usuário, quantos equipamentos temos sem o termo-->
             <a class='btn btn-default btn-xs' href='equip.php?status=3&cpu=1' title='Falta Termo'>
                <i class='fas fa-ban' style='color:#f3b37c7a'></i>
             </a>
@@ -223,7 +220,6 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
          </li>
 
          <li class='list-group-item tec'>
-            <!--botão que informa quantos usuários foram demitidos-->
             <a class='btn btn-default btn-xs ' href='equip.php?status=8' title='Demitidos'>
                <i class='far fa-times-circle' style='color:black'></i>
             </a>
@@ -231,7 +227,6 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
          </li>
 
          <li class='list-group-item tec'>
-            <!--botão que informa quantos usuários que estão sem equipamento-->
             <a class='btn btn-default btn-xs ' href='equip.php?status=9' title='Sem equipamentos'>
                <i class='fas fa-desktop' style='color:darkgray'></i>
             </a>
@@ -246,7 +241,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
          </li>
 
       </ul>
-   </div>
+   </div> -->
 
    <!--botões para chamar os status-->
    <div class="row" style="width: 111%;  margin-left: -4%;">

@@ -6,7 +6,7 @@ require_once('../conexao/conexao.php');
 /*---------------------------------------------------------------------------------*/
 
 //trocando data
-$data = $_POST['data'];
+$data = date('d/m/yy');
 
 //1º incluindo uma nota WINDOWS
 
@@ -16,7 +16,7 @@ if($_POST['tipo'] == 1){
    $tipo_file = $_FILES['termo']['type'];//Pegando qual é a extensão do arquivo
    $nome_db = $_FILES['termo']['name'];
    $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['termo']['name'];//caminho onde será salvo o FILE
-   $caminho_db = "documentos/tecnicos/".$_FILES['termo']['name'];//pasta onde está o FILE para salvar no Bando de dados
+   $caminho_db = "../documentos/tecnicos/".$_FILES['termo']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
    /*VALIDAÇÃO DO FILE*/
    $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -63,7 +63,7 @@ if($_POST['tipo'] == 2){
     $tipo_file = $_FILES['termo']['type'];//Pegando qual é a extensão do arquivo
     $nome_db = $_FILES['termo']['name'];
     $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['termo']['name'];//caminho onde será salvo o FILE
-    $caminho_db = "documentos/tecnicos/".$_FILES['termo']['name'];//pasta onde está o FILE para salvar no Bando de dados
+    $caminho_db = "../documentos/tecnicos/".$_FILES['termo']['name'];//pasta onde está o FILE para salvar no Bando de dados
  
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -111,7 +111,7 @@ if($_POST['tipo'] == 3){
     $tipo_file = $_FILES['termo']['type'];//Pegando qual é a extensão do arquivo
     $nome_db = $_FILES['termo']['name'];
     $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['termo']['name'];//caminho onde será salvo o FILE
-    $caminho_db = "documentos/tecnicos/".$_FILES['termo']['name'];//pasta onde está o FILE para salvar no Bando de dados
+    $caminho_db = "../documentos/tecnicos/".$_FILES['termo']['name'];//pasta onde está o FILE para salvar no Bando de dados
  
     /*VALIDAÇÃO DO FILE*/
     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -163,10 +163,68 @@ if($_POST['tipo'] == 3){
 
  }//end teminando de salvar o TERMO
 
+
+ if($_POST['tipo'] == 10){//scanner
+     //salvando a nota do TERMO
+     $tipo_file = $_FILES['notaFiscal']['type'];//Pegando qual é a extensão do arquivo
+     $nome_db = $_FILES['notaFiscal']['name'];
+     $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['notaFiscal']['name'];//caminho onde será salvo o FILE
+     $caminho_db = "../documentos/tecnicos/".$_FILES['notaFiscal']['name'];//pasta onde está o FILE para salvar no Bando de dados
+  
+     /*VALIDAÇÃO DO FILE*/
+     $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
+  
+     $result =  $conn -> query($sql_file);//aplicando a query
+     $row = $result -> fetch_array();//salvando o resultado em uma variavel
+  
+     if($tipo_file != NULL){
+             /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
+         if ($row['type'] != NULL) {//se é arquivo valido       
+             if (move_uploaded_file($_FILES['notaFiscal']['tmp_name'], $caminho )){//aplicando o salvamento
+             }else{
+             echo "Arquivo não foi enviado!";
+             }//se caso não salvar vai mostrar o erro!
+         }else{// se o arquivo não é valido vai levar para tela de erro    
+             echo "Arquivo Invalido!";
+             exit;
+         }
+     }//end IF validação arquivo
+       
+     //salvando agora A nota no banco
+     $update_termo = "INSERT INTO manager_inventario_anexo 
+                         (id_equipamento,
+                         id_funcionario,
+                         usuario, 
+                         caminho, 
+                         nome, 
+                         tipo, 
+                         data_criacao) 
+                     VALUES 
+                         ('".$_POST['id_equip']."', 
+                         '".$_POST['id_fun']."', 
+                         '".$_SESSION['id']."', 
+                         '".$caminho_db."', 
+                         '".$nome_db."', 
+                         '4', 
+                         '".$data."')";
+
+                         echo $update_termo;
+ 
+     $result_termo = $conn -> query($update_termo);
+ 
+ }
+
  /*---------------------------------------------------------------------------------*/
 
- 
- header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
+/*  switch ($_POST['tipo']) {
+     case '10':
+         header('location: scan_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
+         break;
+     
+     default:
+        header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
+         break;
+ } */
 
  //fechando conexão com o banco de dados
  $conn -> close($conn);

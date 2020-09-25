@@ -39,7 +39,7 @@
     </div>
 </div>
 <div class="widget ">
-    <?php 
+<?php
 
    //recebendo a informação e distribuindo nos campos do formulario
    $query_contrato = "SELECT 
@@ -429,7 +429,7 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
                                         LEFT JOIN
                                     manager_inventario_equipamento MIE ON MIA.id_equipamento = MIE.id_equipamento
                                 WHERE
-                                    MIA.id_equipamento = ".$_GET['id_equip'].";";
+                                    MIA.id_equipamento = ".$_GET['id_equip']."";
 
                                     $result_cod_termo = $conn->query($query_doc_termo);
 
@@ -440,7 +440,13 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
                                                 <a href='".$row_termo['caminho']."' target='_blank'>".$row_termo['nome']."</a>
                                              </td>
                                              <td>
-                                                ".$row_termo['numero_nota']."
+                                                ";
+                                                if(empty($row_termo['numero_nota'])){
+                                                    echo "Alugado";
+                                                }else{
+                                                    echo $row_termo['numero_nota'];
+                                                }
+                                                echo "
                                              </td>
                                           </tr>
                                           ";
@@ -482,7 +488,8 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
         <form id="edit-profile" class="form-horizontal" enctype="multipart/form-data" action="equip_add_doc.php"
             method="post">
             <input type="text" name="id_fun" style="display:none ;" value="<?= $row['id_funcionario']; ?>">
-            <input type="text" name="id_equip" style="display:none ;" value="<?= $_GET['id_equip']; ?>">
+            <input type="text" name="id_equip" style="display:none ;" value="<?= $_GET['id_equip']; ?>">            
+            <input type="text" name="tipo" style="display:none ;" value='10'>
             <div class="control-group">
             </div>
             <div class="control-group">
@@ -494,7 +501,7 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
             <div class="control-group">
                 <label class="control-label">Nota Fiscal:</label>
                 <div class="controls">
-                    <input class="cpfcnpj span2" type="file" name="termo" required />
+                    <input class="cpfcnpj span2" type="file" name="notaFiscal" required />
                 </div>
             </div>
             <div class="modal-footer">
@@ -602,8 +609,7 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
     </div>
     <div class="modal-body">
         <!--Colocar a tabela Aqui!-->
-        <form id="edit-profile" class="form-horizontal" enctype="multipart/form-data" action="equip_trans.php"
-            method="post">
+        <form id="edit-profile" class="form-horizontal" enctype="multipart/form-data" action="equip_trans.php" method="post">
             <input type="text" name="id_fun" style="display:none ;" value="<?= $_GET['id_fun']; ?>">
             <input type="text" name="id_equip" style="display:none ;" value="<?= $_GET['id_equip']; ?>">
             <?php

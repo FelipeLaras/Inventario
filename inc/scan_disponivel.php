@@ -28,8 +28,6 @@ MDL.nome AS locacao,
 MIE.fornecedor_scan,
 MIE.data_fim_contrato,
 MIE.numero_nota,
-MIA.nome AS nome_nota,
-MIA.caminho AS caminho_nota,
 MIF.nome AS responsavel,
 MIF.cpf,
 MDD.nome AS departamento,
@@ -41,8 +39,6 @@ manager_inventario_equipamento MIE
 manager_dropempresa MDE ON MIE.filial = MDE.id_empresa
     LEFT JOIN
 manager_droplocacao MDL ON MIE.locacao = MDL.id_empresa
-    LEFT JOIN
-manager_inventario_anexo MIA ON MIE.id_equipamento = MIA.id_equipamento
     LEFT JOIN
 manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
     LEFT JOIN
@@ -168,7 +164,6 @@ switch ($_GET['msn']){
                     <th class="titulo">Locação</th>                    
                     <th class="titulo">Fornecedor</th>
                     <th class="titulo">Data Fim Contrato</th>
-                    <th class="titulo">Nota</th>
                     <th class="titulo">Status</th>
                     <th class="titulo acao">Ação</th>
                 </tr>
@@ -203,12 +198,7 @@ while ($row_equip = $resultado_equip->fetch_assoc()) {
                <td class='fonte'>".$row_equip['empresa']."</td>
                <td class='fonte'>".$row_equip['locacao']."</td>
                <td class='fonte'>".$row_equip['fornecedor_scan']."</td>           
-               <td class='fonte'>".$data_fim."</td>     
-               <td class='fonte'>
-                  <a href='".$row_equip['caminho_nota']."' target='_blank'>
-                     ".$row_equip['nome_nota']."
-                  </a>
-               </td>";
+               <td class='fonte'>".$data_fim."</td>";
 
                switch ($row_equip['id_status'] ){
                   case '1':

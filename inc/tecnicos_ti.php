@@ -45,7 +45,7 @@
             <div id="notepad">
                <div class="span6">           
                   <div id="teste">
-                     <img src="img/Informatica.png" class="home_img" style="width: 61%; margin-left: 70%;"/>
+                     <img src="../img/Informatica.png" class="home_img" style="width: 61%; margin-left: 70%;"/>
                   </div>
                </div>
             </div>

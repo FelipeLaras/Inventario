@@ -244,7 +244,7 @@ if(($_POST['drop'] == 1) || ($_POST['drop'] == 2)){
 		/*coletando informações do FILE*/ 
 		$tipo_file = $_FILES['checklist']['type'];//Pegando qual é a extensão do arquivo
 		$caminho = "/var/www/html/ti/documentos/inventario/" . $_FILES['checklist']['name'];//caminho onde será salvo o FILE
-		$caminho_db = "documentos/inventario/".$_FILES['checklist']['name'];//pasta onde está o FILE para salvar no Bando de dados
+		$caminho_db = "../documentos/inventario/".$_FILES['checklist']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
 		/*VALIDAÇÃO DO FILE*/
 		$sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 

@@ -39,7 +39,7 @@
                 <div class="control-group">
                     <div class="controls">
                         <div>
-                            <img src="img/google_servopa.png" width="600" height="800" id="imgpos">
+                            <img src="../img/google_servopa.png" width="600" height="800" id="imgpos">
                         </div>
                         <input type="text" class="span6" id="firstname" name="pesquisa">
                         <button type="submit" class="btn btn-primary">Pesquisar</button>

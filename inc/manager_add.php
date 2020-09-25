@@ -12,8 +12,8 @@ $perfil = $_POST['perfil_user'];
 $query_insert = "INSERT INTO manager_profile(profile_name, profile_mail, profile_password, profile_type) 
                 VALUES ('".$nome."','".$email."','".$senha."','".$perfil."')";
 
-$resultado_insert = $conn->query($query_insert);
-$row = $resultado_insert->fetch_assoc();
+$resultado_insert = mysqli_query($conn, $query_insert);
+$row = mysqli_fetch_assoc($resultado_insert);
 
 if ($row != NULL) {
     echo "Aconteceu algo de errado:". mysqli_error($conn);

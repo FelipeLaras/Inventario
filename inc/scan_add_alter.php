@@ -2,7 +2,7 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //alterando formato da data
 $data_fim = date('Y-m-d',  strtotime($_POST['data_fim_scan']));
@@ -82,5 +82,5 @@ header('location: scan_edit.php?id_equip='.$_POST['id_equipamento'].'&tipo='.$_P
 
 /*-----------------------------------------------------------------------------------------*/
 //fechando a coneção com o banco de dados
-$conn->clone();
+$conn->close();
 ?>

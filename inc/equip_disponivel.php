@@ -13,7 +13,7 @@
 
 require_once('../conexao/conexao.php');
 require_once('header.php');
-require_once('query.php');
+require_once('../query/query.php');
 
 
 ?>
@@ -107,7 +107,7 @@ require_once('query.php');
             <tbody>
                 <?php
 //aplicando a query
-while ($row_equip = $resultadoEquipDisponivel -> fetch_assoc()) {
+while ($row_equip = mysqli_fetch_assoc($resultadoEquipDisponivel)) {
 
    empty($row_equip['data_nota_so']) ? $data_so = "semNota" : $data_so = $row_equip['data_nota_so'];//data nota do sistema operacional 
 
@@ -245,7 +245,7 @@ while ($row_equip = $resultadoEquipDisponivel -> fetch_assoc()) {
                               <div class='controls'>
                                  <select class='span2' style='margin-top: -40px; margin-left: 61px;' name='id_funcionario' required>
                                     <option value=''>---</option>";
-                                          while($row_status = $result_status -> fetch_assoc()){
+                                          while($row_status = mysqli_fetch_assoc($result_status)){
                                              echo "<option value='".$row_status['id_funcionario']."'>".$row_status['nome']."</option>";
                                           }                                             
                                     echo"

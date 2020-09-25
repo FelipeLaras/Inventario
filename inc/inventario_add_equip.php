@@ -103,7 +103,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 			$tipo_file = $_FILES['file_nota_celular'.$cont_equip.'']['type'];//Pegando qual é a extensão do arquivo
 			$nome_db = $_FILES['file_nota_celular'.$cont_equip.'']['name'];
 			$caminho = "/var/www/html/ti/documentos/inventario/" . $_FILES['file_nota_celular'.$cont_equip.'']['name'];//caminho onde será salvo o FILE
-			$caminho_db = "documentos/inventario/".$_FILES['file_nota_celular'.$cont_equip.'']['name'];//pasta onde está o FILE para salvar no Bando de dados
+			$caminho_db = "../documentos/inventario/".$_FILES['file_nota_celular'.$cont_equip.'']['name'];//pasta onde está o FILE para salvar no Bando de dados
 	
 			/*VALIDAÇÃO DO FILE*/
 			$sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
@@ -225,7 +225,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 			$tipo_file = $_FILES['file_nota_tablet'.$cont_equip.'']['type'];//Pegando qual é a extensão do arquivo
 			$nome_db = $_FILES['file_nota_tablet'.$cont_equip.'']['name'];
 			$caminho = "/var/www/html/ti/documentos/inventario/" . $_FILES['file_nota_tablet'.$cont_equip.'']['name'];//caminho onde será salvo o FILE
-			$caminho_db = "documentos/inventario/".$_FILES['file_nota_tablet'.$cont_equip.'']['name'];//pasta onde está o FILE para salvar no Bando de dados
+			$caminho_db = "../documentos/inventario/".$_FILES['file_nota_tablet'.$cont_equip.'']['name'];//pasta onde está o FILE para salvar no Bando de dados
 	
 			/*VALIDAÇÃO DO FILE*/
 			$sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 

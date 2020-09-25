@@ -52,18 +52,18 @@ $row_profile = $resultado_profile -> fetch_assoc();
     <meta charset="utf-8">
     <title>EDITAR - <?= $row_edit['nome'] ?></title>
     <!--FAVICON-->
-    <link href="favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="../img/favicon.ico" rel="icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
 
-    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="../css/font-awesome.css" rel="stylesheet">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet" type="text/css">
-    <link href="css/pages/signin.css" rel="stylesheet" type="text/css">
+    <link href="../css/style.css" rel="stylesheet" type="text/css">
+    <link href="../css/pages/signin.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -183,7 +183,7 @@ $row_profile = $resultado_profile -> fetch_assoc();
 
     <!-- Text Under Box -->
     <div class="login-extra">
-        Já tem uma conta? <a href="../index.php">Faça login na sua conta</a>
+        Já tem uma conta? <a href="../index.html">Faça login na sua conta</a>
     </div> <!-- /login-extra -->
 
     <script src="../js/jquery-1.7.2.min.js"></script>
