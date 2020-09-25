@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
   
 <?php
 //aplicando para usar varialve em outro arquivo
-session_start(); require 'header.php'?><!--Chamando a Header-->
+session_start(); 
+
+require_once('../inc/header.php');
+
+?><!--Chamando a Header-->
 
 <div class="container">
 	
@@ -37,8 +41,8 @@ session_start(); require 'header.php'?><!--Chamando a Header-->
 	</div> <!-- /row -->
 	
 </div> <!-- /container -->
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/bootstrap.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
+<script src="../js/bootstrap.js"></script>
 
 </body>
 

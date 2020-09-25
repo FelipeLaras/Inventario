@@ -2,16 +2,14 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
-   
+     header('location: ../index.php');   
    }
-?>
-<!DOCTYPE html>
-<html>
-  <?php  require 'header.php'?><!--Chamando a Header-->
+require_once('../inc/header.php')
+
+?><!--Chamando a Header-->
 <div class="subnavbar">
     <div class="container">
       <div class="error-container">                
@@ -20,7 +18,7 @@ if($_SESSION["perfil"] == NULL){
 					  Para que se aplique as alterações você deve sair e entrar novamente no sistema!
 					</div>
         <div class="error-actions">
-          <a href="manager.php" class="btn btn-success">Voltar</a>
+          <a href="../inc/manager.php" class="btn btn-success">Voltar</a>
         </div>			
       </div> <!-- /error-container -->
     </div>
@@ -29,10 +27,10 @@ if($_SESSION["perfil"] == NULL){
     <!-- Le javascript
     ================================================== --> 
     <!-- Placed at the end of the document so the pages load faster --> 
-    <script src="js/jquery-1.7.2.min.js"></script> 
-    <script src="js/excanvas.min.js"></script> 
-    <script src="js/chart.min.js" type="text/javascript"></script> 
-    <script src="js/bootstrap.js"></script>
-    <script src="js/base.js"></script> 
+    <script src="../js/jquery-1.7.2.min.js"></script> 
+    <script src="../js/excanvas.min.js"></script> 
+    <script src="../js/chart.min.js" type="text/javascript"></script> 
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/base.js"></script> 
   </body>
 </html>
