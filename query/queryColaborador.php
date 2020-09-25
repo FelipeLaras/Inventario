@@ -1,6 +1,5 @@
 <?php
-require_once('conexao.php');
-
+require_once('../conexao/conexao.php');
 
 //contador
 $contador = 0;

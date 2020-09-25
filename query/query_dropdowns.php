@@ -1,9 +1,6 @@
 <?php
 require_once('../conexao/conexao.php');
 
-
-
-
 //tipo de equipamento
 $query_equip = "SELECT * FROM manager_dropequipamentos WHERE deletar = 0 ORDER BY nome ASC";
 $resultado_equip = $conn -> query($query_equip);

@@ -1,7 +1,5 @@
 <?php
-
-//chamando conexão com o banco
-require_once('conexao.php');
+require_once('../conexao/conexao.php');
 
 //Equipamentos versão 1
 $query = "SELECT 
