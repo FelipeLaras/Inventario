@@ -437,15 +437,15 @@
 <!-- /main-inner -->
 </div>
 <!--JAVASCRITPS TABELAS-->
-<script src="js/tabela.js"></script>
-<script src="js/tabela2.js"></script>
-<script src="java.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/tabela.js"></script>
+<script src="../sdjs/tabela2.js"></script>
+<script src="../java.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--Paginação entre filho arquivo e pai-->
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/base.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/base.js"></script>
 </body>
 <!--MODAIS-->
 <!-- Modal FILHO ADICIONAR -->

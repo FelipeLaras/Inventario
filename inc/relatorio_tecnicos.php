@@ -356,21 +356,21 @@ select.form-control.form-control-sm {
 </div>
 </body>
 <!--JAVASCRITPS TABELAS-->
-<script src="js/tabela_mensagem1.js"></script>
-<script src="js/tabela_mensagem.js"></script>
+<script src="../js/tabela_mensagem1.js"></script>
+<script src="../js/tabela_mensagem.js"></script>
 
-<script src="js/tabela.js"></script>
-<script src="js/tabela2.js"></script>
-<script src="java.js"></script>
-<script src="js/cnpj.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/tabela.js"></script>
+<script src="../js/tabela2.js"></script>
+<script src="../java.js"></script>
+<script src="../js/cnpj.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--Paginação entre filho arquivo e pai-->
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/base.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/base.js"></script>
 </body>
-<script src="js/tabela_relatorio_tecnico.js"></script>
+<script src="../js/tabela_relatorio_tecnico.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(document).ready(function() {

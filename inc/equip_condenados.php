@@ -6,11 +6,11 @@ session_start();
 /*------------------------------------------------------------------------------------------------------------------*/
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-   header('location: index.html');
+   header('location: ../front/index.html');
 
 }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
 
-      header('location: error.php');
+      header('location: ../front/error.php');
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
@@ -414,11 +414,11 @@ echo    "<!--MODAL WINDOWS-->
 <!-- Le javascript
    ================================================== -->
 <!--JAVASCRITPS TABELAS-->
-<script src="js/tabela.js"></script>
-<script src="js/tabela2.js"></script>
-<script src="java.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/tabela.js"></script>
+<script src="../js/tabela2.js"></script>
+<script src="../java.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </body>

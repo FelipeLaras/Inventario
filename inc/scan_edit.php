@@ -459,15 +459,15 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
     </div>
 </div>
 <!--JAVASCRITPS TABELAS-->
-<script src="js/tabela.js"></script>
-<script src="js/tabela2.js"></script>
-<script src="java.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/tabela.js"></script>
+<script src="../js/tabela2.js"></script>
+<script src="../ava.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--Paginação entre filho arquivo e pai-->
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/base.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/base.js"></script>
 </body>
 <!--MODAIS-->
 <!-- Modal ANEXOS ADICIONAR -->
@@ -734,7 +734,7 @@ function fechar(id) {
 }
 </script>
 <!--AUTO PREENCHIMENTO DO CAMPO FORNECEDOR-->
-<script src="js/autocomplete_f.js"></script>
+<script src="../js/autocomplete_f.js"></script>
 <!--MASCARA MAIUSCULA-->
 <script type="text/javascript">
 // INICIO FUNÇÃO DE MASCARA MAIUSCULA

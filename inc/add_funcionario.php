@@ -113,4 +113,4 @@ function maiuscula(z) {
 //FIM DA FUNÇÃO MASCARA MAIUSCULA
 </script>
 <!--CNPJ MASCARA-->
-<script src="js/cnpj.js"></script>
+<script src="../js/cnpj.js"></script>

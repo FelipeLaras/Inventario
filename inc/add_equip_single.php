@@ -1397,11 +1397,6 @@ $gols3.addEventListener('blur', handleSubmit);
 
 
 </script>
-
-
-
-
-
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
 <!--MOSTRAR CAMPO OBSERVAÇÃO-->
 <script>
@@ -1472,13 +1467,13 @@ $gols3.addEventListener('blur', handleSubmit);
         }
     }
 </script>
-<script src="js/autocomplete_f.js"></script>
+<script src="../js/autocomplete_f.js"></script>
 <!--PARA FORNECEDOR-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
-<script src="js/cnpj.js"></script>
-<script src="js/contrato_filho.js"></script>
+<script src="../js/cnpj.js"></script>
+<script src="../js/contrato_filho.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
 </html>
-<?php   mysqli_close($conn); ?>
+<?php   $conn->close(); ?>

@@ -956,7 +956,7 @@ switch ($_GET['msn']) {
               $query_status_equip= "SELECT * from manager_dropstatusequipamento WHERE deletar = 0 ";
                   $resultado_status_equip = $conn->query($query_status_equip);
                   echo "<option value=''>---</option>";
-                while ($row_status_equip = $resultado_status_equip->etch_assoc()) {
+                while ($row_status_equip = $resultado_status_equip->fetch_assoc()) {
                   echo "<option value='".$row_status_equip['id_status']."'>".$row_status_equip['nome']."</option>";
                   $add++;
                 }
@@ -1644,15 +1644,15 @@ $cont++;
 </div>
 </div>
 <!--JAVASCRITPS TABELAS-->
-<script src="js/tabela.js"></script>
-<script src="js/tabela2.js"></script>
-<script src="java.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/tabela.js"></script>
+<script src="../js/tabela2.js"></script>
+<script src="../java.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--Paginação entre filho arquivo e pai-->
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/base.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/base.js"></script>
 </body>
 <!--MODAIS-->
 

@@ -17,7 +17,7 @@ $row = $resultado_insert->fetch_assoc();
 if ($row != NULL) {
     echo "Aconteceu algo de errado:". mysqli_error($conn);
 }else{
-  $conn->clone();
+  $conn->close();
   
   $_SESSION['usuario'] = $nome;
   header('location: maneger_conf.php');

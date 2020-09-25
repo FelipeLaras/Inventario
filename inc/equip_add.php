@@ -1062,7 +1062,7 @@ require_once('../query/query_dropdowns.php');
                                                     unset($_SESSION['office_note']);
                                                 } else {                                                
                                                     echo "<option value=''>---</option>";
-                                                    while ($row_office_note = $resultado_office -> fetch_assoc($)) {
+                                                    while ($row_office_note = $resultado_office -> fetch_assoc()) {
                                                         echo "<option value='".$row_office_note['id']."'>".$row_office_note['nome']."</option>";
                                                     }
                                                 }
@@ -1478,7 +1478,7 @@ require_once('../query/query_dropdowns.php');
 </form>
 <!-- /widget-content -->
 </div>
-    <script src="js/formulario_autoPreenchido.js"></script>
+    <script src="../js/formulario_autoPreenchido.js"></script>
 </body>
 <!-- Le javascript
 ================================================== -->
@@ -1561,12 +1561,12 @@ require_once('../query/query_dropdowns.php');
     }
     //FIM DA FUNÇÃO MASCARA MAIUSCULA
 </script>
-<script src="js/autocomplete_f.js"></script>
+<script src="../js/autocomplete_f.js"></script>
 <!--PARA FORNECEDOR-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
-<script src="js/cnpj.js"></script>
-<script src="js/contrato_filho.js"></script>
+<script src="../js/cnpj.js"></script>
+<script src="../js/contrato_filho.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </html>
 <?php $conn -> close() ?>

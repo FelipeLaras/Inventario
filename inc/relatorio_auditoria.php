@@ -10,8 +10,8 @@ if ($_SESSION["perfil"] == NULL) {
 }
 
 require_once('header.php'); 
-require_once('conexao.php');
-require_once('query_dropdowns.php')
+require_once('../conexao/conexao.php');
+require_once('../query/query_dropdowns.php')
 
 ?>
 <div class="subnavbar">
@@ -447,18 +447,18 @@ require_once('query_dropdowns.php')
     </div>
 </div>
 <!--JAVASCRITPS TABELAS-->
-<script src="js/tabela.js"></script>
-<script src="js/tabela2.js"></script>
-<script src="java.js"></script>
-<script src="js/cnpj.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/tabela.js"></script>
+<script src="../js/tabela2.js"></script>
+<script src="../java.js"></script>
+<script src="../js/cnpj.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--Paginação entre filho arquivo e pai-->
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/base.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/base.js"></script>
 <!--REGRA PARA MOSTRAR OS CAMPOS NO RELATÓRIOS DE VIGENCIA-->
-<script src="js/vigencia.js"></script>
+<script src="../js/vigencia.js"></script>
 </body>
 
 <!--MOSTRAR CAMPO ICONE-->
@@ -484,6 +484,6 @@ function maiuscula(z) {
 }
 //FIM DA FUNÇÃO MASCARA MAIUSCULA
 </script>
-<?php mysqli_close($conn); ?>
+<?php $conn->close(); ?>
 
 </html>

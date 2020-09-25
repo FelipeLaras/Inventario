@@ -183,15 +183,15 @@ $row_profile = $resultado_profile -> fetch_assoc();
 
     <!-- Text Under Box -->
     <div class="login-extra">
-        Já tem uma conta? <a href="index.html">Faça login na sua conta</a>
+        Já tem uma conta? <a href="../index.php">Faça login na sua conta</a>
     </div> <!-- /login-extra -->
 
-    <script src="js/jquery-1.7.2.min.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="../js/jquery-1.7.2.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
 
-    <script src="js/signin.js"></script>
+    <script src="../js/signin.js"></script>
     <!-- MD5 -->
-    <script src="js/md5.js"></script>
+    <script src="../js/md5.js"></script>
 </body>
 
 </html>

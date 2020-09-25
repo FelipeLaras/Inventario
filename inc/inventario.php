@@ -13,8 +13,8 @@
    }
 
    require_once('header.php');
-   require_once('queryColaborador.php');
-   require_once('conexao.php');
+   require_once('../query/queryColaborador.php');
+   require_once('../conexao/conexao.php');
 
 ?>
 <style>
@@ -337,11 +337,11 @@ $conn -> close();
 </div>
 </div>
 <!--JAVASCRITPS TABELAS-->
-<script src="js/tabela.js"></script>
-<script src="js/tabela2.js"></script>
-<script src="java.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/tabela.js"></script>
+<script src="../js/tabela2.js"></script>
+<script src="../java.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </body>

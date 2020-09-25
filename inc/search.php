@@ -133,10 +133,10 @@
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
-<script src="js/jquery-1.7.2.min.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
 
-<script src="js/bootstrap.js"></script>
-<script src="js/base.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/base.js"></script>
 
 </body>
 

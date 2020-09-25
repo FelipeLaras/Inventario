@@ -1100,14 +1100,14 @@ function maiuscula(z) {
     $gols1.addEventListener('blur', handleSubmit);
 })();
 </script>
-<script src="js/autocomplete.js"></script>
+<script src="../js/autocomplete.js"></script>
 <!--PARA MODELOS CELULAR-->
-<script src="js/autocomplete_t.js"></script>
+<script src="../js/autocomplete_t.js"></script>
 <!--PARA MODELOS TABLET-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
-<script src="js/cnpj.js"></script>
-<script src="js/contrato_filho.js"></script>
+<script src="../js/cnpj.js"></script>
+<script src="../js/contrato_filho.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
 </html>

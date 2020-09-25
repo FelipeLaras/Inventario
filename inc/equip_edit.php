@@ -3,9 +3,9 @@
 session_start();
 
 if ($_SESSION["perfil"] == NULL) {
-   header('location: index.html');
+   header('location: ../front/index.html');
 } elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
-   header('location: error.php');
+   header('location: ../front/error.php');
 }
 
 require_once('../conexao/conexao.php');
@@ -1088,15 +1088,15 @@ require_once('header.php')
 </div>
 </div>
 <!--JAVASCRITPS TABELAS-->
-<script src="js/tabela.js"></script>
-<script src="js/tabela2.js"></script>
-<script src="java.js"></script>
-<script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/tabela.js"></script>
+<script src="../js/tabela2.js"></script>
+<script src="../java.js"></script>
+<script src="../jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--Paginação entre filho arquivo e pai-->
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/base.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/base.js"></script>
 </body>
 <!--MODAIS-->
 <!-- Modal ANEXOS ADICIONAR -->
@@ -1375,7 +1375,7 @@ require_once('header.php')
 </script>
 <!--MASCARÁS CPF/DATA-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="js/cnpj.js"></script>
+<script src="../js/cnpj.js"></script>
 <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
 <script language="javascript">
@@ -1386,7 +1386,7 @@ require_once('header.php')
 </script>
 
 <!--AUTO PREENCHIMENTO DO CAMPO FORNECEDOR-->
-<script src="js/autocomplete_f.js"></script>
+<script src="../js/autocomplete_f.js"></script>
 <!--MASCARA MAIUSCULA-->
 <script type="text/javascript">
    function maiuscula(z) {

@@ -123,11 +123,11 @@ require_once('../query/query_dropdowns.php');
 <!-- Le javascript
     ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/excanvas.min.js"></script>
-<script src="js/chart.min.js" type="text/javascript"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/base.js"></script>
+<script src="../js/jquery-1.7.2.min.js"></script>
+<script src="../js/excanvas.min.js"></script>
+<script src="../js/chart.min.js" type="text/javascript"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/base.js"></script>
 </body>
 <!-- Modal NOVO USUÁRIO -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -183,6 +183,6 @@ require_once('../query/query_dropdowns.php');
 </div>
 <!-- /controls -->
 <!-- MD5 -->
-<script src="js/md5.js"></script>
+<script src="../js/md5.js"></script>
 
 </html>
