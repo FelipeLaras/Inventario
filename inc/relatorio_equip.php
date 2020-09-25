@@ -4,14 +4,14 @@
 
    unset($_SESSION['id_funcionario']);//LIMPANDO A SESSION
    //chamando conexão com o banco
-   require 'conexao.php';
+   require_once('../conexao/conexao.php');
     //Aplicando a regra de login
     if($_SESSION["perfil"] == NULL){  
-      header('location: index.html');
+      header('location: ../front/index.html');
     
     }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
     
-        header('location: error.php');
+        header('location: ../front/error.php');
     }
 
 //recebendo as informações do formulario
@@ -71,92 +71,94 @@ $query_relatorios = "SELECT
                      }//Fim IF caso venha as duas informações
 $query_relatorios .= " order by MIF.nome ASC";                     
 
-$resultado_relatorios = mysqli_query($conn, $query_relatorios);
+$resultado_relatorios = $conn->query($query_relatorios);
 
 
 $_SESSION['query_relatorios'] = $query_relatorios;//enviando query para PDF ou EXCEL
 
-?>
+require_once('header.php')
 
-<?php  require 'header.php'?><!--Chamando a Header-->
+?>
+<!--Chamando a Header-->
 <div class="subnavbar">
-   <div class="subnavbar-inner">
-      <div class="container">
-         <ul class="mainnav">
-            <li>
-               <a href="inventario_ti.php"><i class="icon-home"></i>
-               <span>Home</span>
-               </a>
-            </li>
-            <li>
-               <a href="inventario.php"><i class="icon-group"></i>
-               <span>Colaboradores</span>
-               </a>
-            </li>
-            <li>
-               <a href="inventario_equip.php"><i class="icon-cogs"></i>
-               <span>Equipamentos</span>
-               </a>
-            </li>
-            <li class="active">
-              <a href="relatorio_auditoria.php"><i class="icon-list-alt"></i>
-                <span>Relatórios</span>
-              </a>
-            </li>
-         </ul>
-      </div>
-   </div>
+    <div class="subnavbar-inner">
+        <div class="container">
+            <ul class="mainnav">
+                <li>
+                    <a href="inventario_ti.php"><i class="icon-home"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="inventario.php"><i class="icon-group"></i>
+                        <span>Colaboradores</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="inventario_equip.php"><i class="icon-cogs"></i>
+                        <span>Equipamentos</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="relatorio_auditoria.php"><i class="icon-list-alt"></i>
+                        <span>Relatórios</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <div class="widget ">
-   <div class="widget-header">
+    <div class="widget-header">
         <h3>
-        <i class="icon-home"></i> &nbsp;
-           <a href="inventario_ti.php">
+            <i class="icon-home"></i> &nbsp;
+            <a href="inventario_ti.php">
                 Home
             </a>
             /
             <i class="icon-list-alt"></i> &nbsp;
             <a href="relatorio_auditoria.php">
-              Relatórios
+                Relatórios
             </a>
-           / 
-           Equipamento
+            /
+            Equipamento
         </h3>
         <!--PDF-->
         <div id="novo_usuario">
-         <a class="botao" href="relatorio_print.php" title="Imprimir" style="margin-top: 0px;" target="_blank"> 
-            <i class="fas fa-print fa-2x" style="margin-left: -3px;"></i>
-         </a>
-      </div>
-      <!--PDF-->
+            <a class="botao" href="relatorio_print.php" title="Imprimir" style="margin-top: 0px;" target="_blank">
+                <i class="fas fa-print fa-2x" style="margin-left: -3px;"></i>
+            </a>
+        </div>
+        <!--PDF-->
         <div id="novo_usuario">
-         <a class="botao" href="relatorio_excel.php" title="Exportar EXCEL" style="margin-top: 0px;" target="_blank">
-         <i class="fas fa-file-excel fa-2x"  style="margin-left: -3px;"></i> 
-         </a>
-      </div>
-      </div>  
+            <a class="botao" href="relatorio_excel.php" title="Exportar EXCEL" style="margin-top: 0px;" target="_blank">
+                <i class="fas fa-file-excel fa-2x" style="margin-left: -3px;"></i>
+            </a>
+        </div>
+    </div>
 </div>
 <div class="container">
-   <div class="row">
-      <table id="example" class="table table-striped table-bordered" style="width:100%; font-size: 10px; font-weight: bold;">
-         <thead>
-            <tr>
-            <th class="titulo">Nome</th>
-               <th class="titulo" style="width: 75px;">CPF</th>
-               <th class="titulo">FUNÇÃO</th>
-               <th class="titulo">DEPARTAMENTO</th>
-               <th class="titulo">EMPRESA/FILIAL</th>
-               <th class="titulo">EQUIPAMENTOS</th>
-               <th class="titulo">PATRIMÔNIO</th>
-               <th class="titulo">MODELO</th>
-               <th class="titulo">IMEI</th>
-               <th class="titulo" style="width: 90px;">NÚMERO</th>
-               <th class="titulo" style="width: 60px;">VALOR</th>
-               <th class="titulo">STATUS</th>
-            </tr>
-         </thead>
-         <tbody>
-            <?php
+    <div class="row">
+        <table id="example" class="table table-striped table-bordered"
+            style="width:100%; font-size: 10px; font-weight: bold;">
+            <thead>
+                <tr>
+                    <th class="titulo">Nome</th>
+                    <th class="titulo" style="width: 75px;">CPF</th>
+                    <th class="titulo">FUNÇÃO</th>
+                    <th class="titulo">DEPARTAMENTO</th>
+                    <th class="titulo">EMPRESA/FILIAL</th>
+                    <th class="titulo">EQUIPAMENTOS</th>
+                    <th class="titulo">PATRIMÔNIO</th>
+                    <th class="titulo">MODELO</th>
+                    <th class="titulo">IMEI</th>
+                    <th class="titulo" style="width: 90px;">NÚMERO</th>
+                    <th class="titulo" style="width: 60px;">VALOR</th>
+                    <th class="titulo">STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
             while ($row_relatorio = mysqli_fetch_assoc($resultado_relatorios)) {
             echo "
             <tr>";
@@ -236,9 +238,9 @@ $_SESSION['query_relatorios'] = $query_relatorios;//enviando query para PDF ou E
             </tr>
              ";
              } ?>
-         </tbody>
-      </table>
-   </div>
+            </tbody>
+        </table>
+    </div>
 </div>
 </div>
 <!-- Le javascript
@@ -248,8 +250,9 @@ $_SESSION['query_relatorios'] = $query_relatorios;//enviando query para PDF ou E
 <script src="js/tabela2.js"></script>
 <script src="java.js"></script>
 <script src="jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>   
+<script src="js/dataTables.bootstrap4.min.js"></script>
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </body>
+
 </html>

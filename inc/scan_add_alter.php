@@ -17,7 +17,7 @@ $data_fim = date('Y-m-d',  strtotime($_POST['data_fim_scan']));
         WHERE
         id_equipamento = ".$_GET['id_equipamento']." limit 1";
     
-        $result_condenar= mysqli_query($conn, $update_condenar) or die(mysqli_error($conn));
+        $result_condenar= $conn->query($update_condenar) or die(mysqli_error($conn));
         /*-----------------------------------------------------------------------------------------*/
         //fechando a coneção com o banco de dados
         mysqli_close($conn);
@@ -36,7 +36,7 @@ $data_fim = date('Y-m-d',  strtotime($_POST['data_fim_scan']));
     WHERE
     id_funcionario = ".$_POST['id_funcionario']." limit 1";
 
-    $result_funcionario = mysqli_query($conn, $update_funcionario) or die(mysqli_error($conn));
+    $result_funcionario = $conn->query($update_funcionario) or die(mysqli_error($conn));
 /*-----------------------------------------------------------------------------------------*/
 //2º alterando o cadastro do equipamento
 
@@ -55,7 +55,7 @@ $data_fim = date('Y-m-d',  strtotime($_POST['data_fim_scan']));
         WHERE
         id_equipamento = ".$_POST['id_equipamento']."";
 
-        $result_equip_scan = mysqli_query($conn, $update_equip_scan) or die(mysqli_error($conn));        
+        $result_equip_scan = $conn->query($update_equip_scan) or die(mysqli_error($conn));        
     }//end IF ALUGADO
 
     /*COMPRADO*/
@@ -72,7 +72,7 @@ $data_fim = date('Y-m-d',  strtotime($_POST['data_fim_scan']));
         WHERE
         id_equipamento = ".$_POST['id_equipamento']."";
 
-        $result_equip_scan = mysqli_query($conn, $update_equip_scan) or die(mysqli_error($conn));        
+        $result_equip_scan = $conn->query($update_equip_scan) or die(mysqli_error($conn));        
     }//end IF ALUGADO
 
 /*-----------------------------------------------------------------------------------------*/
@@ -82,5 +82,5 @@ header('location: scan_edit.php?id_equip='.$_POST['id_equipamento'].'&tipo='.$_P
 
 /*-----------------------------------------------------------------------------------------*/
 //fechando a coneção com o banco de dados
-mysqli_close($conn);
+$conn->clone();
 ?>

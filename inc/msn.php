@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include 'header.php';
+require_once('header.php');
 ?>
 	<div class="container">
 		<div class="row">
@@ -12,7 +12,7 @@ include 'header.php';
 					</div> <!-- /error-details -->
 					<div class="error-actions">
 						<a href="contracts_add.php" class="btn btn-info">Novo</a>
-						<a href="contracts_edit.php?id=<?php echo $_SESSION['number_father'] ?>" class="btn btn-warning">Exibir</a>
+						<a href="contracts_edit.php?id=<?= $_SESSION['number_father'] ?>" class="btn btn-warning">Exibir</a>
 					</div> <!-- /error-actions -->
 				</div> <!-- /error-container -->
 			</div> <!-- /span12 -->

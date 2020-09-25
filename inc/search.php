@@ -2,19 +2,21 @@
    //aplicando para usar varialve em outro arquivo
    session_start();
    //chamando conexão com o banco
-   require 'conexao.php';
-   require 'pesquisa_condb.php';
+   require_once('../conexao/conexao.php');
+   require_once('../conexao/pesquisa_condb.php');
+
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
    
-       header('location: error.php');
+       header('location: ../front/error.php');
    }
-?>
 
-<?php  require 'header.php'?>
+   require_once('header.php');
+
+?>
 <!--Chamando a Header-->
 <div class="subnavbar">
     <div class="subnavbar-inner">
@@ -59,11 +61,11 @@
                               deleted = 0 AND (titulo LIKE '%".$_POST['pesquisa']."%' OR body LIKE '%".$_POST['pesquisa']."%')";
 
       //query que retorna as informações do banco
-      $result_pesquisa = mysqli_query($conn_db, $query_pesquisa);
+      $result_pesquisa = $conn_db->query($query_pesquisa);
 
       $contador = 0;
       //laço de repetição para que todas as pesquisas sejam mostradas na pagina search.php
-      while ($row_pequisa = mysqli_fetch_assoc($result_pesquisa)) {
+      while ($row_pequisa = $result_pesquisa->fetch_assoc()) {
         echo"
           <div class='accordion' id='accordion".$contador."' style='margin-bottom: 18px; width: 100%; margin-right: -48px;'>
             <div class='accordion-group'>

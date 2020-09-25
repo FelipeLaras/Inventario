@@ -1,72 +1,19 @@
 <?php
    //aplicando para usar varialve em outro arquivo
    session_start();
-   //chamando conexão com o banco
-   require 'conexao.php';
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
-   
-   }elseif ($_SESSION["perfil"] != 0 AND $_SESSION["perfil"] != 1) {
-       header('location: error.php');
-   }
-
-   /*QUERY DOS MENUS*/
-  //ACESSORIOS
-   $acessorios = "SELECT * FROM manager_dropacessorios where deletar = 0 order by nome asc";
-   $result_acessorios = mysqli_query($conn, $acessorios) or die(mysqli_error($conn));
+    header('location: ../front/index.html');
   
-  //DEPARTAMENTO
-   $departamento = "SELECT * FROM manager_dropdepartamento where deletar = 0 order by nome asc";
-   $result_departamento = mysqli_query($conn, $departamento) or die(mysqli_error($conn));
+  }elseif ($_SESSION["perfil"] != 0 AND $_SESSION["perfil"] != 1) {
+    header('location: ../front/error.php');
+  }
+   //chamando conexão com o banco
+  require_once('../conexao/conexao.php');
+  require_once('../query/query_dropdowns.php');   
+  require_once('header.php');
 
-  //EMPRESA/FILIAL
-   $empresa = "SELECT * FROM manager_dropempresa where deletar = 0 order by nome asc";
-   $result_empresa = mysqli_query($conn, $empresa) or die(mysqli_error($conn));
-  
-  //LOCACAO
-  $locacao = "SELECT * FROM manager_droplocacao where deletar = 0 order by nome asc";
-  $result_locacao = mysqli_query($conn, $locacao) or die(mysqli_error($conn));
-
-  //EQUIPAMENTOS 
-   $equipamentos = "SELECT * FROM manager_dropequipamentos where deletar = 0 order by nome asc";
-   $result_equipamentos = mysqli_query($conn, $equipamentos) or die(mysqli_error($conn));
-
-  //FUNÇÃO
-   $funcao = "SELECT * FROM manager_dropfuncao where deletar = 0 order by nome asc";
-   $result_funcao = mysqli_query($conn, $funcao) or die(mysqli_error($conn));
-
-  //OPERADORA 
-   $operadora = "SELECT * FROM manager_dropoperadora where deletar = 0 order by nome asc";
-   $result_operadora = mysqli_query($conn, $operadora) or die(mysqli_error($conn));
-  
-  //STATUS COLABORADOR 
-   $status = "SELECT * FROM manager_dropstatus where deletar = 0 order by nome asc";
-   $result_status = mysqli_query($conn, $status) or die(mysqli_error($conn));
-  
-  //STATUS EQUIPAMENTO
-   $statusequipamento = "SELECT * FROM manager_dropstatusequipamento where deletar = 0 order by nome asc";
-   $result_statusequipamento = mysqli_query($conn, $statusequipamento) or die(mysqli_error($conn));
-
-   //SITUAÇÃO EQUIPAMENTO
-   $situacao = "SELECT * FROM manager_dropsituacao where deletar = 0 order by nome asc;";
-   $result_situacao = mysqli_query($conn, $situacao) or die(mysqli_error($conn));
-
-   //ESTADO EQUIPAMENTO
-   $estado = "SELECT * FROM manager_dropestado where deletar = 0 order by nome asc;";
-   $result_estado = mysqli_query($conn, $estado) or die(mysqli_error($conn));
-
-   //VERSÕES OFFICE
-   $office = "SELECT * FROM manager_dropoffice where deletar = 0 order by nome asc;";
-   $result_office = mysqli_query($conn, $office) or die(mysqli_error($conn));
-
-   //VERSÕES WINDOWS
-   $windows = "SELECT * FROM manager_dropsistemaoperacional where deletar = 0 order by nome asc;";
-   $result_windows = mysqli_query($conn, $windows) or die(mysqli_error($conn));
-  ?>
-<!DOCTYPE html>
-<html>
-<?php  require 'header.php';?>
+?>
 <div class="subnavbar">
     <div class="subnavbar-inner">
         <div class="container">
@@ -86,7 +33,7 @@
     </div>
 </div>
 <div class="widget ">
-<div class="widget-header">
+    <div class="widget-header">
         <h3>
             <i class="icon-lithe icon-home"></i> <a href="manager.php">&nbsp; Home</a>
             /
@@ -183,7 +130,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                    while ($row_equipamento = mysqli_fetch_assoc($result_funcao)) {                                 
+                                    while ($row_equipamento = $resultado_funcao->fetch_assoc()) {                                 
                                       echo "
                                        <tr>
                                           <td>".$row_equipamento['id_funcao']."</td>
@@ -290,7 +237,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                    while ($row_departamento = mysqli_fetch_assoc($result_departamento)) {
+                                    while ($row_departamento = $resultado_depart->fetch_assoc()) {
                                       echo "
                                        <tr>
                                           <td>".$row_departamento['id_depart']."</td>
@@ -397,7 +344,7 @@
                                     </thead>
                                     <tbody>
                                         <?php 
-                                    while ($row_empresa = mysqli_fetch_assoc($result_empresa)) {
+                                    while ($row_empresa = $resultado_empresa->fetch_assoc()) {
                                       echo "
                                        <tr>
                                           <td>".$row_empresa['id_empresa']."</td>
@@ -504,7 +451,7 @@
                                     </thead>
                                     <tbody>
                                         <?php 
-                                    while ($row_locacao = mysqli_fetch_assoc($result_locacao)) {
+                                    while ($row_locacao = $resultado_empresa->fetch_assoc($resultado_empresa)) {
                                       echo "
                                        <tr>
                                           <td>".$row_locacao['id_empresa']."</td>
@@ -612,7 +559,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                    while ($row_status = mysqli_fetch_assoc($result_status)) {
+                                    while ($row_status = $resultado_statusFun->fetch_assoc()) {
                                        echo "
                                        <tr>
                                           <td>".$row_status['id_status']."</td>
@@ -720,7 +667,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                    while ($row_equipamentos = mysqli_fetch_assoc($result_equipamentos)) {
+                                    while ($row_equipamentos = $resultado_equip->fetch_assoc()) {
                                       echo "
                                      <tr>
                                         <td>".$row_equipamentos['id_equip']."</td>
@@ -827,7 +774,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                    while ($row_situacao = mysqli_fetch_assoc($result_situacao)) {
+                                    while ($row_situacao = $resultado_situacao->fetch_assoc()) {
                                       echo "
                                      <tr>
                                         <td>".$row_situacao['id_situacao']."</td>
@@ -934,7 +881,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                    while ($row_estado = mysqli_fetch_assoc($result_estado)) {
+                                    while ($row_estado = $resultado_status->fetch_assoc()) {
                                       echo "
                                      <tr>
                                         <td>".$row_estado['id']."</td>
@@ -1041,7 +988,7 @@
                                     </thead>
                                     <tbody>
                                         <?php 
-                                    while ($row_acessorios = mysqli_fetch_assoc($result_acessorios)) {
+                                    while ($row_acessorios = $resultado_acessorio->fetch_assoc()) {
                                     echo "
                                      <tr>
                                         <td>".$row_acessorios['id_acessorio']."</td>
@@ -1149,7 +1096,7 @@
                                     <tbody>
                                         <tr>
                                             <?php
-                                   while ($row_operadora = mysqli_fetch_assoc($result_operadora)) {
+                                   while ($row_operadora = $resultado_operadora->fetch_assoc()) {
                                     echo "
                                      <tr>
                                         <td>".$row_operadora['id_operadora']."</td>
@@ -1259,7 +1206,7 @@
                                     <tbody>
                                         <tr>
                                             <?php
-                                    while ($row_Sequipamento = mysqli_fetch_assoc($result_statusequipamento)) {
+                                    while ($row_Sequipamento = $resultado_status_equip->fetch_assoc()) {
                                     echo "
                                      <tr>
                                         <td>".$row_Sequipamento['id_status']."</td>
@@ -1368,7 +1315,7 @@
                                     <tbody>
                                         <tr>
                                             <?php
-                                    while ($row_office = mysqli_fetch_assoc($result_office)) {
+                                    while ($row_office = $resultado_office->fetch_assoc()) {
                                     echo "
                                      <tr>
                                         <td>".$row_office['id']."</td>
@@ -1477,7 +1424,7 @@
                                     <tbody>
                                         <tr>
                                             <?php
-                                    while ($row_windows = mysqli_fetch_assoc($result_windows)) {
+                                    while ($row_windows = $resultado_so->fetch_assoc()) {
                                     echo "
                                      <tr>
                                         <td>".$row_windows['id']."</td>
@@ -1940,4 +1887,4 @@ function maiuscula(z) {
 }
 //FIM DA FUNÇÃO MASCARA MAIUSCULA
 </script>
-<?php mysqli_close($conn); ?>
+<?php $conn->close(); ?>

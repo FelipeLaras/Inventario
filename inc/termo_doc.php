@@ -2,7 +2,7 @@
 //sessão para o id de quem esta trabalhando
 session_start();
 //banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
  /*SALVANDO O TERMO*/
 
 //limitador de caracteres
@@ -17,7 +17,7 @@ $caminho_db = "documentos/inventario/".$_FILES['termo']['name'];//pasta onde est
 /*VALIDAÇÃO DO FILE*/
 $sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 
-$result =  mysqli_query($conn, $sql_file);//aplicando a query
+$result =  $conn->query($sql_file);//aplicando a query
 $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 
 /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -79,7 +79,7 @@ if ($_POST['tipo'] == 4) {
                             '4', 
                             '".$date."')";    
     //aplicando a query
-    $resultado_insert_file = mysqli_query($conn, $insert_bd_file);
+    $resultado_insert_file = $conn->query($insert_bd_file);
 
 }//end IF tipo = 4
 
@@ -90,19 +90,19 @@ if($_POST['tipo'] == 3){
 
     //buscando todos os equipamento para informar que o termo está baixado
     $all_equip = "SELECT id_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = '".$_POST['id_fun']."'";
-    $result_all = mysqli_query($conn, $all_equip);
+    $result_all = $conn->query($all_equip);
 
 
     while($row_termo = mysqli_fetch_assoc($result_all)){
 
         $update_termo = "UPDATE manager_inventario_equipamento SET termo = '0' where id_equipamento = '".$row_termo['id_equipamento']."'";
-        $resultado_termo = mysqli_query($conn, $update_termo) or die(mysqli_error($conn));
+        $resultado_termo = $conn->query($update_termo) or die(mysqli_error($conn));
 
     }//end WHILE all equipamentos    
 
     /*ALTERANDO STATUS DO USUÁRIO*/
     $update_termofun = "UPDATE manager_inventario_funcionario SET status = '4' where id_funcionario = '".$_POST['id_fun']."'";
-    $resultado_termoFU = mysqli_query($conn, $update_termofun) or die(mysqli_error($conn));
+    $resultado_termoFU = $conn->query($update_termofun) or die(mysqli_error($conn));
 
     //agora salvando o termo no banco de dados
 
@@ -146,7 +146,7 @@ if($_POST['tipo'] == 3){
     }
 
     //aplicando a query
-    $resultado_insert_file = mysqli_query($conn, $insert_bd_file);
+    $resultado_insert_file = $conn->query($insert_bd_file);
 
 }//end IF tipo = 3
 
@@ -173,7 +173,7 @@ if($_POST['tipo'] == 5){
                             '".$date."')";
   
     //aplicando a query
-    $resultado_insert_file = mysqli_query($conn, $insert_bd_file);
+    $resultado_insert_file = $conn->query($insert_bd_file);
 
 }//end IF tipo = 5
 
@@ -198,10 +198,10 @@ $log_query = "INSERT manager_log (id_funcionario, id_equipamento, data_alteracao
 						'".$data."',
 						'".$_SESSION["id"]."',
 						'6')";
-$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+$result_log = $conn->query($log_query) or die(mysqli_error($conn));
 
 /*_________________________________ FECHANDO O BANCO ______________________________________*/
 
 //fechando o banco de dados
-mysqli_close($conn);
+$conn->close();
 ?>

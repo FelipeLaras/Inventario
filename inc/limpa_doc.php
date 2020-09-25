@@ -1,6 +1,6 @@
 <?php
     //chamando banco de dados
-    include 'conexao.php';
+    require_once('../conexao/conexao.php');
 
     //função para criar log
     function logMe($msg){
@@ -23,7 +23,7 @@
                         WHERE
                             deletar = 1 AND
                             documento_deletado = 0";
-    $result_doc = mysqli_query($conn, $coletando_doc);
+    $result_doc = $conn->query($coletando_doc);
 
     //montando a regra para cada documento encontrado
 
@@ -41,10 +41,10 @@
 
         //informar no banco que o documento foi deletado do sistema
         $info_del = "UPDATE manager_inventario_anexo SET documento_deletado = 1 WHERE id_anexo = ".$row_doc['id_anexo']." ";
-        $result_del = mysqli_query($conn, $info_del) or die(mysqli_error($conn));
+        $result_del = $conn->query($info_del);
 
     }//end WHILE pegando os doc
 
     //fechando a conexão com o banco
-    mysqli_close($conn);
+    $conn->close();
 ?>

@@ -2,7 +2,7 @@
 //sessão 
 session_start();
 //conexão banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //data de hoje
 $date_hoje = date('Y-m-d');
@@ -13,8 +13,8 @@ foreach ($_POST['mensagem'] as $msn) {
     /*---------------------BUSCAR A MENSANSAGEM-----------------------------*/
 
     $query_busca = "SELECT * FROM manager_comparacao_ocs WHERE id = ".$msn."";
-    $result_busca = mysqli_query($conn, $query_busca);
-    $row_busca = mysqli_fetch_assoc($result_busca);
+    $result_busca = $conn->query($query_busca);
+    $row_busca = $result_busca->fetch_assoc();
     
     /*---------------------INCLUIR A MENSANSAGEM-----------------------------*/
     $insert_msn = "INSERT INTO manager_software
@@ -36,11 +36,11 @@ foreach ($_POST['mensagem'] as $msn) {
                     '".$_SESSION["id"]."', 
                     '".$date_hoje."');
                     ";
-    $result_msn = mysqli_query($conn, $insert_msn) or die(mysqli_error($conn));
+    $result_msn = $conn->query($insert_msn) or die(mysqli_error($conn));
     /*---------------------EXCLUIR A MENSANSAGEM-----------------------------*/
 
     $deletar_busca = "DELETE FROM manager_comparacao_ocs WHERE  id = ".$msn."";
-    $result_deletar = mysqli_query($conn, $deletar_busca) or die(mysqli_error($conn));
+    $result_deletar = $conn->query($deletar_busca) or die(mysqli_error($conn));
 
 }
 //volto para relatório para avisar que excluimos

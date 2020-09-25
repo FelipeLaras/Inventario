@@ -1,17 +1,17 @@
 <?php
 
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 /*PEGANDO DADOS DO FUNCIONARIO*/
 $query_funcionario =  "SELECT  MIF.cpf, MIF.nome, MDF.nome AS funcao, MDD.nome AS departamento, MDE.nome AS empresa
 						FROM manager_inventario_funcionario MIF
-						INNER JOIN manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-						INNER JOIN manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-						INNER JOIN manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
+						LEFT JOIN manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
+						LEFT JOIN manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
+						LEFT JOIN manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
 						WHERE MIF.id_funcionario = '".$_GET['id']."'";
 
-$resultado_funcionarios = mysqli_query($conn, $query_funcionario);
+$resultado_funcionarios = $conn->query($query_funcionario);
 
 $row_fun = mysqli_fetch_assoc($resultado_funcionarios);	
 /*CORPO DO PDF*/
@@ -111,11 +111,11 @@ $html = "
 	$query_equipamento = "SELECT MIE.id_equipamento, MIE.tipo_equipamento, MIE.modelo, MIE.imei_chip, MIE.valor, MIE.numero
 							, MDO.nome AS operadora, MDST.nome AS situacao
 							FROM manager_inventario_equipamento MIE
-							INNER JOIN manager_dropoperadora MDO ON MIE.operadora = MDO.id_operadora
-							INNER JOIN manager_dropsituacao MDST ON MDST.id_situacao = MIE.situacao
+							LEFT JOIN manager_dropoperadora MDO ON MIE.operadora = MDO.id_operadora
+							LEFT JOIN manager_dropsituacao MDST ON MDST.id_situacao = MIE.situacao
 							WHERE MIE.id_equipamento = ".$_GET['id_equip']."";
 
-	$resulado_equipamento = mysqli_query($conn, $query_equipamento);
+	$resulado_equipamento = $conn->query($query_equipamento);
 	$row_equi = mysqli_fetch_assoc($resulado_equipamento);
 
 	if ($row_equi['tipo_equipamento'] == 1) {// 1 = CELULAR
@@ -160,10 +160,10 @@ $html = "
 
 					$query_acessorios = "SELECT mda.nome
 										FROM manager_inventario_acessorios mia
-										INNER JOIN manager_dropacessorios mda ON mia.tipo_acessorio = mda.id_acessorio
+										LEFT JOIN manager_dropacessorios mda ON mia.tipo_acessorio = mda.id_acessorio
 										WHERE mia.id_equipamento = ".$_GET['id_equip']."";					
 
-					$resultado_acessorios = mysqli_query($conn, $query_acessorios);
+					$resultado_acessorios = $conn->query($query_acessorios);
 					
 					while ($row_acessorios = mysqli_fetch_assoc($resultado_acessorios)) {
 							$html .="<tr>
@@ -281,5 +281,5 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('Vigencia_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-mysqli_close($conn);
+$conn->close();
 ?>

@@ -1,16 +1,13 @@
 <?php
 //aplicando para usar varialve em outro arquivo
 session_start();
-//chamando conexão com o banco
-require 'conexao.php';
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){
-  header('location: index.html');
+  header('location: ../front/index.html');
 }
-?>
-<!DOCTYPE html>
-<html>
-  <?php  require 'header.php'?><!--Chamando a Header-->
+require_once('header.php')
+
+?><!--Chamando a Header-->
   <!-- /subnavbar -->
   <body>
     <div class="main">

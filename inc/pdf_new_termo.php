@@ -3,7 +3,7 @@
 session_start(); 
 
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 /*PEGANDO DADOS DO FUNCIONARIO*/
 $query_funcionario =  "SELECT  
@@ -26,7 +26,7 @@ $query_funcionario =  "SELECT
 						WHERE 
 							MIF.id_funcionario = ".$_GET['id_fun']."";
 
-$resultado_funcionarios = mysqli_query($conn, $query_funcionario);
+$resultado_funcionarios = $conn->query($query_funcionario);
 
 $row_fun = mysqli_fetch_assoc($resultado_funcionarios);
 
@@ -120,7 +120,7 @@ $html = "
 												WHERE 
 													MIE.id_equipamento = ".$_SESSION['celular_id'.$cont_equip.'']."";
 
-					$resulado_equipamento_celular = mysqli_query($conn, $query_equipamento_celular);
+					$resulado_equipamento_celular = $conn->query($query_equipamento_celular);
 					$cont_equip++;
 
 				  while ($row_equip_celular = mysqli_fetch_assoc($resulado_equipamento_celular)) {
@@ -134,10 +134,10 @@ $html = "
 				  	$html .= "<td>---</td>";					  		
 		  			$query_acessorios_celular ="SELECT MDA.nome AS acessorios
 						FROM manager_inventario_acessorios MIA
-						INNER JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
+						LEFT JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
 						WHERE MIA.id_equipamento = ".$row_equip_celular['id_equipamento']."";
 					$html .= "<td>";
-					$resultado_acessorios_celular = mysqli_query($conn, $query_acessorios_celular);	
+					$resultado_acessorios_celular = $conn->query($query_acessorios_celular);	
 					while ($row_acessorio_celular = mysqli_fetch_assoc($resultado_acessorios_celular)) {
 
 				  		$html .= $row_acessorio_celular['acessorios']." | ";	
@@ -184,7 +184,7 @@ $html = "
 												WHERE 
 													MIE.id_equipamento = ".$_SESSION['tablet_id'.$cont_equip_tablet.'']."";
 
-					$resulado_equipamento_tablet = mysqli_query($conn, $query_equipamento_tablet);
+					$resulado_equipamento_tablet = $conn->query($query_equipamento_tablet);
 					$cont_equip_tablet++;
 
 				  while ($row_equip_tablet = mysqli_fetch_assoc($resulado_equipamento_tablet)) {
@@ -198,10 +198,10 @@ $html = "
 				  	$html .= "<td>---</td>";	
 		  			$query_acessorios_tablet ="SELECT MDA.nome AS acessorios
 						FROM manager_inventario_acessorios MIA
-						INNER JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
+						LEFT JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
 						WHERE MIA.id_equipamento = ".$row_equip_tablet['id_equipamento']."";
 					$html .= "<td>";
-					$resultado_acessorios_tablet = mysqli_query($conn, $query_acessorios_tablet);	
+					$resultado_acessorios_tablet = $conn->query($query_acessorios_tablet);	
 					while ($row_acessorio_tablet = mysqli_fetch_assoc($resultado_acessorios_tablet)) {
 
 				  		$html .= $row_acessorio_tablet['acessorios']." | ";	
@@ -228,11 +228,11 @@ $html = "
 				while ($_SESSION['chip_id'.$cont_equip_chip.''] != NULL) {//quando for chip
 					$query_equipamento_chip = "SELECT MIE.id_equipamento, MDE.nome AS tipo_equipamento, MIE.modelo, MIE.imei_chip, MIE.valor, MIE.numero, MIE.planos_voz, MIE.planos_dados, MDO.nome AS operadora, MIE.operadora AS id_operadora
 					FROM manager_inventario_equipamento MIE
-					INNER JOIN manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
+					LEFT JOIN manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
 					LEFT JOIN manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
 					WHERE MIE.id_equipamento = ".$_SESSION['chip_id'.$cont_equip_chip.'']."";
 
-					$resulado_equipamento_chip = mysqli_query($conn, $query_equipamento_chip);
+					$resulado_equipamento_chip = $conn->query($query_equipamento_chip);
 					$cont_equip_chip++;
 
 				  while ($row_equip_chip = mysqli_fetch_assoc($resulado_equipamento_chip)) {
@@ -261,10 +261,10 @@ $html = "
 				if ($_SESSION['modem_id'] != NULL) {//quando for modem
 					$query_equipamento = "SELECT MIE.id_equipamento, MDE.nome AS tipo_equipamento, MIE.modelo, MIE.imei_chip, MIE.valor, MIE.numero, MIE.planos_voz, MIE.planos_dados
 					FROM manager_inventario_equipamento MIE
-					INNER JOIN manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
+					LEFT JOIN manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
 					WHERE MIE.id_equipamento = ".$_SESSION['modem_id']."";
 
-					$resulado_equipamento = mysqli_query($conn, $query_equipamento);
+					$resulado_equipamento = $conn->query($query_equipamento);
 
 				  while ($row_equip = mysqli_fetch_assoc($resulado_equipamento)) {
 				  	$html .= "<tr>";
@@ -349,5 +349,5 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_new_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-mysqli_close($conn);
+$conn->close();
 ?>

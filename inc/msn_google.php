@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include 'header.php';
+require_once('header.php');
 ?>
 	<div class="container">
 		<div class="row">

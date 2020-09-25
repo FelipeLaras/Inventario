@@ -2,8 +2,8 @@
     //iniciando a sessão
     session_start();
     #ENVIO DE EMAIL
-	require 'PHPMailer/PHPMailerAutoload.php';
-	
+    require_once('../PHPMailer/PHPMailerAutoload.php');
+    
     //variaveis de conf. envio
     $nome = "felipe";
 	$smtp = "smtp.gmail.com";//servidor usado para envio
@@ -254,5 +254,5 @@ if ($_SESSION['id_equipamento_150'] != NULL) {
 //limpando as sessões
 session_unset();    
 //fechando a conexão com o banco
-mysqli_close($conn);
+$conn->close();
 ?>

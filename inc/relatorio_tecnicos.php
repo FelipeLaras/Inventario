@@ -3,13 +3,13 @@
 session_start();
 
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-   header('location: index.html');
+   header('location: ../front/index.html');
 
 }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
-   header('location: error.php');
+   header('location: ../front/error.php');
 }
 
 //LIMITE POR PAGINA
@@ -18,24 +18,22 @@ $pagina = 20;
 
 //colentando as mensagens
 $mensagem = "SELECT * FROM manager_comparacao_ocs limit ".$pagina." ";
-$resultado_mensagem = mysqli_query($conn, $mensagem);
+$resultado_mensagem = $conn->query($mensagem);
 
 //contando quantos mensagens existem
 $contador_msn = "SELECT COUNT(id) AS quantidade FROM manager_comparacao_ocs";
-$result_contador = mysqli_query($conn, $contador_msn);
-$row_contador = mysqli_fetch_assoc($result_contador);
+$result_contador = $conn->query($contador_msn);
+$row_contador = $result_contador->fetch_assoc();
+
+require_once('header.php');
+require_once('../query/query_dropdowns.php');
 
 ?>
-<!DOCTYPE html>
-<html>
-<?php  require 'header.php';?>
 <style>
 select.form-control.form-control-sm {
     margin-bottom: -51px;
 }
-
 </style>
-
 <div class="subnavbar">
     <div class="subnavbar-inner">
         <div class="container">
@@ -93,7 +91,6 @@ select.form-control.form-control-sm {
             </ul>
             <br>
             <div class="tab-content">
-
                 <!--MENSAGEM-->
                 <div class="tab-pane active" id="mensagem" style='margin-top: -1px;'>
                     <div class="container">
@@ -131,14 +128,14 @@ select.form-control.form-control-sm {
                                                 MCO.data_last_agente
                                             FROM
                                                 manager_comparacao_ocs MCO limit 1000";
-                        $resultado_buscar_mensagem = mysqli_query($conn, $buscar_mensagem);
+                        $resultado_buscar_mensagem = $conn->query($buscar_mensagem);
 
                         //variavel para contagem das linhas
                         $contador = 1;
 
-                        while($row_buscar_mensagem = mysqli_fetch_assoc($resultado_buscar_mensagem)){
+                        while($row_buscar_mensagem = $resultado_buscar_mensagem->fetch_assoc()){
                             echo "                           
-                            <tr>
+                                    <tr>
                                         <td><input type='checkbox' id='check_msn' name='mensagem[]' 
                                         onclick='checkOne(".$contador.")' value='".$row_buscar_mensagem['id']."'></td>";
                                             if($row_buscar_mensagem['mensagem'] == 0){
@@ -187,7 +184,6 @@ select.form-control.form-control-sm {
                         </div>
                     </div>
                 </div>
-
                 <!--ALERTAS-->
                 <?php
                 if($_GET['msn'] == 1 ){
@@ -231,10 +227,7 @@ select.form-control.form-control-sm {
                                 <?php                    
                      echo "<select id='t_cob' name='func' class='span2'>                            
                               <option value=''>---</option>";
-                           //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                            $query_funcao = "SELECT * from manager_dropfuncao WHERE deletar = 0 order by nome ASC;";
-                            $resultado_funcao = mysqli_query($conn, $query_funcao);
-                            while ($row_funcao = mysqli_fetch_assoc($resultado_funcao)) {
+                            while ($row_funcao = $resultado_funcao->fetch_assoc()) {
                               echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";
                             }
                       echo "</select>";
@@ -247,10 +240,7 @@ select.form-control.form-control-sm {
                                 <?php                    
                      echo "<select id='t_cob' name='dep' class='span2'>                            
                               <option value=''>---</option>";
-                           //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                            $query_depart = "SELECT * from manager_dropdepartamento WHERE deletar = 0 order by nome ASC;";
-                            $resultado_depart = mysqli_query($conn, $query_depart);
-                            while ($row_depart = mysqli_fetch_assoc($resultado_depart)) {
+                            while ($row_depart = $resultado_depart->fetch_assoc()) {
                               echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
                             }
                       echo "</select>";
@@ -264,10 +254,7 @@ select.form-control.form-control-sm {
                                 <?php                     
                      echo "<select id='t_cob' name='em' class='span2'>
                             <option value=''>---</option>";
-                           //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                            $query_empresa = "SELECT * from manager_dropempresa WHERE deletar = 0 order by nome ASC;";
-                            $resultado_empresa = mysqli_query($conn, $query_empresa);
-                            while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+                            while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
                               echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                             }
                       echo "</select>";
@@ -294,7 +281,7 @@ select.form-control.form-control-sm {
                               <option value=''>---</option>";
                            //BUSCANDO OS DEPARTAMENTOS NO BANCO
                             $query_equip = "SELECT * from manager_dropequipamentos WHERE id_equip IN (9, 5, 8) AND deletar = 0 order by nome ASC;";
-                            $resultado_equip = mysqli_query($conn, $query_equip);
+                            $resultado_equip = $conn->query($query_equip);
                             while ($row_equip = mysqli_fetch_assoc($resultado_equip)) {
                               echo "<option value='".$row_equip['id_equip']."'>".$row_equip['nome']."</option>";
                             }
@@ -310,7 +297,7 @@ select.form-control.form-control-sm {
                               <option value=''>---</option>";
                            //BUSCANDO OS DEPARTAMENTOS NO BANCO
                             $query_status = "SELECT * from manager_dropstatusequipamento WHERE id_status IN (1, 10, 6) AND deletar = 0 order by nome ASC;";
-                            $resultado_status = mysqli_query($conn, $query_status);
+                            $resultado_status = $conn->query($query_status);
                             while ($row_status = mysqli_fetch_assoc($resultado_status)) {
                               echo "<option value='".$row_status['id_status']."'>".$row_status['nome']."</option>";
                             }
@@ -349,10 +336,7 @@ select.form-control.form-control-sm {
                                 <?php                     
                      echo "<select id='t_cob' name='filial' class='span2'>
                               <option value=''>---</option>";
-                           //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                            $query_empresa = "SELECT * from manager_dropempresa WHERE deletar = 0 order by nome ASC;";
-                            $resultado_empresa = mysqli_query($conn, $query_empresa);
-                            while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+                            while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
                               echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                             }
                       echo "</select>";
@@ -436,6 +420,6 @@ function checkOne(id) {
 }
 </script>
 
-<?php mysqli_close($conn); ?>
+<?php $conn->close(); ?>
 
 </html>

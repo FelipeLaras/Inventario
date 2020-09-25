@@ -2,14 +2,14 @@
    //aplicando para usar variavel em outro arquivo
    session_start();
    //chamando conexão com o banco
-   require 'conexao.php';
+   require_once('../conexao/conexao.php');
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4) && ($_SESSION["perfil"] != 3)) {
    
-       header('location: error.php');
+       header('location: ../front/error.php');
    }
 
 
@@ -19,17 +19,17 @@
 
 $query_funcionario = "SELECT id_funcionario FROM manager_inventario_funcionario WHERE status NOT IN (8,3)";
 
-$result_funcionario = mysqli_query($conn, $query_funcionario);
+$result_funcionario = $conn->query($query_funcionario);
 
 while($funcionario = mysqli_fetch_assoc($result_funcionario)){
 
    $limpar = "SELECT id FROM manager_invent_historico WHERE id_funcionario = ".$funcionario['id_funcionario']."";
-   $result_limpar = mysqli_query($conn, $limpar);
+   $result_limpar = $conn->query($limpar);
 
    while($limpar_historico = mysqli_fetch_assoc($result_limpar)){
 
       $deletar = "UPDATE manager_invent_historico SET deletado = 1 WHERE id = ".$limpar_historico['id']."";
-      $result_deletar = mysqli_query($conn, $deletar) or die(mysqli_error($conn));
+      $result_deletar = $conn->query($deletar);
       
    }//fim while deletando
 
@@ -38,16 +38,18 @@ while($funcionario = mysqli_fetch_assoc($result_funcionario)){
 /*UM PEQUENO AJUSTE PARA ELIMINAR FUNCIONARIOS QUE NÃO POSSUEM EQUIPAMENTOS*/
 
 $verificar_funcio = "SELECT id_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = '".$row['id_funcionario']."'";
-$resulado_ver_funci = mysqli_query($conn, $verificar_funcio);
+$resulado_ver_funci = $conn->query($verificar_funcio);
 $linha_ver = mysqli_fetch_assoc($resulado_ver_funci);
 if ($linha_ver['id_equipamento'] == NULL) {
    $update_ver_funcio = "UPDATE manager_inventario_funcionario SET status = 9 WHERE id_funcionario = '".$row['id_funcionario']."'";
-   $resul = mysqli_query($conn, $update_ver_funcio) or die(mysqli_error($conn));
+   $resul = $conn->query($update_ver_funcio);
 }
 
-   $conn -> close();
-   ?>
-<?php  require 'header.php'?><!--Chamando a Header-->
+$conn -> close();
+
+require_once('header.php')
+
+?><!--Chamando a Header-->
 <div class="subnavbar">
    <div class="subnavbar-inner">
       <div class="container">

@@ -1,7 +1,7 @@
 <?php 
 session_start(); 
 //incluindo o banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //VALIDAÇÃO EQUIPAMENTO
 
@@ -38,7 +38,7 @@ $query_edit_func = "UPDATE
 					WHERE 
 					(id_funcionario = '".$_POST['id_funcionario']."')";
 
-$resultado = mysqli_query($conn, $query_edit_func) or die(mysqli_error($conn));
+$resultado = $conn->query($query_edit_func);
 
 //adicionando os equipamentos
 
@@ -59,7 +59,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 						WHERE 
 							id_equipamento = ".$_POST['id_equip']."";
 		
-		$resultado_update_cel = mysqli_query($conn, $update_cel) or die(mysqli_error($conn));
+		$resultado_update_cel = $conn->query($update_cel);
 		$_SESSION['celular_id'.$cont_equip.''] = $_POST['id_equip'];
 		
 		/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
@@ -76,7 +76,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 							'".$data."',
 							'".$_SESSION["id"]."',
 							'5')";
-		$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+		$result_log = $conn->query($log_query);
 
 		/*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -86,7 +86,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 
 			//pegando a ultima ID_EQUIPAMENTO para preencher o proximo equipamento
 			$query_max_equip = "SELECT max(id_equipamento) AS id FROM manager_inventario_equipamento";
-			$resultado_max_equip = mysqli_query($conn, $query_max_equip);
+			$resultado_max_equip = $conn->query($query_max_equip);
 			$row_max_equip = mysqli_fetch_assoc($resultado_max_equip);
 			$id_equip = $row_max_equip['id'];
 			$id_equip++;
@@ -121,7 +121,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 										'".$_POST['data_nota_celular'.$cont_equip.'']."',
 										'".$_POST['valor'.$cont_equip.'']."')";
 
-			$resultado_equipamento = mysqli_query($conn, $insert_equipamento) or die(mysqli_error($conn));
+			$resultado_equipamento = $conn->query($insert_equipamento);
 
 			if (isset($_POST['acessorio_celular'.$cont_equip.''])) {
 
@@ -130,7 +130,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 				foreach ($idAcessorioCelular as $IdCelular) {
 					//montando a query
 					$query_acessorios = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUES ('".$id_equip."','".$IdCelular."')";
-					$resultado_acessrios = mysqli_query($conn, $query_acessorios) or die(mysqli_error($conn));
+					$resultado_acessrios = $conn->query($query_acessorios);
 				}
 
 			}
@@ -153,7 +153,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 								'".$data."',
 								'".$_SESSION["id"]."',
 								'5')";
-			$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+			$result_log = $conn->query($log_query);
 
 			/*_________________________________ FECHANDO O BANCO ______________________________________*/
 			
@@ -173,7 +173,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 	while ($_POST['modelo_tablet'.$cont_equip_tablet.''] != NULL) {
 		//pegando a ultima ID_EQUIPAMENTO para preencher o proximo equipamento
 		$query_max_equip = "SELECT max(id_equipamento) AS id_tablet FROM manager_inventario_equipamento";
-		$result = mysqli_query($conn, $query_max_equip);
+		$result = $conn->query($query_max_equip);
 		$row_max_tablet = mysqli_fetch_assoc($result);
 		$id_tablet = $row_max_tablet['id_tablet'];
 		$id_tablet++;
@@ -210,7 +210,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 											'".$_POST['data_nota_tablet'.$cont_equip_tablet.'']."', 
 											'".$_POST['valor_tablet'.$cont_tablet.'']."')";
 
-		$resultado_equipamento_tablet = mysqli_query($conn, $insert_equipamento_tablet) or die(mysqli_error($conn));
+		$resultado_equipamento_tablet = $conn->query($insert_equipamento_tablet);
 
 		if (isset($_POST['acessorio_tablet'.$cont_equip_tablet.''])) {
 
@@ -219,7 +219,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 			foreach ($idAcessorioTablet as $IdTablet) {
 				//montando a query
 				$query_tablet = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUES ('".$id_tablet."','".$IdTablet."')";
-				$resultado_tablet = mysqli_query($conn, $query_tablet) or die(mysqli_error($conn));
+				$resultado_tablet = $conn->query($query_tablet);
 			}
 
 		}
@@ -238,7 +238,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 								'".$data."',
 								'".$_SESSION["id"]."',
 								'5')";
-			$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+			$result_log = $conn->query($log_query);
 
 			/*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -266,7 +266,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 					WHERE 
 						id_equipamento = ".$_POST['id_equip']."";
 		
-		$resultado_update = mysqli_query($conn, $update) or die(mysqli_error($conn));
+		$resultado_update = $conn->query($update);
 		$_SESSION['chip_id'.$cont_equip_chip.''] = $_POST['id_equip'];
 
 		/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
@@ -283,7 +283,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 								'".$data."',
 								'".$_SESSION["id"]."',
 								'5')";
-			$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+			$result_log = $conn->query($log_query);
 
 			/*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -293,7 +293,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 		while ($_POST['operadora_chip'.$cont_equip_chip.''] != NULL) {
 			//pegando a ultima ID_EQUIPAMENTO para preencher o proximo equipamento
 			$query_max_equip_chip = "SELECT max(id_equipamento) AS id_max_chip FROM manager_inventario_equipamento";
-			$resultado_max_equip_chip = mysqli_query($conn, $query_max_equip_chip);
+			$resultado_max_equip_chip = $conn->query($query_max_equip_chip);
 			$row_max_equip_chip = mysqli_fetch_assoc($resultado_max_equip_chip);
 			$id_equip_chip = $row_max_equip_chip['id_max_chip'];
 			$id_equip_chip++;
@@ -328,7 +328,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 											'".$date."', 
 											'---')";		
 
-			$resultado_equipamento_chip = mysqli_query($conn, $query_equipamento_chip) or die(mysqli_error($conn));
+			$resultado_equipamento_chip = $conn->query($query_equipamento_chip);
 
 			/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
 
@@ -344,7 +344,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 								'".$data."',
 								'".$_SESSION["id"]."',
 								'5')";
-			$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+			$result_log = $conn->query($log_query);
 
 			/*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -361,7 +361,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 if ($_POST['modelo_modem'] != NULL) {		
 		//pegando o ultimo ID
 		$query_modem = "SELECT max(id_equipamento) AS id_max_moden FROM manager_inventario_equipamento";
-		$resultado_max_modem = mysqli_query($conn, $query_modem);
+		$resultado_max_modem = $conn->query($query_modem);
 		$row_max_modem = mysqli_fetch_assoc($resultado_max_modem);
 		$id_modem = $row_max_modem['id_max_moden'];
 		$id_modem++;
@@ -395,7 +395,7 @@ if ($_POST['modelo_modem'] != NULL) {
 							'".$date."', 
 							'---')";
 
-		$resultado_modem = mysqli_query($conn, $query_modem) or die(mysqli_error($conn));
+		$resultado_modem = $conn->query($query_modem);
 
 		/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
 
@@ -411,13 +411,13 @@ if ($_POST['modelo_modem'] != NULL) {
 								'".$data."',
 								'".$_SESSION["id"]."',
 								'5')";
-			$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+			$result_log = $conn->query($log_query);
 
 			/*_________________________________ FECHANDO O BANCO ______________________________________*/
 		
 		$_SESSION['modem_id'] = $id_modem;//pegando o id do equipamento para emitir um termo só dele
 }
-mysqli_close($conn);
+$conn->close();
 
 
 header('location: pdf_new_termo.php?id_fun='.$_POST['id_funcionario'].'');

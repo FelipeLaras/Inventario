@@ -4,9 +4,9 @@ session_start();
 
 //Aplicando a regra de login
 if ($_SESSION["perfil"] == NULL) {
-    header('location: index.html');
+    header('location: ../front/index.html');
 } elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
-    header('location: error.php');
+    header('location: ../front/error.php');
 }
 
 require_once('header.php'); 

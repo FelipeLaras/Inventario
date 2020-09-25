@@ -1,10 +1,10 @@
 <?php
 session_start();
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //aplicando a query
-$resultado_relatorios = mysqli_query($conn, $_SESSION['query_relatorios']);
+$resultado_relatorios = $conn->query($_SESSION['query_relatorios']);
 
 /*
 * Criando e exportando planilhas do Excel
@@ -27,7 +27,7 @@ $html = "
 			</thead>
 		<tbody>";
 
-		  while ($row_relatorio = mysqli_fetch_assoc($resultado_relatorios)) {
+		  while ($row_relatorio = $resultado_relatorios->fetch_assoc()) {
 			$html .= "<tr>";               
 			//CÓDIGO DO EQUIPAMENTO 
 			if($row_relatorio['tipo_equipamento'] != NULL){

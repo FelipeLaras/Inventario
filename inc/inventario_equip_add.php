@@ -1,16 +1,19 @@
 <?php
    session_start();
    //chamando conexão com o banco
-   require 'conexao.php';
+   require_once('../conexao/conexao.php');
+   
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
-       header('location: error.php');
+       header('location: ../front/error.php');
    }
+   require_once('header.php');
+   require_once('../query/query_dropdowns.php');
+
 ?>
-<?php require 'header.php' ?>
 <div class="subnavbar">
    <div class="subnavbar-inner">
       <div class="container">
@@ -43,19 +46,16 @@
 
 <?php 
 //mostrando erro na tela se caso não for fornecido nenhum equipamento
-if ($_GET['error'] == 1) {
-  echo "<div class='alert'>
-          <button type='button' class='close' data-dismiss='alert'>×</button>
-          <strong>Atenção!</strong> Você deve cadastrar no minimo um equipamento
-        </div>";
+switch ($_GET['error']) {
+   case '1':
+      echo "<div class='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Você deve cadastrar no minimo um equipamento</div>";
+      break;
+   
+   case '2':
+      echo "<div class='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Arquivo já existe!</strong> O arquivo que vc está anexando já possui com o mesmo nome em nossos registro. Por favor renomeie</div>";
+      break;
 }
-if ($_GET['error'] == 2) {
-   echo "<div class='alert'>
-           <button type='button' class='close' data-dismiss='alert'>×</button>
-           <strong>Arquivo já existe!</strong> O arquivo que vc está anexando já possui com o mesmo nome em nossos registro. Por favor renomeie
-         </div>";
- }
- ?>
+?>
 <div class="widget ">
    <div class="widget-header">
       <h3>
@@ -79,7 +79,7 @@ if ($_GET['error'] == 2) {
             <!--Buscando inforação pelo apollo-->
                 <form id='form1' class='form-horizontal' action='inventario_add_equip.php' method='POST' enctype='multipart/form-data' autocomplete='off'>
               <!--GAMBI PARA PEGAR O ID-->
-              <input type="texte" name="id_funcionario" value="<?php echo  $_GET['id_funcio']?>" style="display: none;">
+              <input type="texte" name="id_funcionario" value="<?= $_GET['id_funcio']?>" style="display: none;">
                <div class="control-group">
                   <h3 style="color: red;">
                      <font style="vertical-align: inherit;">Cadastro - Equipamento</font>
@@ -153,9 +153,7 @@ if ($_GET['error'] == 2) {
                                     <select id="t_cob" name="filial_celular0" class="span2">
                                        <option value="">---</option>
                                        <?php
-                                          $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 ORDER BY nome ASC";
-                                          $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                          while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+                                          while ($row_empresa = $resultado_empresa->fetch_assoc()) {
                                              echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                           }
                                        ?>
@@ -169,9 +167,7 @@ if ($_GET['error'] == 2) {
                                     <select id="t_cob" name="situacao_celular0" class="span2">
                                        <option value=''>---</option>
                                        <?php
-                                          $query_situacao = "SELECT * from manager_dropsituacao where deletar = 0 ORDER BY nome ASC";
-                                          $resultado_situacao = mysqli_query($conn, $query_situacao);
-                                          while ($row_situacao = mysqli_fetch_assoc($resultado_situacao)) {
+                                          while ($row_situacao = $resultado_situacao->fetch_assoc()) {
                                              echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['nome']."</option>";
                                           }
                                        ?>
@@ -185,9 +181,7 @@ if ($_GET['error'] == 2) {
                                     <select id="t_cob" name="estado_celular0" class="span2">
                                        <option value=''>---</option>
                                        <?php
-                                          $query_estado = "SELECT * from manager_dropestado where deletar = 0 ORDER BY nome ASC";
-                                          $resultado_estado = mysqli_query($conn, $query_estado);
-                                          while ($row_estado = mysqli_fetch_assoc($resultado_estado)) {
+                                          while ($row_estado = $resultado_status->fetch_assoc()) {
                                              echo "<option value='".$row_estado['id']."'>".$row_estado['nome']."</option>";
                                           }
                                        ?>
@@ -199,9 +193,7 @@ if ($_GET['error'] == 2) {
                                  <label class="control-label">Acessórios:</label>
                                  <div class="controls">
                                     <?php 
-                                       $query_acessorio = "SELECT * from manager_dropacessorios where deletar = 0 ORDER BY nome ASC";
-                                       $resultado_acessorio = mysqli_query($conn, $query_acessorio);
-                                       while ($row_acessorio = mysqli_fetch_assoc($resultado_acessorio)) {
+                                       while ($row_acessorio = $resultado_acessorio->fetch_assoc()) {
                                           echo "<label class='checkbox inline'>
                                                    <input type='checkbox' name='acessorio_celular0[]' value='".$row_acessorio['id_acessorio']."'> ".$row_acessorio['nome']."
                                                 </label></br>";
@@ -223,9 +215,7 @@ if ($_GET['error'] == 2) {
                                     <select id="t_cob" name="status_celular0" class="span2">
                                        <option value=''>---</option>
                                        <?php
-                                          $query_situacao = "SELECT * from manager_dropstatusequipamento where deletar = 0 AND id_status in (6,10) ORDER BY nome";
-                                          $resultado_situacao = mysqli_query($conn, $query_situacao);
-                                          while ($row_situacao = mysqli_fetch_assoc($resultado_situacao)) {
+                                          while ($row_situacao = $resultado_status_equip->fetch_assoc()) {
                                              echo "<option value='".$row_situacao['id_status']."'>".$row_situacao['nome']."</option>";
                                           }
                                        ?>
@@ -307,9 +297,7 @@ if ($_GET['error'] == 2) {
                                  <select id="t_cob" name="filial_tablet0" class="span2">
                                     <option value="">---</option>
                                     <?php
-                                       $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 ORDER BY nome";
-                                       $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                       while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+                                       while ($row_empresa = $resultado_empresa->fetch_assoc()) {
                                           echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                        }
                                        ?>
@@ -323,9 +311,7 @@ if ($_GET['error'] == 2) {
                                  <select id="t_cob" name="situacao_tablet0" class="span2">
                                     <option value=''>---</option>
                                  <?php
-                                    $query_situacao = "SELECT * from manager_dropsituacao where deletar = 0 ORDER BY nome";
-                                    $resultado_situacao = mysqli_query($conn, $query_situacao);
-                                    while ($row_situacao = mysqli_fetch_assoc($resultado_situacao)) {
+                                    while ($row_situacao = $resultado_situacao->fetch_assoc()) {
                                        echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['nome']."</option>";
                                     }
                                     ?>
@@ -339,9 +325,7 @@ if ($_GET['error'] == 2) {
                                  <select id="t_cob" name="estado_tablet0" class="span2">
                                     <option value=''>---</option>
                                     <?php
-                                       $query_estado = "SELECT * from manager_dropestado where deletar = 0 ORDER BY nome ASC";
-                                       $resultado_estado = mysqli_query($conn, $query_estado);
-                                       while ($row_estado = mysqli_fetch_assoc($resultado_estado)) {
+                                       while ($row_estado = $resultado_empresa->fetch_assoc()) {
                                           echo "<option value='".$row_estado['id']."'>".$row_estado['nome']."</option>";
                                        }
                                     ?>
@@ -353,9 +337,7 @@ if ($_GET['error'] == 2) {
                               <label class="control-label">Acessórios:</label>
                               <div class="controls">
                                  <?php 
-                                    $query_acessorio = "SELECT * from manager_dropacessorios where deletar = 0 ORDER BY nome";
-                                    $resultado_acessorio = mysqli_query($conn, $query_acessorio);
-                                    while ($row_acessorio = mysqli_fetch_assoc($resultado_acessorio)) {
+                                    while ($row_acessorio = $resultado_acessorio->fetch_assoc()) {
                                        echo "<label class='checkbox inline'>
                                        <input type='checkbox' name='acessorio_tablet0[]' value='".$row_acessorio['id_acessorio']."'> ".$row_acessorio['nome']."
                                        </label></br>";
@@ -377,9 +359,7 @@ if ($_GET['error'] == 2) {
                                  <select id="t_cob" name="status_tablet0" class="span2">
                                     <option value=''>---</option>
                                     <?php
-                                       $query_situacao = "SELECT * from manager_dropstatusequipamento where deletar = 0 AND id_status in (6,10) ORDER BY nome";
-                                       $resultado_situacao = mysqli_query($conn, $query_situacao);
-                                       while ($row_situacao = mysqli_fetch_assoc($resultado_situacao)) {
+                                       while ($row_situacao = $resultado_status_equip->fetch_assoc()) {
                                           echo "<option value='".$row_situacao['id_status']."'>".$row_situacao['nome']."</option>";
                                        }
                                     ?>
@@ -468,9 +448,7 @@ if ($_GET['error'] == 2) {
                                           <select id="t_cob" name="operadora_chip0" class="span2">
                                              <option value=''>---</option>
                                           <?php
-                                             $query_operadora = "SELECT * from manager_dropoperadora where deletar = 0 ORDER BY nome";
-                                             $resultado_operadora = mysqli_query($conn, $query_operadora);
-                                             while ($row_operadora = mysqli_fetch_assoc($resultado_operadora)) {
+                                             while ($row_operadora = $resultado_operadora->fetch_assoc()) {
                                                echo "<option value='".$row_operadora['id_operadora']."'>".$row_operadora['nome']."</option>";
                                              }
                                              ?>
@@ -480,9 +458,7 @@ if ($_GET['error'] == 2) {
                                           <select id="t_cob" name="filial_chip0" class="span2">
                                             <option value="">---</option>
                                           <?php
-                                             $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 ORDER BY nome";
-                                             $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                             while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+                                             while ($row_empresa = $resultado_empresa->fetch_assoc()) {
                                                echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                              }
                                              ?>
@@ -568,9 +544,7 @@ if ($_GET['error'] == 2) {
                                           <select id="t_cob" name="filial_modem" class="span2">
                                             <option value="">---</option>
                                           <?php
-                                             $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 ORDER BY nome";
-                                             $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                             while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+                                             while ($row_empresa = $resultado_empresa->fetch_assoc()) {
                                                echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                              }
                                              ?>
@@ -582,9 +556,7 @@ if ($_GET['error'] == 2) {
                                        <td>
                                           <select id="t_cob" name="operadora_modem" class="span2">
                                           <?php
-                                             $query_operadora = "SELECT * from manager_dropoperadora where deletar = 0 ORDER BY nome";
-                                             $resultado_operadora = mysqli_query($conn, $query_operadora);
-                                             while ($row_operadora = mysqli_fetch_assoc($resultado_operadora)) {
+                                             while ($row_operadora = $resultado_operadora->fetch_assoc()) {
                                                echo "<option value='".$row_operadora['id_operadora']."'>".$row_operadora['nome']."</option>";
                                              }
                                              ?>
@@ -659,4 +631,4 @@ if ($_GET['error'] == 2) {
 <script src="js/contrato_filho_equip.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </html>
-<?php   mysqli_close($conn); ?>
+<?php   $conn->close(); ?>

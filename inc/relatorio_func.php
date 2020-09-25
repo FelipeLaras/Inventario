@@ -7,13 +7,13 @@ session_start();
 
 unset($_SESSION['id_funcionario']); //LIMPANDO A SESSION
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //Aplicando a regra de login
 if ($_SESSION["perfil"] == NULL) {
-   header('location: index.html');
+   header('location: ../front/index.html');
 } elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
 
-   header('location: error.php');
+   header('location: ../front/error.php');
 }
 
 //recebendo as informações do formulario
@@ -122,13 +122,13 @@ if (empty($_GET['funcao_funcionario'])) {
 
 $query_relatorios .= ") ORDER BY MIF.nome ASC";
 
-$resultado_relatorios = mysqli_query($conn, $query_relatorios);
+$resultado_relatorios = $conn->query($query_relatorios);
 
 $_SESSION['query_relatorios'] = $query_relatorios; //enviando query para PDF ou EXCEL
 
-?>
+require_once('header.php');
 
-<?php require 'header.php' ?>
+?>
 <!--Chamando a Header-->
 <div class="subnavbar">
    <div class="subnavbar-inner">
@@ -208,7 +208,7 @@ $_SESSION['query_relatorios'] = $query_relatorios; //enviando query para PDF ou 
          </thead>
          <tbody>
             <?php
-            while ($row_relatorio = mysqli_fetch_assoc($resultado_relatorios)) {
+            while ($row_relatorio = $resultado_relatorios->fetch_assoc()) {
                echo "
             <tr>
                <td>" . $row_relatorio['nome'] . "</td>

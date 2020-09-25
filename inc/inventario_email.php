@@ -3,7 +3,7 @@
 session_start();
 
 //chamando o banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 /*-----------------------------------------------------------------------------*/
 
 //Variaveis com as tratativas das datas
@@ -38,7 +38,7 @@ MIF.deletar = 0 AND
 MIE.termo = 1 AND 
 MIE.tipo_equipamento IN (1, 3, 4, 2) AND /*1 = Celular; 3 = CHIP; 4 = MODEM; 2 = TABLET*/
 MIE.data_criacao = '".$data_5."'";
-$resultado_data_5 = mysqli_query($conn, $query_data_5);
+$resultado_data_5 = $conn->query($query_data_5);
 
 $cont = 0;
 while ($row_data_5 = mysqli_fetch_assoc($resultado_data_5)) {
@@ -72,22 +72,22 @@ MIE.imei_chip,
 MIE.numero
 FROM
 manager_inventario_funcionario MIF
-    INNER JOIN
+    LEFT JOIN
 manager_inventario_equipamento MIE ON MIE.id_funcionario = MIF.id_funcionario
-    INNER JOIN
+    LEFT JOIN
 manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
-    INNER JOIN
+    LEFT JOIN
 manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
 WHERE
 MIF.deletar = 0 AND 
 MIE.termo = 1 AND 
 MIE.tipo_equipamento IN (1, 3, 4, 2) AND /*1 = Celular; 3 = CHIP; 4 = MODEM; 2 = TABLET*/
 MIE.data_criacao = '".$data_10."'";
-$resultado_data_10 = mysqli_query($conn, $query_data_10);
+$resultado_data_10 = $conn->query($query_data_10);
 
 
 $cont = 0;
-while ($row_data_10 = mysqli_fetch_assoc($resultado_data_10)) {
+while ($row_data_10 = $resultado_data_10->fetch_assoc()) {
 
     $_SESSION['destinatario_10'] = 'lucimara.segalla@servopa.com.br';
     $_SESSION['nome_10'] = 'Larissa Santos';
@@ -118,18 +118,18 @@ MIE.imei_chip,
 MIE.numero
 FROM
 manager_inventario_funcionario MIF
-    INNER JOIN
+    LEFT JOIN
 manager_inventario_equipamento MIE ON MIE.id_funcionario = MIF.id_funcionario
-    INNER JOIN
+    LEFT JOIN
 manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
-    INNER JOIN
+    LEFT JOIN
 manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
 WHERE
 MIF.deletar = 0 AND 
 MIE.termo = 1 AND 
 MIE.tipo_equipamento IN (1, 3, 4, 2) AND /*1 = Celular; 3 = CHIP; 4 = MODEM; 2 = TABLET*/
 MIE.data_criacao =  '".$data_15."'";
-$resultado_data_15 = mysqli_query($conn, $query_data_15);
+$resultado_data_15 = $conn->query($query_data_15);
 
 $cont = 0;
 while ($row_data_15 = mysqli_fetch_assoc($resultado_data_15)) {
@@ -149,5 +149,5 @@ while ($row_data_15 = mysqli_fetch_assoc($resultado_data_15)) {
 }
 
 header('location: inventario_envioEmail.php');
-mysqli_close($conn);
+$conn->close();
 ?>

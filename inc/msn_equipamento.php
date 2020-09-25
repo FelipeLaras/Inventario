@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include 'header.php';
+require_once('header.php');
 
 if($_GET['msn'] == 1){//1 = DESKTOP
 	echo "<div class='container'>
@@ -211,18 +211,18 @@ if($_GET['scan'] == 1){// SCANNER
                         <div class='widget-content' style="background-color: #bdb3b3">
                             <div class='shortcuts'>
                                 <?php							
-							if($_GET['win'] != NULL){
-								echo "
-								<a href='equip_modelo.php?id_win=".$_GET['win']."' class='shortcut' target='_blank'>
-									<span class='shortcut-label'>WINDOWS</span>
-								</a>";
-							}//end IF botao modelo
-							if($_GET['off'] != NULL){
-												echo "
-								<a href='equip_modelof.php?id_off=".$_GET['off']."' class='shortcut' target='_blank'>
-									<span class='shortcut-label'>OFFICE</span> 
-								</a>";
-							}//end IF office
+								if($_GET['win'] != NULL){
+									echo "
+									<a href='equip_modelo.php?id_win=".$_GET['win']."' class='shortcut' target='_blank'>
+										<span class='shortcut-label'>WINDOWS</span>
+									</a>";
+								}//end IF botao modelo
+								if($_GET['off'] != NULL){
+													echo "
+									<a href='equip_modelof.php?id_off=".$_GET['off']."' class='shortcut' target='_blank'>
+										<span class='shortcut-label'>OFFICE</span> 
+									</a>";
+								}//end IF office
 								?>
 
                             </div>

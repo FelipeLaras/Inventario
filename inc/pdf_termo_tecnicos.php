@@ -11,7 +11,7 @@ if($_SESSION['patrimonio_termo'] != NULL){
 }
 
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 /*PEGANDO DADOS DO FUNCIONARIO*/
 $query_funcionario =  "SELECT  
@@ -252,5 +252,5 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-mysqli_close($conn);
+$conn->close();
 ?>

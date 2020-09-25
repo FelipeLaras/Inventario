@@ -2,21 +2,19 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){  
-  header('location: index.html');
-
+    header('location: ../front/index.html');
 }elseif ($_SESSION["perfil"] != 0) {
-
-    header('location: error.php');
-  }
+    header('location: ../front/error.php');
+}
   
+require_once('header.php');
+require_once('../query/query_dropdowns.php');
+
 ?>
-<!DOCTYPE html>
-<html>
-<?php  require 'header.php'?>
 <!--Chamando a Header-->
 <div class="subnavbar">
     <div class="subnavbar-inner">
@@ -58,7 +56,8 @@ if($_SESSION["perfil"] == NULL){
             <div class="control-group">
                 <div class="controls">
                     <!-- Button to trigger modal -->
-                    <a href="#myModal" role="button" class="btn btn-info pull-left filho" data-toggle="modal" title="Adicionar novo usuário">
+                    <a href="#myModal" role="button" class="btn btn-info pull-left filho" data-toggle="modal"
+                        title="Adicionar novo usuário">
                         <i class='fas fa-plus' style="margin-right: 10px"></i>Usuário
                     </a>
                 </div>
@@ -86,9 +85,9 @@ if($_SESSION["perfil"] == NULL){
                                     maneger_profile MP
                               LEFT JOIN 
                                     maneger_profile_type MPT ON MP.profile_type = MPT.type_profile order by MP.id_profile";
-          $resultado_show = mysqli_query($conn, $query_show_user);
+          $resultado_show = $conn->query($query_show_user);
 
-            while ($row_show = mysqli_fetch_assoc($resultado_show)) {
+            while ($row_show = $resultado_show->fetch_assoc()) {
              echo "<tbody>
                     <tr>
                         <td>".$row_show['id']."</td>
@@ -155,15 +154,11 @@ if($_SESSION["perfil"] == NULL){
                     <select id='t_cont' name='perfil_user' class='span2' required>
                         <option value=''>---</option>
                         <?php
-                //query buscando os perfis
-                $query_perfil = "SELECT * FROM maneger_profile_type";
-                $resultado_perfil = mysqli_query($conn, $query_perfil);
-                while ($row_perfil = mysqli_fetch_assoc($resultado_perfil)) {
-
-                   echo "<option value='".$row_perfil['type_profile']."'>".$row_perfil['type_name']."</option>";
-                 }
-                 mysqli_close($conn);
-                 ?>
+                            while ($row_perfil = $resultado_perfil->fetch_assoc()) {
+                                echo "<option value='".$row_perfil['type_profile']."'>".$row_perfil['type_name']."</option>";
+                            }
+                            $conn->close();
+                        ?>
                     </select>
                 </div>
             </div>

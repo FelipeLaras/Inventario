@@ -2,19 +2,19 @@
    //aplicando para usar varialve em outro arquivo
    session_start();
    //chamando conexão com o banco
-   require 'conexao.php';
+   require_once('../conexao/conexao.php');
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
-       header('location: error.php');
+       header('location: ../front/error.php');
    }   
- 
-   ?>
-<!DOCTYPE html>
-<html>
-<?php  require 'header.php';?>
+   
+   require_once('header.php');
+   require_once('../query/query_dropdowns.php');
+
+?>
 <div class="subnavbar">
     <div class="subnavbar-inner">
         <div class="container">
@@ -88,7 +88,7 @@ FROM
 WHERE
    MIE.id_equipamento = ".$_GET['id_equip']."";
 
-   $resultado = mysqli_query($conn, $query_contrato);
+   $resultado = $conn->query($query_contrato);
    $row = mysqli_fetch_assoc($resultado); 
 
    //trocando formato da dara fim do contrato
@@ -108,12 +108,12 @@ WHERE
             /
             <i class="icon-lithe fas fa-print"></i>&nbsp;
             <?php
-   if($row['id_situacao'] == 4){
-      echo "<a href='javascript:'>".$row['modelo']."</a>";
-   }else{
-      echo "<a href='javascript:'>".$row['patrimonio']."</a>";
-   }
-?>
+            if($row['id_situacao'] == 4){
+                echo "<a href='javascript:'>".$row['modelo']."</a>";
+            }else{
+                echo "<a href='javascript:'>".$row['patrimonio']."</a>";
+            }
+            ?>
         </h3>
     </div>
     <!-- /widget-header -->
@@ -128,35 +128,25 @@ WHERE
                 </li>
             </ul>
             <?php
-    if($_GET['msn'] == 1){
-       echo "
-            <div class='alert alert-success'>
-               <button type='button' class='close' data-dismiss='alert'>×</button>
-               <strong>Atenção!</strong> Dados da nota alterado com sucesso!.
-            </div>";
-   }
-   if($_GET['msn'] == 2){
-      echo "
-           <div class='alert alert-success'>
-              <button type='button' class='close' data-dismiss='alert'>×</button>
-              <strong>Atenção!</strong> Office cadastrado com sucesso!.
-           </div>";
-  }
-  if($_GET['msn'] == 3){
-   echo "
-        <div class='alert alert-success'>
-           <button type='button' class='close' data-dismiss='alert'>×</button>
-           <strong>Atenção!</strong> Office transferido com sucesso!.
-        </div>";
-}
-    ?>
+                switch ($_GET['msn']) {
+                    case '1':
+                        echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Dados da nota alterado com sucesso!.</div>";
+                    break;
+                    case '2':
+                        echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Office cadastrado com sucesso!.</div>";
+                    break;
+                    case '3':
+                        echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Office transferido com sucesso!.</div>";
+                    break;
+                }
+            ?>
             <div class="tab-content">
                 <!--Equipamento-->
                 <div class="tab-pane active" id="contratos">
                     <form id="edit-profile" class="form-horizontal" action="scan_add_alter.php" method="post">
                         <!--Uma gambiarra para levar o id do contrato para a tela de update-->
                         <input type="text" name="id_funcionario" style="display: none;"
-                            value="<?php echo $row['id_funcionario'] ?>">
+                            value="<?= $row['id_funcionario'] ?>">
                         <!--fim da gambiarra-->
                         <div class="control-group">
                             <h3 style="color: red;">
@@ -167,29 +157,27 @@ WHERE
                             <label class="control-label">Nome completo:</label>
                             <div class="controls">
                                 <input class="span6" name="nome" type="text" onkeyup='maiuscula(this)' required
-                                    value="<?php echo $row['responsavel'] ?>" />
+                                    value="<?= $row['responsavel'] ?>" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">CPF:</label>
                             <div class="controls">
-                                <input class="cpfcnpj span2" type="text" name="cnpj_forne"
-                                    value="<?php echo $row['cpf']  ?>" required />
+                                <input class="cpfcnpj span2" type="text" name="cnpj_forne" value="<?= $row['cpf']  ?>"
+                                    required />
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Função:</label>
                             <div class="controls">
                                 <select id="t_cont" name="funcao" class="span2">
-                                    <option value="<?php echo $row['id_funcao'] ?>"><?php echo $row['funcao']  ?>
+                                    <option value="<?= $row['id_funcao'] ?>"><?= $row['funcao']  ?>
                                     </option>
                                     <?php 
-                              $query_funcao = "SELECT * from manager_dropfuncao";
-                                $resultado_funcao = mysqli_query($conn, $query_funcao);
-                                while ($row_funcao = mysqli_fetch_assoc($resultado_funcao)) {
-                                  echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";
-                                }
-                               ?>
+                                        while ($row_funcao = $resultado_funcao->fetch_assoc()) {
+                                        echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";
+                                        }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -197,14 +185,12 @@ WHERE
                             <label class="control-label">Empresa / Filial:</label>
                             <div class="controls">
                                 <select id="t_cob" name="empresa" class="span2" required>
-                                    <option value="<?php echo $row['id_empresaFUN'] ?>"> <?php echo $row['empresaFUN']?> </option>
+                                    <option value="<?= $row['id_empresaFUN'] ?>"> <?= $row['empresaFUN']?> </option>
                                     <?php 
-                              $query_empresa = "SELECT * from manager_dropempresa";
-                                $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
-                                  echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
-                                }
-                                 ?>
+                                        while ($row_empresa = $resultado_empresa->fetch_assoc()) {
+                                            echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
+                                        }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -212,14 +198,13 @@ WHERE
                             <label class="control-label">Departamento:</label>
                             <div class="controls">
                                 <select id="setor_1" name="setor" class="span2">
-                                    <option value="<?php echo $row['id_depart'] ?>"><?php echo $row['departamento']  ?>
+                                    <option value="<?= $row['id_depart'] ?>"><?= $row['departamento']  ?>
                                     </option>
-                                    <?php 
-                              $query_depart = "SELECT * from manager_dropdepartamento";
-                                 $resultado_depart = mysqli_query($conn, $query_depart);
-                                while ($row_depart = mysqli_fetch_assoc($resultado_depart)) {
-                                  echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
-                                } ?>
+                                    <?php
+                                        while ($row_depart = $resultado_depart->fetch_assoc()) {
+                                            echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
+                                        } 
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -251,7 +236,7 @@ WHERE
                               <option value='".$row['id_empresa']."'>".$row['empresa']."</option>
                               <option>---</option>";
                               $query_empresa_cpu = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
-                               $resultado_empresa_cpu = mysqli_query($conn, $query_empresa_cpu);
+                               $resultado_empresa_cpu = $conn->query($query_empresa_cpu);
                               while ($row_empresa= mysqli_fetch_assoc($resultado_empresa_cpu)) {
                                 echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                               }
@@ -268,7 +253,7 @@ WHERE
                               <option value='".$row['id_locacao']."'>".$row['locacao']."</option> 
                               <option>---</option>"; 
                               $query_locacao_cpu = "SELECT * from manager_droplocacao  where deletar = 0 ORDER BY nome";
-                               $resultado_locacao_cpu = mysqli_query($conn, $query_locacao_cpu);
+                               $resultado_locacao_cpu = $conn->query($query_locacao_cpu);
                               while ($row_locacao= mysqli_fetch_assoc($resultado_locacao_cpu)) {
                                 echo "<option value='".$row_locacao['id_empresa']."'>".$row_locacao['nome']."</option>";
                               }
@@ -295,7 +280,7 @@ WHERE
                               <option value='".$row['id_situacao']."'>".$row['situacao']."</option>
                               <option>---</option>";
                               $query_situacao = "SELECT * from manager_dropsituacao  where id_situacao in (4,5) ORDER BY nome";
-                                 $resultado_situacao = mysqli_query($conn, $query_situacao);
+                                 $resultado_situacao = $conn->query($query_situacao);
                                  while ($row_situacao= mysqli_fetch_assoc($resultado_situacao)) {
                                  echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['nome']."</option>";
                                  }
@@ -335,9 +320,7 @@ WHERE
                            <select id='t_cob' name='empresa_scan' class='span2'>
                               <option value='".$row['id_empresa']."'>".$row['empresa']."</option>
                               <option>---</option>";
-                              $query_empresa_cpu = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
-                               $resultado_empresa_cpu = mysqli_query($conn, $query_empresa_cpu);
-                              while ($row_empresa= mysqli_fetch_assoc($resultado_empresa_cpu)) {
+                              while ($row_empresa= $resultado_empresa->fetch_assoc()) {
                                 echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                               }
                         echo "
@@ -352,9 +335,7 @@ WHERE
                            <select id='t_cob' name='locacao_scan' class='span2'>
                               <option value='".$row['id_locacao']."'>".$row['locacao']."</option> 
                               <option>---</option>"; 
-                              $query_locacao_cpu = "SELECT * from manager_droplocacao  where deletar = 0 ORDER BY nome";
-                               $resultado_locacao_cpu = mysqli_query($conn, $query_locacao_cpu);
-                              while ($row_locacao= mysqli_fetch_assoc($resultado_locacao_cpu)) {
+                              while ($row_locacao= $resultado_empresa->fetch_assoc()) {
                                 echo "<option value='".$row_locacao['id_empresa']."'>".$row_locacao['nome']."</option>";
                               }
                         echo "
@@ -373,9 +354,7 @@ WHERE
                            <select id='setor_1' name='situacao_scan' class='span2'>
                               <option value='".$row['id_situacao']."'>".$row['situacao']."</option>
                               <option>---</option>";
-                              $query_situacao = "SELECT * from manager_dropsituacao  where id_situacao in (4,5) ORDER BY nome";
-                                 $resultado_situacao = mysqli_query($conn, $query_situacao);
-                                 while ($row_situacao= mysqli_fetch_assoc($resultado_situacao)) {
+                                 while ($row_situacao= $resultado_situacao->fetch_assoc()) {
                                  echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['nome']."</option>";
                                  }
                            echo "
@@ -395,8 +374,8 @@ WHERE
 if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
 
    $query_tem_office = "SELECT id FROM manager_office WHERE id_equipamento = ".$_GET['id_equip'] .";";
-   $result_tem_office = mysqli_query($conn,$query_tem_office);
-   $row_tem_office = mysqli_fetch_assoc($result_tem_office);
+   $result_tem_office = $conn->query($query_tem_office);
+   $row_tem_office = $result_tem_office->fetch_assoc();
 
    if($row_tem_office['id'] == NULL){
       echo "<a href='#myModalOffice' class='btn btn-warning' data-toggle='modal' style='margin-left: -142px;'>
@@ -452,7 +431,7 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
                                 WHERE
                                     MIA.id_equipamento = ".$_GET['id_equip'].";";
 
-                                    $result_cod_termo = mysqli_query($conn, $query_doc_termo);
+                                    $result_cod_termo = $conn->query($query_doc_termo);
 
                                  while ($row_termo = mysqli_fetch_assoc($result_cod_termo)) {
 
@@ -502,8 +481,8 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
         <!--Colocar a tabela Aqui!-->
         <form id="edit-profile" class="form-horizontal" enctype="multipart/form-data" action="equip_add_doc.php"
             method="post">
-            <input type="text" name="id_fun" style="display:none ;" value="<?php echo $row['id_funcionario']; ?>">
-            <input type="text" name="id_equip" style="display:none ;" value="<?php echo $_GET['id_equip']; ?>">
+            <input type="text" name="id_fun" style="display:none ;" value="<?= $row['id_funcionario']; ?>">
+            <input type="text" name="id_equip" style="display:none ;" value="<?= $_GET['id_equip']; ?>">
             <div class="control-group">
             </div>
             <div class="control-group">
@@ -537,17 +516,15 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
         <!--Colocar a tabela Aqui!-->
         <form id="edit-profile" class="form-horizontal" enctype="multipart/form-data" action="equip_new_office.php"
             method="post">
-            <input type="text" name="id_fun" style="display:none ;" value="<?php echo $_GET['id_fun']; ?>">
-            <input type="text" name="id_equip" style="display:none ;" value="<?php echo $_GET['id_equip']; ?>">
+            <input type="text" name="id_fun" style="display:none ;" value="<?= $_GET['id_fun']; ?>">
+            <input type="text" name="id_equip" style="display:none ;" value="<?= $_GET['id_equip']; ?>">
             <?php
       echo "<div class='control-group'>
                <label class='control-label'>Office:</label>                  
                <div class='controls'>
                   <select id='t_cob' name='tipo_office' class='span3'>
                      <option>---</option>";
-                        $office_cpu = "SELECT * from manager_dropoffice where deletar = 0";
-                        $resultado = mysqli_query($conn, $office_cpu);
-                       while($row = mysqli_fetch_assoc($resultado)){
+                       while($row = $resultado_office->fetch_assoc()){
                         echo "<option value='".$row['id']."'>".$row['nome']."</option>";
                      }//end WHILE office
                   echo "   
@@ -565,10 +542,8 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
                <div class='controls'>
                   <select id='t_cob' name='local_office' class='span3'>
                      <option>---</option>";
-                     $officeNEW = "SELECT * from manager_droplocacao  where deletar = 0 ORDER BY nome";
-                        $resultado_officeNEW = mysqli_query($conn, $officeNEW);
-                        while ($row_officeNEW= mysqli_fetch_assoc($resultado_officeNEW)) {
-                        echo "<option value='".$row_officeNEW['id_empresa']."'>".$row_officeNEW['nome']."</option>";
+                        while ($row_officeNEW= $resultado_empresa->fetch_assoc()) {
+                            echo "<option value='".$row_officeNEW['id_empresa']."'>".$row_officeNEW['nome']."</option>";
                         }
                      echo "   
                   </select>   
@@ -579,10 +554,8 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
                <div class='controls'>
                   <select id='t_cob' name='empresa_office' class='span3'>
                      <option>---</option>";
-                     $office = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
-                        $resultado_office = mysqli_query($conn, $office);
-                        while ($row_office= mysqli_fetch_assoc($resultado_office)) {
-                        echo "<option value='".$row_office['id_empresa']."'>".$row_office['nome']."</option>";
+                        while ($row_office= $resultado_empresa->fetch_assoc()) {
+                            echo "<option value='".$row_office['id_empresa']."'>".$row_office['nome']."</option>";
                         }
                      echo "   
                   </select>   
@@ -631,8 +604,8 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
         <!--Colocar a tabela Aqui!-->
         <form id="edit-profile" class="form-horizontal" enctype="multipart/form-data" action="equip_trans.php"
             method="post">
-            <input type="text" name="id_fun" style="display:none ;" value="<?php echo $_GET['id_fun']; ?>">
-            <input type="text" name="id_equip" style="display:none ;" value="<?php echo $_GET['id_equip']; ?>">
+            <input type="text" name="id_fun" style="display:none ;" value="<?= $_GET['id_fun']; ?>">
+            <input type="text" name="id_equip" style="display:none ;" value="<?= $_GET['id_equip']; ?>">
             <?php
    $traz_office = "SELECT 
    MDO.nome AS office,
@@ -644,16 +617,16 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
    MO.serial
    FROM
    manager_office MO
-      INNER JOIN
+      LEFT JOIN
    manager_dropoffice MDO ON MO.versao = MDO.id
-      INNER JOIN
+      LEFT JOIN
    manager_dropempresa MDE ON MO.empresa = MDE.id_empresa
-      INNER JOIN
+      LEFT JOIN
    manager_droplocacao MDL ON MO.locacao = MDL.id_empresa
    WHERE
    MO.id_equipamento = ".$_GET['id_equip'].";";
 
-   $result_traz_office = mysqli_query($conn, $traz_office);
+   $result_traz_office = $conn->query($traz_office);
 
    if($row_traz_office = mysqli_fetch_assoc($result_traz_office)){
       echo "<div class='control-group'>
@@ -674,9 +647,7 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
                   <select id='t_cob' name='local_office' class='span3'>
                      <option value='".$row_traz_office['IDlocacao_office']."'>".$row_traz_office['locacao_office']."</option>
                      <option>---</option>";
-                     $officeE = "SELECT * from manager_droplocacao  where deletar = 0 ORDER BY nome";
-                        $resultado_officeE = mysqli_query($conn, $officeE);
-                        while ($row_officeE= mysqli_fetch_assoc($resultado_officeE)) {
+                        while ($row_officeE = $resultado_empresa->fetch_assoc()) {
                         echo "<option value='".$row_officeE['id_empresa']."'>".$row_officeE['nome']."</option>";
                         }
                      echo "   
@@ -689,9 +660,7 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
                   <select id='t_cob' name='empresa_office' class='span3'>
                      <option value='".$row_traz_office['IDempresa_office']."'>".$row_traz_office['empresa_office']."</option>
                      <option>---</option>";
-                     $officeEM = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
-                        $resultado_officeEM = mysqli_query($conn, $officeEM);
-                        while ($row_officeEM= mysqli_fetch_assoc($resultado_officeEM)) {
+                        while ($row_officeEM= $resultado_empresa->fetch_assoc()) {
                         echo "<option value='".$row_officeEM['id_empresa']."'>".$row_officeEM['nome']."</option>";
                         }
                      echo "   
@@ -722,7 +691,7 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
             MIE.tipo_equipamento IN (8,9)";
 
             echo $buscando_usuario;
-            $result_search_user = mysqli_query($conn, $buscando_usuario);
+            $result_search_user = $conn->query($buscando_usuario);
 
             while($row_search = mysqli_fetch_assoc($result_search_user)){
 
@@ -775,4 +744,4 @@ function maiuscula(z) {
 }
 //FIM DA FUNÇÃO MASCARA MAIUSCULA
 </script>
-<?php mysqli_close($conn); ?>
+<?php $conn->close(); ?>

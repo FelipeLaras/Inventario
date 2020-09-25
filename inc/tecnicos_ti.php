@@ -2,18 +2,20 @@
    //aplicando para usar variavel em outro arquivo
    session_start();
    //chamando conexão com o banco
-   require 'conexao.php';
+   require_once('../conexao/conexao.php');
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
    
-       header('location: error.php');
+       header('location: ../front/error.php');
    }
-   mysqli_close($conn);
-   ?>
-<?php  require 'header.php'?><!--Chamando a Header-->
+   $conn->close();
+   
+   require_once('header.php')
+   
+?><!--Chamando a Header-->
 <div class="subnavbar">
    <div class="subnavbar-inner">
       <div class="container">

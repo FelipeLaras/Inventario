@@ -31,14 +31,14 @@
 
                     <?php
         //conectando com o bando de dados
-        include ("conexao.php");
+        require_once('../conexao/conexao.php');
 
         //criando a pesquisa 
         $query = "SELECT * FROM manager_contracts WHERE deleted = 0"; //0 = ativo, 1 = desativado
         //Criando a pesquisa para contagem  
         
         //aplicando a regra e organizando na tela
-        if ($resultado = mysqli_query($conn, $query)){
+        if ($resultado = $conn->query($query)){
             
                 while($row = mysqli_fetch_assoc($resultado)){
                     
@@ -61,7 +61,7 @@
                 }
             }
             
-        mysqli_close($conn);
+        $conn->close();
         ?>
 
                 </tbody>

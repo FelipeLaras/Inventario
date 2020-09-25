@@ -15,6 +15,7 @@ if($_SESSION["perfil"] == NULL){
 $_SESSION['id_funcionario_historico'] = $_GET['id'];
 
 require_once('header.php');
+require_once('../query/query_dropdowns.php');
 
 ?>
 <div class="subnavbar">
@@ -22,9 +23,9 @@ require_once('header.php');
         <div class="container">
             <ul class="mainnav">
                 <li>
-                  <a href="inventario_ti.php"><i class="icon-home"></i>
-                  <span>Home</span>
-                  </a>
+                    <a href="inventario_ti.php"><i class="icon-home"></i>
+                        <span>Home</span>
+                    </a>
                 </li>
                 <li class="active">
                     <a href="inventario.php"><i class="icon-group"></i>
@@ -46,86 +47,35 @@ require_once('header.php');
     </div>
 </div>
 <?php 
-if ($_GET['msn'] == 1) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-success'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-          O equipamento editado com sucesso!!
-      </div>
-    </div>";
-}
-if ($_GET['msn'] == 2) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-success'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-          Anexo salvo com sucesso!!
-      </div>
-    </div>";
-}
-if ($_GET['msn'] == 3) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-success'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-          Anexo deletado com sucesso!!
-      </div>
-    </div>";
-}
-if ($_GET['msn'] == 4) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-success'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-          Data de vigencia adicionado com sucesso!!
-      </div>
-    </div>";
-}
-if ($_GET['msn'] == 5) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-block'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-        <h4 style='color: red'>ATENÇÃO!</h4>
-        <u style='color: red;'>&ldquo;Nome do seu documento&rdquo;</u> passou o limite de <u style='color: red;'>20</u> caracteres!.
-      </div>
-    </div>";
-}
-if ($_GET['msn'] == 6) {
-  echo "
-    <div class='alert alert-info'>
-      <button type='button' class='close' data-dismiss='alert'>×</button>
-        <strong>Sucesso!</strong> Histórico inserido com sucesso.
-    </div>";
-}
 
-if($_GET['msn'] == 7){
-  echo "
-    <div class='alert alert-info'>
-      <button type='button' class='close' data-dismiss='alert'>×</button>
-        <strong>Sucesso!</strong> Histórico excluido!
-    </div>";
-}
-
-if ($_GET['msn'] == 8) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-success'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-          O equipamento cadastrado com sucesso!!
-      </div>
-    </div>";
-}
-if ($_GET['msn'] == 9) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-block'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-        <h4 style='color: red'>ATENÇÃO!</h4>
-        <u style='color: red;'>Anexo já existe!</u> nome desse arquivo já possui em nosso registros. Por favor renomeie!.
-      </div>
-    </div>";
+switch ($_GET['msn']) {
+  case '1':
+    echo "<div class='control-group'><div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button>O equipamento editado com sucesso!!</div></div>";
+  break;  
+  case '2':
+    echo "<div class='control-group'><div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button>Anexo salvo com sucesso!!</div></div>";
+  break;
+  case '3':
+    echo "<div class='control-group'><div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button>Anexo deletado com sucesso!!</div></div>";
+  break;
+  case '4':
+    echo "<div class='control-group'><div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button>Data de vigencia adicionado com sucesso!!</div></div>";
+  break;
+  case '5':
+    echo "<div class='control-group'><div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4 style='color: red'>ATENÇÃO!</h4><u style='color: red;'>&ldquo;Nome do seu documento&rdquo;</u> passou o limite de <u style='color: red;'>20</u> caracteres!.</div></div>";
+  break;
+  case '6':
+    echo "<div class='alert alert-info'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Sucesso!</strong> Histórico inserido com sucesso.</div>";
+  break;
+  case '7':
+    echo "<div class='alert alert-info'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Sucesso!</strong> Histórico excluido!</div>";
+  break;
+  case '8':
+    echo "<div class='control-group'><div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button>O equipamento cadastrado com sucesso!!</div></div>";
+  break;
+  case '9':
+    echo "<div class='control-group'><div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4 style='color: red'>ATENÇÃO!</h4><u style='color: red;'>Anexo já existe!</u> nome desse arquivo já possui em nosso registros. Por favor renomeie!.</div></div>";
+  break;
 }
 
 ?>
@@ -136,11 +86,7 @@ if ($_GET['msn'] == 9) {
    if ($_SESSION['id_funcionario'] != NULL) {
       $sessao_id =  $_SESSION['id_funcionario'];//VEIO DO FORMULARIO INVENTARIO_ADD.PHP
       unset($_SESSION['id_funcionario']);//LIMPANDO A SESSION
-      echo "
-      <div class='alert alert-info'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-        <strong>ALERTA!</strong> - Funcionario já está cadastrado, segue abaixo os dados dele !!!
-      </div>";
+      echo "<div class='alert alert-info'><button type='button' class='close' data-dismiss='alert'>×</button><strong>ALERTA!</strong> - Funcionario já está cadastrado, segue abaixo os dados dele !!!</div>";
     }else {
       $sessao_id = $_GET['id'];//VEIO DA TELA INICIAL INVENTARIO.PHP
     } 
@@ -170,8 +116,8 @@ if ($_GET['msn'] == 9) {
                             manager_dropstatus S ON F.status = S.id_status
                           WHERE
                             F.deletar = 0 AND F.id_funcionario = ".$sessao_id."";
-   $resultado = mysqli_query($conn, $query_contrato);
-   $row = mysqli_fetch_assoc($resultado); 
+   $resultado = $conn->query($query_contrato);
+   $row = $resultado->fetch_assoc(); 
 
    ?>
     <div class="widget-header">
@@ -193,17 +139,13 @@ if ($_GET['msn'] == 9) {
     <div class="widget-content">
         <div class="tabbable">
             <ul class="nav nav-tabs">
-              <?php
+                <?php
                   if($_GET['page'] != 1){
-                    echo "<li class='active'>
-                              <a href='#contratos' data-toggle='tab'>Funcionário</a>
-                          </li>";
+                    echo "<li class='active'><a href='#contratos' data-toggle='tab'>Funcionário</a></li>";
                   }else{
-                    echo "<li>
-                              <a href='#contratos' data-toggle='tab'>Funcionário</a>
-                          </li>";
+                    echo "<li><a href='#contratos' data-toggle='tab'>Funcionário</a></li>";
                   }
-              ?>                
+                ?>
                 <li>
                     <a href="#equipamento" data-toggle="tab">Equipamentos</a>
                 </li>
@@ -228,139 +170,128 @@ if ($_GET['msn'] == 9) {
                 <!--CONTRATOS-->
                 <!--ALERTA ANTES DE DESATIVAR UM USUÁRIO-->
                 <?php
-               if ($_GET['id_equip'] != NULL) {
-                 echo"<div class='alert alert-block'>
-                 <button type='button' class='close' data-dismiss='alert'>×</button>
-                 <h4>Atenção! Este usuário possui equipamentos em seu dominio</h4>
-                 Antes de desativa-lo vá na aba &ldquo;Equipamentos&rdquo; e determine uma data de <u>vigência</u> para cada um deles!...
-               </div>";
-               }
+                if ($_GET['id_equip'] != NULL) {
+                  echo"<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>Atenção! Este usuário possui equipamentos em seu dominio</h4>Antes de desativa-lo vá na aba &ldquo;Equipamentos&rdquo; e determine uma data de <u>vigência</u> para cada um deles!...</div>";
+                }
 
-               if($_GET['page'] == 1){
-                      echo "<div class='tab-pane' id='contratos'>";
-                    }else{
-                      echo "<div class='tab-pane active' id='contratos'>";
-                    }//aplicando o active caso venha page = 1
+                if($_GET['page'] == 1){
+                  echo "<div class='tab-pane' id='contratos'>";
+                }else{
+                  echo "<div class='tab-pane active' id='contratos'>";
+                }//aplicando o active caso venha page = 1
                 ?>
-                    <form id="edit-profile" class="form-horizontal" action="edit_func.php" method="post">
-                        <!--Uma gambiarra para levar o id do contrato para a tela de update-->
-                        <input type="text" name="id_funcionario" style="display: none;"
-                            value="<?= $sessao_id ?>">
-                        <!--fim da gambiarra-->
-                        <div class="control-group">
-                            <label class="control-label">Nome completo:</label>
-                            <div class="controls">
-                                <input class="span6" name="nome" type="text" onkeyup='maiuscula(this)' required
-                                    value="<?= $row['nome'] ?>" />
-                            </div>
+                <form id="edit-profile" class="form-horizontal" action="edit_func.php" method="post">
+                    <!--Uma gambiarra para levar o id do contrato para a tela de update-->
+                    <input type="text" name="id_funcionario" style="display: none;" value="<?= $sessao_id ?>">
+                    <!--fim da gambiarra-->
+                    <div class="control-group">
+                        <label class="control-label">Nome completo:</label>
+                        <div class="controls">
+                            <input class="span6" name="nome" type="text" onkeyup='maiuscula(this)' required
+                                value="<?= $row['nome'] ?>" />
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">CPF:</label>
-                            <div class="controls">
-                                <input class="cpfcnpj span2" type="text" name="cnpj_forne"
-                                    value="<?= $row['cpf']  ?>" required />
-                            </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">CPF:</label>
+                        <div class="controls">
+                            <input class="cpfcnpj span2" type="text" name="cnpj_forne" value="<?= $row['cpf']  ?>"
+                                required />
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Função:</label>
-                            <div class="controls">
-                                <select id="t_cont" name="funcao" class="span2">
-                                    <option value="<?= $row['id_funcao'] ?>"><?= $row['funcao']  ?></option>
-                                    <option value="">---</option>
-                                    <?php 
-                              $query_funcao = "SELECT * from manager_dropfuncao WHERE deletar = 0 ORDER BY nome ASC";
-                                $resultado_funcao = mysqli_query($conn, $query_funcao);
-                                while ($row_funcao = mysqli_fetch_assoc($resultado_funcao)) {
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Função:</label>
+                        <div class="controls">
+                            <select id="t_cont" name="funcao" class="span2">
+                                <option value="<?= $row['id_funcao'] ?>"><?= $row['funcao']  ?></option>
+                                <option value="">---</option>
+                                <?php 
+                                while ($row_funcao = $resultado_funcao->fetch_assoc()) {
                                   echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";
                                 }
-                               ?>
-                                </select>
-                            </div>
+                              ?>
+                            </select>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Empresa / Filial:</label>
-                            <div class="controls">
-                                <select id="t_cob" name="empresa" class="span2" required>
-                                    <option value="<?= $row['id_empresa'] ?>"><?= $row['empresa']  ?></option>
-                                    <option value="">---</option>
-                                    <?php 
-                              $query_empresa = "SELECT * from manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
-                                $resultado_empresa = mysqli_query($conn, $query_empresa);
-                                while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
-                                  echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
-                                }
-                                 ?>
-                                </select>
-                            </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Empresa / Filial:</label>
+                        <div class="controls">
+                            <select id="t_cob" name="empresa" class="span2" required>
+                                <option value="<?= $row['id_empresa'] ?>"><?= $row['empresa']  ?></option>
+                                <option value="">---</option>
+                                <?php
+                                  while ($row_empresa = $resultado_empresa->fetch_assoc()) {
+                                    echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
+                                  }
+                                ?>
+                            </select>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Departamento:</label>
-                            <div class="controls">
-                                <select id="setor_1" name="setor" class="span2">
-                                    <option value="<?= $row['id_depart'] ?>"><?= $row['departamento']  ?></option>
-                                    <option value="">---</option>
-                                    <?php 
-                              $query_depart = "SELECT * from manager_dropdepartamento WHERE deletar = 0 ORDER BY nome ASC";
-                                 $resultado_depart = mysqli_query($conn, $query_depart);
-                                while ($row_depart = mysqli_fetch_assoc($resultado_depart)) {
-                                  echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
-                                } ?>
-                                </select>
-                            </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Departamento:</label>
+                        <div class="controls">
+                            <select id="setor_1" name="setor" class="span2">
+                                <option value="<?= $row['id_depart'] ?>"><?= $row['departamento']  ?></option>
+                                <option value="">---</option>
+                                <?php 
+                                  while ($row_depart = $resultado_depart ->fetch_assoc()) {
+                                    echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
+                                  } 
+                                ?>
+                            </select>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Status:</label>
-                            <div class="controls">
-                                <select id="setor_1" name="status" class="span2">
-                                    <option value="<?= $row['id_status']?>"><?= $row['status']?></option>
-                                    <option value="">---</option>
-                                    <?php 
-                              $query_statusFun = "SELECT * FROM manager_dropstatus WHERE id_status IN (4, 3, 8, 10) AND deletar = 0 ORDER BY nome ASC";
-                                 $resultado_statusFun = mysqli_query($conn, $query_statusFun);
-                                while ($row_statusFu = mysqli_fetch_assoc($resultado_statusFun)) {
-                                  echo "<option value='".$row_statusFu['id_status']."'>".$row_statusFu['nome']."</option>";
-                                } ?>
-                                </select>
-                            </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Status:</label>
+                        <div class="controls">
+                            <select id="setor_1" name="status" class="span2">
+                                <option value="<?= $row['id_status']?>"><?= $row['status']?></option>
+                                <option value="">---</option>
+                                <?php
+                                  while ($row_statusFu = $resultado_statusFun->fetch_assoc()) {
+                                    echo "<option value='".$row_statusFu['id_status']."'>".$row_statusFu['nome']."</option>";
+                                  } 
+                                ?>
+                            </select>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Inativar</label>
-                            <div class="controls">
-                                <label class="checkbox inline">
-                                    <input type="checkbox" name="inativar">
-                                    <?= ($_SESSION["desativar_cpf"] == 0) ? "<input type='checkbox' name='inativar'  disabled>" : "<input type='checkbox' name='inativar'>" ?>
-                                </label>
-                            </div> <!-- /controls -->
-                        </div>
-                        <div class="form-actions">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Inativar</label>
+                        <div class="controls">
+                            <label class="checkbox inline">
+                                <input type="checkbox" name="inativar">
+                                <?= ($_SESSION["desativar_cpf"] == 0) ? "<input type='checkbox' name='inativar'  disabled>" : "<input type='checkbox' name='inativar'>" ?>
+                            </label>
+                        </div> <!-- /controls -->
+                    </div>
+                    <div class="form-actions">
                         <?php
                             if(!empty($_SESSION["emitir_check_list"])){
                               echo '<a href="emitir_cheklist.php?nome='.$row["nome"].'&id_fun='.$sessao_id.'" class="btn btn-warning pull-left" style="margin-left: -132px;">Check-List</a>';
                             }
                         ?>
-                            <button type="submit" class="btn btn-primary pull-right">Salvar</button>
-                        </div>
-                    </form>
-                </div>
-                <!--EQUIPAMENTOS-->
-                <div class="tab-pane" id="equipamento">
-                    <div class="span3" style="width: 95%;">
-                        <div class="widget stacked widget-table action-table">
-                            <div class="widget-header">
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <!-- Button to trigger modal -->
-                                        <a href='new_equipamento.php?id_func=<?= $sessao_id;?>' role="button"
-                                            class="btn btn-info pull-left filho" title="Novo Equipamento">
-                                            <i class='btn-icon-only icon-plus inventario'></i>
-                                        </a>
-                                        <a href='#emitirTermo' role="button" class="btn btn-info pull-left filho"
-                                            title="Emitir Termo" data-toggle="modal">
-                                            <i class='btn-icon-only icon-file inventario'></i>
-                                        </a>
-                                        <!-- Modal Emitir Termo-->
-                                        <div id='emitirTermo' class='modal hide fade' tabindex='-1' role='dialog'
-                                            aria-labelledby='myModalLabel' aria-hidden='true' style='display: none;''>
+                        <button type="submit" class="btn btn-primary pull-right">Salvar</button>
+                    </div>
+                </form>
+            </div>
+            <!--EQUIPAMENTOS-->
+            <div class="tab-pane" id="equipamento">
+                <div class="span3" style="width: 95%;">
+                    <div class="widget stacked widget-table action-table">
+                        <div class="widget-header">
+                            <div class="control-group">
+                                <div class="controls">
+                                    <!-- Button to trigger modal -->
+                                    <a href='new_equipamento.php?id_func=<?= $sessao_id;?>' role="button"
+                                        class="btn btn-info pull-left filho" title="Novo Equipamento">
+                                        <i class='btn-icon-only icon-plus inventario'></i>
+                                    </a>
+                                    <a href='#emitirTermo' role="button" class="btn btn-info pull-left filho"
+                                        title="Emitir Termo" data-toggle="modal">
+                                        <i class='btn-icon-only icon-file inventario'></i>
+                                    </a>
+                                    <!-- Modal Emitir Termo-->
+                                    <div id='emitirTermo' class='modal hide fade' tabindex='-1' role='dialog'
+                                        aria-labelledby='myModalLabel' aria-hidden='true' style='display: none;'>
                                         <div class=' modal-header'>
                                             <button type='button' class='close' data-dismiss='modal'
                                                 aria-hidden='true'>×</button>
@@ -390,8 +321,8 @@ if ($_GET['msn'] == 9) {
                                                         rows="3" name="obs_termo"></textarea>
                                                 </div>
                                                 <br>
-                                                <input type='text' style='display:none;'
-                                                    value='<?= $sessao_id;?>' name='id_funcionario' />
+                                                <input type='text' style='display:none;' value='<?= $sessao_id;?>'
+                                                    name='id_funcionario' />
                                                 <!--gambiarra-->
                                                 <div class='modal-footer'>
                                                     <button class='btn' data-dismiss='modal'
@@ -421,7 +352,7 @@ if ($_GET['msn'] == 9) {
                                         <th>Número</th>
                                         <th>Imei</th>
                                         <th>Planos</th>
-                                        <th>Valor</th>                                        
+                                        <th>Valor</th>
                                         <th>Estado</th>
                                         <th>Situação</th>
                                         <th>Status</th>
@@ -473,9 +404,9 @@ if ($_GET['msn'] == 9) {
                                     IQ.deletar = 0 AND 
                                     IQ.id_funcionario = ".$sessao_id."";
 
-                                    if ($resultado_files = mysqli_query($conn, $query_files)) {
+                                    if ($resultado_files = $conn->query($query_files)) {
                                       $cont = 0;
-                                      while ($row_files = mysqli_fetch_assoc($resultado_files)) {
+                                      while ($row_files = $resultado_files->fetch_assoc()) {
 
                                         $data = date("d/m/Y", strtotime($row_files['data_nota']));
                                         
@@ -608,18 +539,18 @@ if ($_GET['msn'] == 9) {
 
             $operadora = "SELECT MDO.nome AS operadora, MIE.operadora AS id_operadora 
             FROM manager_inventario_equipamento MIE
-            INNER JOIN manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
+            LEFT JOIN manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
             WHERE MIE.id_equipamento = ".$row['id_equipamento']."";
-            $resultado_operadora = mysqli_query($conn, $operadora);
+            $resultado_operadora = $conn->query($operadora);
 
-            if ($row_operadora = mysqli_fetch_assoc($resultado_operadora)) {
+            if ($row_operadora = $resultado_operadora->fetch_assoc()) {
               echo "<option value='".$row_operadora['id_operadora']."'>".$row_operadora['operadora']."</option>";
             }
             echo "<option value=''>---</option>";
 
             $query_operadora_equip = "SELECT * from manager_dropoperadora WHERE deletar = 0";
-            $resultado_operadora_equip = mysqli_query($conn, $query_operadora_equip);
-              while ($row_operadora_equip = mysqli_fetch_assoc($resultado_operadora_equip)) {
+            $resultado_operadora_equip = $conn->query($query_operadora_equip);
+              while ($row_operadora_equip = $resultado_operadora_equip->fetch_assoc()) {
                 echo "<option value='".$row_operadora_equip['id_operadora']."'>".$row_operadora_equip['nome']."</option>";
               }
               echo "
@@ -630,8 +561,8 @@ if ($_GET['msn'] == 9) {
 
             $planos = "SELECT planos_voz, planos_dados  FROM manager_inventario_equipamento
                         WHERE id_equipamento = ".$row_files['id_equipamento']."";
-            $resultado_planos= mysqli_query($conn, $planos);
-            $row_planos = mysqli_fetch_assoc($resultado_planos);
+            $resultado_planos= $conn->query($planos);
+            $row_planos = $resultado_planos->fetch_assoc();
 
               if($row_planos['planos_voz'] != NULL){
                 echo "<input type='checkbox' name='voz' value='Voz' checked='checked'/>Voz&nbsp";
@@ -663,8 +594,8 @@ if ($_GET['msn'] == 9) {
             ";
             $add = 0;
             $query_status_equip= "SELECT * from manager_dropstatusequipamento WHERE id_status != 1 order by nome ASC";
-               $resultado_status_equip = mysqli_query($conn, $query_status_equip);
-              while ($row_status_equip = mysqli_fetch_assoc($resultado_status_equip)) {
+               $resultado_status_equip = $conn->query($query_status_equip);
+              while ($row_status_equip = $resultado_status_equip->fetch_assoc()) {
                 echo "<option value='".$row_status_equip['id_status']."'>".$row_status_equip['nome']."</option>";
                 $add++;
               }
@@ -678,17 +609,15 @@ if ($_GET['msn'] == 9) {
 
             $empresa = "SELECT MDE.nome AS filial, MIE.filial AS id_filial
                         FROM manager_inventario_equipamento MIE
-                        INNER JOIN manager_dropempresa MDE ON MDE.id_empresa = MIE.filial
+                        LEFT JOIN manager_dropempresa MDE ON MDE.id_empresa = MIE.filial
                         WHERE MIE.id_equipamento = ".$row_files['id_equipamento']."";
-            $resultado_empresa = mysqli_query($conn, $empresa);
+            $resultado_empresa = $conn->query($empresa);
 
             if ($row_empresa= mysqli_fetch_assoc($resultado_empresa)) {
               echo "<option value='".$row_empresa['id_filial']."'>".$row_empresa['filial']."</option>";
             }            
             echo "<option value=''>---</option>";
-            $query_empresa_equip= "SELECT * from manager_dropempresa WHERE deletar = 0 order by nome";
-            $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
-              while ($row_empresa_equip = mysqli_fetch_assoc($resultado_empresa_equip)) {
+              while ($row_empresa_equip = $$resultado_empresa->fetch_assoc()) {
                 echo "<option value='".$row_empresa_equip['id_empresa']."'>".$row_empresa_equip['nome']."</option>";
               }
               echo "
@@ -744,16 +673,14 @@ if ($_GET['msn'] == 9) {
                           manager_dropsituacao MDST ON MDST.id_situacao = MIE.situacao
                         WHERE 
                           MIE.id_equipamento = ".$row_files['id_equipamento']."";
-            $resultado_situacao = mysqli_query($conn, $situacao);
+            $resultado_situacao = $conn->query($situacao);
 
             if ($row_situacao = mysqli_fetch_assoc($resultado_situacao)) {
               echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['situacao']."</option>";
             }
             echo "<option value=''>---</option>";
 
-            $query_situacao_equip = "SELECT * FROM manager_dropsituacao WHERE deletar = 0";
-            $resultado_situacao_equip = mysqli_query($conn, $query_situacao_equip);
-              while ($row_situacao_equip = mysqli_fetch_assoc($resultado_situacao_equip)) {
+              while ($row_situacao_equip = $resultado_situacao->fetch_assoc()) {
                 echo "<option value='".$row_situacao_equip['id_situacao']."'>".$row_situacao_equip['nome']."</option>";
               }
               echo "
@@ -772,16 +699,14 @@ if ($_GET['msn'] == 9) {
                           manager_dropestado MDE ON MDE.id = MIE.estado
                         WHERE 
                           MIE.id_equipamento = ".$row_files['id_equipamento']."";
-            $resultado_estado = mysqli_query($conn, $estado);
+            $resultado_estado = $conn->query($estado);
 
             if ($row_estado = mysqli_fetch_assoc($resultado_estado)) {
               echo "<option value='".$row_estado['id_estado']."'>".$row_estado['estado']."</option>";
             }
             echo "<option value=''>---</option>";
 
-            $query_estado_equip = "SELECT id, nome FROM manager_dropestado WHERE deletar = 0";
-            $resultado_estado_equip = mysqli_query($conn, $query_estado_equip);
-              while ($row_estado_equip = mysqli_fetch_assoc($resultado_estado_equip)) {
+              while ($row_estado_equip = $resultado_status->fetch_assoc()) {
                 echo "<option value='".$row_estado_equip['id']."'>".$row_estado_equip['nome']."</option>";
               }
               echo "
@@ -804,11 +729,11 @@ if ($_GET['msn'] == 9) {
             MIA.tipo_acessorio AS id_acessorios
         FROM
             manager_inventario_acessorios MIA
-                INNER JOIN
+                LEFT JOIN
             manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio
         WHERE
             MIA.id_equipamento = ".$row_files['id_equipamento']."";
-            $resultado_acessorios= mysqli_query($conn, $acessorios);
+            $resultado_acessorios= $conn->query($acessorios);
 
             $contador = 0;
 
@@ -822,20 +747,20 @@ if ($_GET['msn'] == 9) {
 
             $acessorios_new = "SELECT * FROM manager_dropacessorios WHERE id_acessorio NOT IN (";
 
-            $ass = "SELECT MIA.tipo_acessorio AS id_acessorios FROM manager_inventario_acessorios MIA INNER JOIN  manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio WHERE MIA.id_equipamento = ".$row_files['id_equipamento']."";
-            $result_ass = mysqli_query($conn, $ass);
+            $ass = "SELECT MIA.tipo_acessorio AS id_acessorios FROM manager_inventario_acessorios MIA LEFT JOIN  manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio WHERE MIA.id_equipamento = ".$row_files['id_equipamento']."";
+            $result_ass = $conn->query($ass);
             
 
-            while($row_ass = mysqli_fetch_assoc($result_ass)){
+            while($row_ass = $result_ass->fetch_assoc()){
 
               $acessorios_new .= "".$row_ass['id_acessorios'].",";
 
             }
             $acessorios_new .= "'') AND deletar = 0";
 
-            $result_acessorios_new = mysqli_query($conn, $acessorios_new);
+            $result_acessorios_new = $conn->query($acessorios_new);
             
-            while($row_acessorios_new = mysqli_fetch_assoc($result_acessorios_new)){
+            while($row_acessorios_new = $result_acessorios_new->fetch_assoc()){
 
               echo "<input type='checkbox' name='acessorio_celular[]' value='".$row_acessorios_new['id_acessorio']."'/>".$row_acessorios_new['nome']."</br>";
               //acrecentando no contador
@@ -849,10 +774,9 @@ if ($_GET['msn'] == 9) {
               <option value='".$row_files['id_status']."'>".$row_files['status']."</option>
             ";
             $add = 0;
-            $query_status_equip= "SELECT * from manager_dropstatusequipamento WHERE deletar = 0 ";
-               $resultado_status_equip = mysqli_query($conn, $query_status_equip);
+            
                echo "<option value=''>---</option>";
-              while ($row_status_equip = mysqli_fetch_assoc($resultado_status_equip)) {
+              while ($row_status_equip = $resultado_status_equip->fetch_assoc()) {
                 echo "<option value='".$row_status_equip['id_status']."'>".$row_status_equip['nome']."</option>";
                 $add++;
               }
@@ -868,19 +792,17 @@ if ($_GET['msn'] == 9) {
                             MDE.nome AS filial, MIE.filial AS id_filial
                         FROM
                             manager_inventario_equipamento MIE
-                                INNER JOIN
+                                LEFT JOIN
                             manager_dropempresa MDE ON MDE.id_empresa = MIE.filial
                         WHERE
                             MIE.id_equipamento = ".$row_files['id_equipamento']."";
-            $resultado_empresa = mysqli_query($conn, $empresa);
+            $resultado_empresa = $conn->query($empresa);
 
             if ($row_empresa= mysqli_fetch_assoc($resultado_empresa)) {
               echo "<option value='".$row_empresa['id_filial']."'>".$row_empresa['filial']."</option>";
             }            
             echo "<option value=''>---</option>";
-            $query_empresa_equip= "SELECT * from manager_dropempresa WHERE deletar = 0 order by nome";
-            $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
-              while ($row_empresa_equip = mysqli_fetch_assoc($resultado_empresa_equip)) {
+              while ($row_empresa_equip = $resultado_empresa->fetch_assoc()) {
                 echo "<option value='".$row_empresa_equip['id_empresa']."'>".$row_empresa_equip['nome']."</option>";
               }
               echo "
@@ -931,16 +853,14 @@ if ($_GET['msn'] == 9) {
                           LEFT JOIN 
                             manager_dropsituacao MDST ON MDST.id_situacao = MIE.situacao
                           WHERE MIE.id_equipamento = ".$row_files['id_equipamento']."";
-              $resultado_situacao = mysqli_query($conn, $situacao);
+              $resultado_situacao = $conn->query($situacao);
   
-              if ($row_situacao = mysqli_fetch_assoc($resultado_situacao)) {
+              if ($row_situacao = $resultado_situacao->fetch_assoc()) {
                 echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['situacao']."</option>";
               }
               echo "<option value=''>---</option>";
   
-              $query_situacao_equip = "SELECT * FROM manager_dropsituacao WHERE deletar = 0";
-              $resultado_situacao_equip = mysqli_query($conn, $query_situacao_equip);
-                while ($row_situacao_equip = mysqli_fetch_assoc($resultado_situacao_equip)) {
+                while ($row_situacao_equip = $resultado_situacao->fetch_assoc()) {
                   echo "<option value='".$row_situacao_equip['id_situacao']."'>".$row_situacao_equip['nome']."</option>";
                 }
                 echo "
@@ -958,16 +878,14 @@ if ($_GET['msn'] == 9) {
                           LEFT JOIN 
                             manager_dropestado MDE ON MDE.id = MIE.estado
                           WHERE MIE.id_equipamento = ".$row_files['id_equipamento']."";
-              $resultado_estado = mysqli_query($conn, $estado);
+              $resultado_estado = $conn->query($estado);
   
-              if ($row_estado = mysqli_fetch_assoc($resultado_estado)) {
+              if ($row_estado = $resultado_estado->fetch_assoc()) {
                 echo "<option value='".$row_estado['id_estado']."'>".$row_estado['estado']."</option>";
               }
               echo "<option value=''>---</option>";
   
-              $query_estado_equip = "SELECT id, nome FROM manager_dropestado WHERE deletar = 0";
-              $resultado_estado_equip = mysqli_query($conn, $query_estado_equip);
-                while ($row_estado_equip = mysqli_fetch_assoc($resultado_estado_equip)) {
+                while ($row_estado_equip = $resultado_status->fetch_assoc()) {
                   echo "<option value='".$row_estado_equip['id']."'>".$row_estado_equip['nome']."</option>";
                 }
                 echo "
@@ -990,15 +908,15 @@ if ($_GET['msn'] == 9) {
               MIA.tipo_acessorio AS id_acessorios
           FROM
               manager_inventario_acessorios MIA
-                  INNER JOIN
+                  LEFT JOIN
               manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio
           WHERE
               MIA.id_equipamento = ".$row_files['id_equipamento']."";
-              $resultado_acessorios= mysqli_query($conn, $acessorios);
+              $resultado_acessorios= $conn->query($acessorios);
   
               $contador = 0;
   
-              while ($row_acessorios= mysqli_fetch_assoc($resultado_acessorios)) {
+              while ($row_acessorios= $resultado_acessorios->fetch_assoc()) {
   
                 echo "<input type='checkbox' name='acessorio_celular[]' value='".$row_acessorios['id_acessorios']."' checked='checked'/>".$row_acessorios['acessorios']."</br>";
                 
@@ -1008,8 +926,8 @@ if ($_GET['msn'] == 9) {
   
               $acessorios_new = "SELECT * FROM manager_dropacessorios WHERE id_acessorio NOT IN (";
   
-              $ass = "SELECT MIA.tipo_acessorio AS id_acessorios FROM manager_inventario_acessorios MIA INNER JOIN  manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio WHERE MIA.id_equipamento = ".$row_files['id_equipamento']."";
-              $result_ass = mysqli_query($conn, $ass);
+              $ass = "SELECT MIA.tipo_acessorio AS id_acessorios FROM manager_inventario_acessorios MIA LEFT JOIN  manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio WHERE MIA.id_equipamento = ".$row_files['id_equipamento']."";
+              $result_ass = $conn->query($ass);
               
   
               while($row_ass = mysqli_fetch_assoc($result_ass)){
@@ -1019,7 +937,7 @@ if ($_GET['msn'] == 9) {
               }
               $acessorios_new .= "'') AND deletar = 0";
   
-              $result_acessorios_new = mysqli_query($conn, $acessorios_new);
+              $result_acessorios_new = $conn->query($acessorios_new);
               
               while($row_acessorios_new = mysqli_fetch_assoc($result_acessorios_new)){
   
@@ -1036,9 +954,9 @@ if ($_GET['msn'] == 9) {
               ";
               $add = 0;
               $query_status_equip= "SELECT * from manager_dropstatusequipamento WHERE deletar = 0 ";
-                  $resultado_status_equip = mysqli_query($conn, $query_status_equip);
+                  $resultado_status_equip = $conn->query($query_status_equip);
                   echo "<option value=''>---</option>";
-                while ($row_status_equip = mysqli_fetch_assoc($resultado_status_equip)) {
+                while ($row_status_equip = $resultado_status_equip->etch_assoc()) {
                   echo "<option value='".$row_status_equip['id_status']."'>".$row_status_equip['nome']."</option>";
                   $add++;
                 }
@@ -1054,19 +972,17 @@ if ($_GET['msn'] == 9) {
                               MDE.nome AS filial, MIE.filial AS id_filial
                           FROM
                               manager_inventario_equipamento MIE
-                                  INNER JOIN
+                                  LEFT JOIN
                               manager_dropempresa MDE ON MDE.id_empresa = MIE.filial
                           WHERE
                               MIE.id_equipamento = ".$row_files['id_equipamento']."";
-              $resultado_empresa = mysqli_query($conn, $empresa);
+              $resultado_empresa = $conn->query($empresa);
   
-              if ($row_empresa= mysqli_fetch_assoc($resultado_empresa)) {
+              if ($row_empresa= $resultado_empresa->fetch_assoc()) {
                 echo "<option value='".$row_empresa['id_filial']."'>".$row_empresa['filial']."</option>";
               }            
               echo "<option value=''>---</option>";
-              $query_empresa_equip= "SELECT * from manager_dropempresa WHERE deletar = 0 order by nome";
-              $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
-                while ($row_empresa_equip = mysqli_fetch_assoc($resultado_empresa_equip)) {
+                while ($row_empresa_equip = $resultado_empresa ->fetch_assoc()) {
                   echo "<option value='".$row_empresa_equip['id_empresa']."'>".$row_empresa_equip['nome']."</option>";
                 }
                 echo "
@@ -1156,7 +1072,7 @@ echo "
         <select id='t_cob' name='list_fun' class='span2'>
           <option value=''>---</option>";
           $query_fun = "SELECT id_funcionario, nome FROM manager_inventario_funcionario WHERE deletar = 0 AND empresa != '' order by nome ASC";
-          $resultado_fun = mysqli_query($conn, $query_fun);
+          $resultado_fun = $conn->query($query_fun);
 
           while ($row_fun = mysqli_fetch_assoc($resultado_fun)) {
             echo "<option value='".$row_fun['id_funcionario']."'>".$row_fun['nome']."</option>";
@@ -1192,7 +1108,7 @@ echo "
                         manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
                       WHERE id_funcionario = ".$_GET['id']." AND
                       MIE.tipo_equipamento NOT IN (9, 2, 10, 8)";
-        $result_list = mysqli_query($conn, $list_equip);
+        $result_list = $conn->query($list_equip);
         
         while($linha_list = mysqli_fetch_assoc($result_list)){
           if($linha_list['id_tipo'] == 3){//chip
@@ -1213,10 +1129,7 @@ echo "
           <option value='".$row_files['id_status']."'>".$row_files['status']."</option>
           <option value=''></option>";
 
-          $query_status = "SELECT * FROM manager_dropstatusequipamento WHERE deletar = 0 order by nome";
-          $resultado_status = mysqli_query($conn, $query_status);
-
-          while ($row_status = mysqli_fetch_assoc($resultado_status)) {
+          while ($row_status = $resultado_status_equip->fetch_assoc()) {
             echo "<option value='".$row_status['id_status']."'>".$row_status['nome']."</option>";
           }
 
@@ -1231,10 +1144,7 @@ echo "
           <option value='".$row_files['id_filial']."'>".$row_files['filial']."</option>
           <option value=''></option>";
 
-          $query_empresa_equip = "SELECT * FROM manager_dropempresa order by nome";
-          $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
-
-          while ($row_empresa_equip= mysqli_fetch_assoc($resultado_empresa_equip)) {
+          while ($row_empresa_equip= $resultado_empresa->fetch_assoc()) {
             echo "<option value='".$row_empresa_equip['id_empresa']."'>".$row_empresa_equip['nome']."</option>";
           }
 
@@ -1310,10 +1220,10 @@ echo "
           $add_obs = 0;
            $query_OBS = "SELECT MIO.obs, MIO.data_criacao, MDSE.nome AS status
                         FROM manager_inventario_obs MIO
-                        INNER JOIN manager_dropstatusequipamento MDSE ON MIO.id_status = MDSE.id_status
+                        LEFT JOIN manager_dropstatusequipamento MDSE ON MIO.id_status = MDSE.id_status
                         where MIO.id_equipamento = ".$row_files['id_equipamento']." AND MIO.deletar = 0 order by MIO.data_criacao DESC";
 
-            $resultado_OBS = mysqli_query($conn, $query_OBS);
+            $resultado_OBS = $conn->query($query_OBS);
 
             while ($row_OBS = mysqli_fetch_assoc($resultado_OBS)) {
 
@@ -1390,8 +1300,10 @@ $cont++;
                                     </div>
                                     <div class='modal-body'>
                                         <!--Colocar a tabela Aqui!-->
-                                        <form id='edit-profile' class='form-horizontal' enctype='multipart/form-data' action='termo_doc.php' method='post'>
-                                            <input type='text' name='id_fun' style='display:none' value='<?= $_GET['id']; ?>' />
+                                        <form id='edit-profile' class='form-horizontal' enctype='multipart/form-data'
+                                            action='termo_doc.php' method='post'>
+                                            <input type='text' name='id_fun' style='display:none'
+                                                value='<?= $_GET['id']; ?>' />
                                             <div class='control-group'>
                                                 <label class='control-label'>Tipo:</label>
                                                 <div class='controls'>
@@ -1412,7 +1324,7 @@ $cont++;
                                                         <option value=''>---</option>
                                                         <?php
                                                           $mostra_equip = "SELECT id_equipamento, modelo, numero, tipo_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = ".$_GET['id']."";
-                                                          $result_equip = mysqli_query($conn, $mostra_equip);
+                                                          $result_equip = $conn->query($mostra_equip);
                                                           while($row_mostrar = mysqli_fetch_assoc($result_equip)){
 
                                                             if($row_mostrar['tipo_equipamento'] == 3){
@@ -1486,7 +1398,7 @@ $cont++;
                                     MIA.id_funcionario = ".$_GET['id']." AND 
                                     MIA.deletar = 0";
                                                                         
-                                    if ($resultado_files = mysqli_query($conn, $query_files)) {
+                                    if ($resultado_files = $conn->query($query_files)) {
                                       while ($row_filess = mysqli_fetch_assoc($resultado_files)) {
 
                                     echo "<tr>
@@ -1587,49 +1499,50 @@ $cont++;
               }else{
                 echo "<div class='tab-pane' id='historico'>";
               }//aplicando o active caso venha page = 1
-            ?>            
-                <div class="control-group">
-                    <div class="control">
-                        <a href="#modalHistorico" role="button" class="btn btn-info filho" data-toggle="modal" style="float: none;margin-left: 2px;margin-bottom: 10px;">Adicionar Novo Histórico</a>
+            ?>
+            <div class="control-group">
+                <div class="control">
+                    <a href="#modalHistorico" role="button" class="btn btn-info filho" data-toggle="modal"
+                        style="float: none;margin-left: 2px;margin-bottom: 10px;">Adicionar Novo Histórico</a>
+                </div>
+                <!--modal histórico-->
+                <div id="modalHistorico" class="modal hide fade" tabindex="-1" role="dialog"
+                    aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 id="myModalLabel">Insira seu histórico</h3>
                     </div>
-                    <!--modal histórico-->
-                    <div id="modalHistorico" class="modal hide fade" tabindex="-1" role="dialog"
-                        aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                            <h3 id="myModalLabel">Insira seu histórico</h3>
+                    <form id="adc-historico" class="form-horizontal" action="invent_historico.php" method="post">
+                        <div class="modal-body">
+                            <div class="control-group">
+                                <label class="control-label required">CONTEÚDO:</label>
+                                <textarea name="msg_hist" class="form-control" rows="4"></textarea>
+                            </div>
                         </div>
-                        <form id="adc-historico" class="form-horizontal" action="invent_historico.php" method="post">
-                            <div class="modal-body">
-                                <div class="control-group">
-                                    <label class="control-label required">CONTEÚDO:</label>
-                                    <textarea name="msg_hist" class="form-control" rows="4"></textarea>
-                                </div>
-                            </div>
-                            <input name="id_funcionario" style="display:none" value="<?= $_GET['id']; ?>" />
-                            <input name="status_funcionario" style="display:none" value="<?= $row['id_status']; ?>" />
-                            <div class="modal-footer">
-                                <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
-                                <button class="btn btn-primary">Salvar informações</button>
-                            </div>
-                        </form>
-                    </div>
-                    <!--fim modal-->
-                    <!--Inicio da tabela-->
-                    <div id='tabelaHistorico'>
-                        <table class="table table-striped table-bordered" style="width:1000px">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>STATUS</th>
-                                    <th>USUÁRIO</th>
-                                    <th>MENSAGEM</th>
-                                    <th>DATA DO HISTÓRICO</th>
-                                    <th>AÇÃO</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php                          
+                        <input name="id_funcionario" style="display:none" value="<?= $_GET['id']; ?>" />
+                        <input name="status_funcionario" style="display:none" value="<?= $row['id_status']; ?>" />
+                        <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+                            <button class="btn btn-primary">Salvar informações</button>
+                        </div>
+                    </form>
+                </div>
+                <!--fim modal-->
+                <!--Inicio da tabela-->
+                <div id='tabelaHistorico'>
+                    <table class="table table-striped table-bordered" style="width:1000px">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>STATUS</th>
+                                <th>USUÁRIO</th>
+                                <th>MENSAGEM</th>
+                                <th>DATA DO HISTÓRICO</th>
+                                <th>AÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php                          
                           $tableHistorico = "SELECT 
                                                   MIH.id,
                                                   MIH.historico,
@@ -1649,8 +1562,8 @@ $cont++;
                                               WHERE
                                                   MIH.deletado = 0 AND 
                                                   MIH.id_funcionario = ".$_GET['id']." ORDER BY MIH.id DESC";                
-                            $result_table = mysqli_query($conn, $tableHistorico);
-                              while ($rowtableHistorico = mysqli_fetch_assoc($result_table)) {
+                            $result_table = $conn->query($tableHistorico);
+                              while ($rowtableHistorico = $result_table->fetch_assoc()) {
 
                                 echo "
                                 <tr>
@@ -1673,8 +1586,6 @@ $cont++;
                                     echo "<td></td>";
                                   }
                                 echo "</tr>
-
-
 
                                 <!--modal editar histórico-->     
                               <div id='modalEditHistorico".$rowtableHistorico['id']."' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' style='display: none;''>
@@ -1722,14 +1633,14 @@ $cont++;
                             ";
                             }
                             ?>
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <!--FIM HISTORICO-->
         </div>
+        <!--FIM HISTORICO-->
     </div>
+</div>
 </div>
 </div>
 <!--JAVASCRITPS TABELAS-->
@@ -1748,8 +1659,8 @@ $cont++;
 </html>
 <!--MOSTRAR CAMPO ICONE-->
 <script language="javascript">
-  function abrir(){
-    window.open("add_funcionario.php","mywindow","width=500,height=600");
+function abrir() {
+    window.open("add_funcionario.php", "mywindow", "width=500,height=600");
 }
 </script>
 
@@ -1767,4 +1678,4 @@ function fechar(id) {
 }
 </script>
 
-<?php mysqli_close($conn); ?>
+<?php $conn->close(); ?>

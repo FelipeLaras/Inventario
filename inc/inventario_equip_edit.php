@@ -1,20 +1,18 @@
 <?php
-   //aplicando para usar varialve em outro arquivo
-   session_start();
-   //chamando conexão com o banco
-   require 'conexao.php';
-   //Aplicando a regra de login
-   if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
-   
+//aplicando para usar varialve em outro arquivo
+session_start();
+//chamando conexão com o banco
+require_once('../conexao/conexao.php');
+//Aplicando a regra de login
+if($_SESSION["perfil"] == NULL){  
+    header('location: ../front/index.html');
 }elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
-       header('location: error.php');
-   }   
- 
-   ?>
-<!DOCTYPE html>
-<html>
-<?php  require 'header.php';?>
+    header('location: ../front/error.php');
+}   
+require_once('header.php');
+require_once('../query/query_dropdowns.php');
+
+?>
 <div class="subnavbar">
     <div class="subnavbar-inner">
         <div class="container">
@@ -44,44 +42,21 @@
     </div>
 </div>
 <?php 
-if ($_GET['msn'] == 1) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-success'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-          O equipamento editado com sucesso!!
-      </div>
-    </div>";
-}
-if ($_GET['msn'] == 2) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-success'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-          Anexo salvo com sucesso!!
-      </div>
-    </div>";
-}
-if ($_GET['msn'] == 3) {
-  echo "
-    <div class='control-group'>
-      <div class='alert alert-success'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-          Anexo deletado com sucesso!!
-      </div>
-    </div>";
-}
 
-if ($_GET['msn'] == 5) {
-    echo "
-    <div class='control-group'>
-      <div class='alert alert-block'>
-        <button type='button' class='close' data-dismiss='alert'>×</button>
-        <h4 style='color: red'>ATENÇÃO!</h4>
-        <u style='color: red;'>&ldquo;Nome do seu documento&rdquo;</u> passou o limite de <u style='color: red;'>20</u> caracteres!.
-      </div>
-    </div>";
-  }
+switch ($_GET['msn']) {
+    case '1':
+        echo "<div class='control-group'><div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button>O equipamento editado com sucesso!!</div></div>";
+        break;
+    case '2':
+        echo "<div class='control-group'><div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button>Anexo salvo com sucesso!!</div></div>";
+        break;
+    case '3':
+        echo "<div class='control-group'><div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button>Anexo deletado com sucesso!!</div></div>";
+        break;
+    case '5':
+        echo "<div class='control-group'><div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4 style='color: red'>ATENÇÃO!</h4><u style='color: red;'>&ldquo;Nome do seu documento&rdquo;</u> passou o limite de <u style='color: red;'>20</u> caracteres!.</div></div>";
+        break;
+    }
 ?>
 <div class='widget'>
     <div class="widget-header">
@@ -99,19 +74,19 @@ if ($_GET['msn'] == 5) {
             <?php
                 if($_GET['tipo'] == 3){//chip
                     $tipo = "SELECT numero FROM manager_inventario_equipamento WHERE id_equipamento = '".$_GET['id_equip']."'";
-                    $result_tipo = mysqli_query($conn, $tipo);
+                    $result_tipo = $conn->query($tipo);
                     $row_tipo = mysqli_fetch_assoc($result_tipo);
                     echo "<i class='fas fa-sim-card fa-1x' style='margin-right: 9px; margin-left: 9px;'></i>".$row_tipo['numero'];
                 }
                 if($_GET['tipo'] == 1){//celular
                     $tipo = "SELECT modelo FROM manager_inventario_equipamento WHERE id_equipamento = '".$_GET['id_equip']."'";
-                    $result_tipo = mysqli_query($conn, $tipo);
+                    $result_tipo = $conn->query($tipo);
                     $row_tipo = mysqli_fetch_assoc($result_tipo);
                     echo "<i class='fas fa-mobile-alt fa-1x' style='margin-right: 9px; margin-left: 9px;'></i>".$row_tipo['modelo'];
                 }
                 if($_GET['tipo'] == 2){//tablet
                     $tipo = "SELECT modelo FROM manager_inventario_equipamento WHERE id_equipamento = '".$_GET['id_equip']."'";
-                    $result_tipo = mysqli_query($conn, $tipo);
+                    $result_tipo = $conn->query($tipo);
                     $row_tipo = mysqli_fetch_assoc($result_tipo);
                     echo "<i class='fas fa-tablet-alt fa-1x' style='margin-right: 9px; margin-left: 9px;'></i>".$row_tipo['modelo'];
                 }
@@ -182,9 +157,9 @@ if ($_GET['msn'] == 5) {
                                                         IQ.deletar = 0 AND 
                                                         IQ.id_equipamento =  ".$_GET['id_equip']."";
 
-                                    $resultado_files = mysqli_query($conn, $query_files);
+                                    $resultado_files = $conn->query($query_files);
 
-                                    $row_files = mysqli_fetch_assoc($resultado_files);
+                                    $row_files = $resultado_files->fetch_assoc();
 
                                     /*--------------------------------------------------- CELULAR ------------------------------------------------------------------*/
                                             if($_GET['tipo'] == 1){
@@ -209,13 +184,8 @@ echo "
         <select id='inputState' class='form-control' name='situacao_equip'>
             <option value='".$row_files['id_situacao']."'>".$row_files['situacao']."</option>
             <option>---</option>";
-            $situacao_cel = "SELECT 
-                                id_situacao,
-                                nome
-                            FROM manager_dropsituacao
-                            WHERE deletar = 0 ORDER BY nome ASC";
-            $result_situacao_cel = mysqli_query($conn, $situacao_cel);
-            while($linha_cel = mysqli_fetch_assoc($result_situacao_cel)){
+            $result_situacao_cel = $conn->query($situacao_cel);
+            while($linha_cel = $resultado_situacao->fetch_assoc()){
                 echo "<option value='".$linha_cel['id_situacao']."'>".$linha_cel['nome']."</option>";
             }                                      
 echo " </select>
@@ -225,13 +195,8 @@ echo " </select>
         <select id='inputState' class='form-control' name='estado_equip'>
             <option value='".$row_files['id_estado']."'>".$row_files['estado']."</option>
             <option>---</option>";
-            $estado_cel = "SELECT 
-                                id,
-                                nome
-                            FROM manager_dropestado
-                            WHERE deletar = 0 ORDER BY nome ASC";
-            $result_estado_cel = mysqli_query($conn, $estado_cel);
-            while($linha_estado = mysqli_fetch_assoc($result_estado_cel)){
+            $result_estado_cel = $conn->query($estado_cel);
+            while($linha_estado = $resultado_status->fetch_assoc()){
                 echo "<option value='".$linha_estado['id']."'>".$linha_estado['nome']."</option>";
             }                                      
 echo " </select>
@@ -257,7 +222,7 @@ echo " </select>
         manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio
         WHERE
         MIA.id_equipamento = ".$row_files['id_equipamento']."";
-        $resultado_acessorios= mysqli_query($conn, $acessorios);
+        $resultado_acessorios= $conn->query($acessorios);
 
         $contador = 0;
 
@@ -271,8 +236,8 @@ echo " </select>
 
         $acessorios_new = "SELECT * FROM manager_dropacessorios WHERE id_acessorio NOT IN (";
 
-        $ass = "SELECT MIA.tipo_acessorio AS id_acessorios FROM manager_inventario_acessorios MIA INNER JOIN  manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio WHERE MIA.id_equipamento = ".$row_files['id_equipamento']."";
-        $result_ass = mysqli_query($conn, $ass);
+        $ass = "SELECT MIA.tipo_acessorio AS id_acessorios FROM manager_inventario_acessorios MIA LEFT JOIN  manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio WHERE MIA.id_equipamento = ".$row_files['id_equipamento']."";
+        $result_ass = $conn->query($ass);
 
 
         while($row_ass = mysqli_fetch_assoc($result_ass)){
@@ -282,7 +247,7 @@ echo " </select>
         }
         $acessorios_new .= "'') AND deletar = 0";
 
-        $result_acessorios_new = mysqli_query($conn, $acessorios_new);
+        $result_acessorios_new = $conn->query($acessorios_new);
 
         while($row_acessorios_new = mysqli_fetch_assoc($result_acessorios_new)){
 
@@ -298,10 +263,8 @@ echo " </select>
         <option value='".$row_files['id_status']."'>".$row_files['status']."</option>
         ";
         $add = 0;
-        $query_status_equip= "SELECT * from manager_dropstatusequipamento WHERE deletar = 0 order by nome";
-        $resultado_status_equip = mysqli_query($conn, $query_status_equip);
         echo "<option value=''>---</option>";
-        while ($row_status_equip = mysqli_fetch_assoc($resultado_status_equip)) {
+        while ($row_status_equip = $resultado_status_equip->fetch_assoc()) {
         echo "<option value='".$row_status_equip['id_status']."'>".$row_status_equip['nome']."</option>";
         $add++;
         }
@@ -321,15 +284,13 @@ echo " </select>
         manager_dropempresa MDE ON MDE.id_empresa = MIE.filial
         WHERE
         MIE.id_equipamento = ".$row_files['id_equipamento']."";
-        $resultado_empresa = mysqli_query($conn, $empresa);
+        $resultado_empresa = $conn->query($empresa);
 
         if ($row_empresa= mysqli_fetch_assoc($resultado_empresa)) {
         echo "<option value='".$row_empresa['id_filial']."'>".$row_empresa['filial']."</option>";
         }            
         echo "<option value=''>---</option>";
-        $query_empresa_equip= "SELECT * from manager_dropempresa WHERE deletar = 0 order by nome";
-        $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
-        while ($row_empresa_equip = mysqli_fetch_assoc($resultado_empresa_equip)) {
+        while ($row_empresa_equip = $resultado_empresa->fetch_assoc()) {
         echo "<option value='".$row_empresa_equip['id_empresa']."'>".$row_empresa_equip['nome']."</option>";
         }
         echo "
@@ -370,13 +331,8 @@ echo "
                 <select id='inputState' class='form-control' name='situacao_equip'>
                 <option value='".$row_files['id_situacao']."'>".$row_files['situacao']."</option>
                 <option>---</option>";
-                $situacao_cel = "SELECT 
-                                    id_situacao,
-                                    nome
-                                FROM manager_dropsituacao
-                                WHERE deletar = 0 ORDER BY nome ASC";
-                $result_situacao_cel = mysqli_query($conn, $situacao_cel);
-                while($linha_cel = mysqli_fetch_assoc($result_situacao_cel)){
+                $result_situacao_cel = $conn->query($situacao_cel);
+                while($linha_cel = $resultado_situacao->fetch_assoc()){
                     echo "<option value='".$linha_cel['id_situacao']."'>".$linha_cel['nome']."</option>";
                 }                                      
     echo " </select>
@@ -386,13 +342,7 @@ echo "
             <select id='inputState' class='form-control' name='estado_equip'>
                 <option value='".$row_files['id_estado']."'>".$row_files['estado']."</option>
                 <option>---</option>";
-                $estado_cel = "SELECT 
-                                    id,
-                                    nome
-                                FROM manager_dropestado
-                                WHERE deletar = 0 ORDER BY nome ASC";
-                $result_estado_cel = mysqli_query($conn, $estado_cel);
-                while($linha_estado = mysqli_fetch_assoc($result_estado_cel)){
+                while($linha_estado = $resultado_status->fetch_assoc()){
                     echo "<option value='".$linha_estado['id']."'>".$linha_estado['nome']."</option>";
                 }                                      
     echo " </select>
@@ -418,7 +368,7 @@ echo "
                         manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio
                     WHERE
                         MIA.id_equipamento = ".$row_files['id_equipamento']."";
-    $resultado_acessorios= mysqli_query($conn, $acessorios);
+    $resultado_acessorios= $conn->query($acessorios);
 
     $contador = 0;
 
@@ -435,8 +385,8 @@ echo "
                         WHERE 
                             id_acessorio NOT IN (";
 
-    $ass = "SELECT MIA.tipo_acessorio AS id_acessorios FROM manager_inventario_acessorios MIA INNER JOIN  manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio WHERE MIA.id_equipamento = ".$row_files['id_equipamento']."";
-    $result_ass = mysqli_query($conn, $ass);
+    $ass = "SELECT MIA.tipo_acessorio AS id_acessorios FROM manager_inventario_acessorios MIA LEFT JOIN  manager_dropacessorios MDA ON MDA.id_acessorio = MIA.tipo_acessorio WHERE MIA.id_equipamento = ".$row_files['id_equipamento']."";
+    $result_ass = $conn->query($ass);
 
 
     while($row_ass = mysqli_fetch_assoc($result_ass)){
@@ -447,7 +397,7 @@ echo "
 
     $acessorios_new .= "'') AND deletar = 0";
 
-    $result_acessorios_new = mysqli_query($conn, $acessorios_new);
+    $result_acessorios_new = $conn->query($acessorios_new);
 
     while($row_acessorios_new = mysqli_fetch_assoc($result_acessorios_new)){
 
@@ -463,10 +413,8 @@ echo "
             <option value='".$row_files['id_status']."'>".$row_files['status']."</option>
             ";
             $add = 0;
-            $query_status_equip= "SELECT * from manager_dropstatusequipamento WHERE deletar = 0 order by nome ";
-            $resultado_status_equip = mysqli_query($conn, $query_status_equip);
             echo "<option value=''>---</option>";
-            while ($row_status_equip = mysqli_fetch_assoc($resultado_status_equip)) {
+            while ($row_status_equip = $resultado_status_equip->fetch_assoc()) {
             echo "<option value='".$row_status_equip['id_status']."'>".$row_status_equip['nome']."</option>";
             $add++;
             }
@@ -487,15 +435,13 @@ echo "
                     manager_dropempresa MDE ON MDE.id_empresa = MIE.filial
                 WHERE
                     MIE.id_equipamento = ".$row_files['id_equipamento']."";
-    $resultado_empresa = mysqli_query($conn, $empresa);
+    $resultado_empresa = $conn->query($empresa);
 
     if ($row_empresa= mysqli_fetch_assoc($resultado_empresa)) {
         echo "<option value='".$row_empresa['id_filial']."'>".$row_empresa['filial']."</option>";
     }            
     echo "<option value=''>---</option>";
-    $query_empresa_equip= "SELECT * from manager_dropempresa WHERE deletar = 0 order by nome";
-    $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
-    while ($row_empresa_equip = mysqli_fetch_assoc($resultado_empresa_equip)) {
+    while ($row_empresa_equip = $resultado_empresa->fetch_assoc()) {
         echo "<option value='".$row_empresa_equip['id_empresa']."'>".$row_empresa_equip['nome']."</option>";
     }
     echo "       </select>
@@ -525,18 +471,16 @@ echo "
 
     $operadora = "SELECT MDO.nome AS operadora, MIE.operadora AS id_operadora 
     FROM manager_inventario_equipamento MIE
-    INNER JOIN manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
+    LEFT JOIN manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
     WHERE MIE.id_equipamento = ".$row['id_equipamento']."";
-    $resultado_operadora = mysqli_query($conn, $operadora);
+    $resultado_operadora = $conn->query($operadora);
 
     if ($row_operadora = mysqli_fetch_assoc($resultado_operadora)) {
     echo "<option value='".$row_operadora['id_operadora']."'>".$row_operadora['operadora']."</option>";
     }
     echo "<option value=''>---</option>";
 
-    $query_operadora_equip = "SELECT * from manager_dropoperadora WHERE deletar = 0";
-    $resultado_operadora_equip = mysqli_query($conn, $query_operadora_equip);
-    while ($row_operadora_equip = mysqli_fetch_assoc($resultado_operadora_equip)) {
+    while ($row_operadora_equip = $resultado_operadora->fetch_assoc()) {
     echo "<option value='".$row_operadora_equip['id_operadora']."'>".$row_operadora_equip['nome']."</option>";
     }
     echo "
@@ -547,7 +491,7 @@ echo "
 
     $planos = "SELECT planos_voz, planos_dados  FROM manager_inventario_equipamento
     WHERE id_equipamento = ".$row_files['id_equipamento']."";
-    $resultado_planos= mysqli_query($conn, $planos);
+    $resultado_planos= $conn->query($planos);
     $row_planos = mysqli_fetch_assoc($resultado_planos);
 
     if($row_planos['planos_voz'] != NULL){
@@ -580,7 +524,7 @@ echo "
     ";
     $add = 0;
     $query_status_equip= "SELECT * from manager_dropstatusequipamento WHERE id_status != 1 order by nome ASC";
-    $resultado_status_equip = mysqli_query($conn, $query_status_equip);
+    $resultado_status_equip = $conn->query($query_status_equip);
     while ($row_status_equip = mysqli_fetch_assoc($resultado_status_equip)) {
     echo "<option value='".$row_status_equip['id_status']."'>".$row_status_equip['nome']."</option>";
     $add++;
@@ -595,17 +539,15 @@ echo "
 
     $empresa = "SELECT MDE.nome AS filial, MIE.filial AS id_filial
     FROM manager_inventario_equipamento MIE
-    INNER JOIN manager_dropempresa MDE ON MDE.id_empresa = MIE.filial
+    LEFT JOIN manager_dropempresa MDE ON MDE.id_empresa = MIE.filial
     WHERE MIE.id_equipamento = ".$row_files['id_equipamento']."";
-    $resultado_empresa = mysqli_query($conn, $empresa);
+    $resultado_empresa = $conn->query($empresa);
 
     if ($row_empresa= mysqli_fetch_assoc($resultado_empresa)) {
     echo "<option value='".$row_empresa['id_filial']."'>".$row_empresa['filial']."</option>";
     }            
     echo "<option value=''>---</option>";
-    $query_empresa_equip= "SELECT * from manager_dropempresa WHERE deletar = 0";
-    $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
-    while ($row_empresa_equip = mysqli_fetch_assoc($resultado_empresa_equip)) {
+    while ($row_empresa_equip = $resultado_empresa->fetch_assoc()) {
     echo "<option value='".$row_empresa_equip['id_empresa']."'>".$row_empresa_equip['nome']."</option>";
     }
     echo "
@@ -669,7 +611,7 @@ echo "
                                     MIE.id_equipamento = ".$_GET['id_equip']."
                                     AND MIA.deletar = 0";
                                     
-                                    $resultado_anexo = mysqli_query($conn, $query_anexo);
+                                    $resultado_anexo = $conn->query($query_anexo);
 
                                       while ($row_anexo = mysqli_fetch_assoc($resultado_anexo)) {
 
@@ -679,16 +621,19 @@ echo "
                                              </td>
                                              <td>";
 
-                                             if($row_anexo['tipo'] == 3){
-                                                 echo "TERMO DE RESPONSABILIDADE";
-                                             }
+                                             switch ($row_anexo['tipo']) {
+                                                 case '3':
+                                                    echo "TERMO DE RESPONSABILIDADE";
+                                                     break;
+                                                 
+                                                case '4':
+                                                    echo "NOTA FISCAL";
+                                                    break;
 
-                                            if($row_anexo['tipo'] == 4){
-                                                echo "NOTA FISCAL";
-                                            }
-                                            if($row_anexo['tipo'] == 5){
-                                                echo "CHECKLIST";
-                                            }
+                                                case '5':
+                                                    echo "CHECKLIST";
+                                                    break;
+                                             }
 
                                      echo "  </td>
                                              <td>
@@ -767,9 +712,9 @@ echo "
         <form id="edit-profile" class="form-horizontal" enctype="multipart/form-data" action="termo_doc.php"
             method="post">
             <!--Uma gambiarra para levar o id do contrato para a tela de update-->
-            <input type="text" name="id_nota_fiscal" style="display:none"  value="<?php echo $row_files['id_equipamento'] ?>">
-            <input type="text" name="id_fun" style="display:none" value="<?php echo $row_files['id_funcionario'] ?>">
-            <input type="text" name="tipo_equip" style="display:none" value="<?php echo $_GET['tipo'] ?>">
+            <input type="text" name="id_nota_fiscal" style="display:none"  value="<?= $row_files['id_equipamento'] ?>">
+            <input type="text" name="id_fun" style="display:none" value="<?= $row_files['id_funcionario'] ?>">
+            <input type="text" name="tipo_equip" style="display:none" value="<?= $_GET['tipo'] ?>">
             <input type="text" name="page" style="display:none" value="1">
             <div class="control-group">
                 <label class="control-label required">Tipo:</label>
@@ -779,7 +724,7 @@ echo "
                         <option value='4'>Nota Fiscal</option>
                     <?php
                             $validando = "SELECT status, termo FROM manager_inventario_equipamento WHERE id_equipamento = ".$_GET['id_equip']."";
-                            $result_valid = mysqli_query($conn, $validando);
+                            $result_valid = $conn->query($validando);
                             $row_valid = mysqli_fetch_assoc($result_valid);
 
                             if($row_valid['status'] != 1){
@@ -798,7 +743,7 @@ echo "
                 </div>
             </div>            
             <div class="control-group">
-                <input name='id_nota_fiscal' value='<?php echo $_GET['id_equip'];?>' style="display:none;"/>
+                <input name='id_nota_fiscal' value='<?= $_GET['id_equip'];?>' style="display:none;"/>
                 <input name='page' value='1' style="display:none;"/>
             </div> 
             <div class="control-group">
@@ -830,4 +775,4 @@ function fechar(id) {
     }
 }
 </script>
-<?php mysqli_close($conn); ?>
+<?php $conn->close(); ?>

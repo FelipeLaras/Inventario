@@ -10,11 +10,11 @@
   require_once('conexao.php');
   //Aplicando a regra de login
   if($_SESSION["perfil"] == NULL){  
-    header('location: index.html');
+    header('location: ../front/index.html');
 
   }elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
 
-    header('location: error.php');
+    header('location: ../front/error.php');
   }  
 
   $data = date("d/m/Y", strtotime($row['data_nota']));  

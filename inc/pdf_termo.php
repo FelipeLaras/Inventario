@@ -2,7 +2,7 @@
 session_start();
 
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //id funcionario
 if($_GET['id_funcionario'] != NULL){//esta vindo de um novo cadastro de equipamento
@@ -16,10 +16,10 @@ if($_GET['id_funcionario'] != NULL){//esta vindo de um novo cadastro de equipame
 
 		//1º remover a anterior para sobrescrever a nova observação
 		$drop_obs = "DELETE FROM manager_inventario_obs WHERE id_funcionario = ".$id_funcionario."";
-		$result_drop = mysqli_query($conn, $drop_obs) or die(mysqli_error($conn));
+		$result_drop = $conn->query($drop_obs) or die(mysqli_error($conn));
 		// 2º agora iremos salvar a nova observação
 		$obs_insert = "INSERT INTO manager_inventario_obs (id_funcionario, usuario, obs) VALUES ('".$id_funcionario."', '".$_SESSION['id']."', '".$_POST['obs_termo']."')";
-		$result_obs = mysqli_query($conn, $obs_insert) or die(mysqli_error($conn));
+		$result_obs = $conn->query($obs_insert) or die(mysqli_error($conn));
 		
 	}
 }
@@ -38,7 +38,7 @@ $log_query = "INSERT manager_log (id_funcionario, data_alteracao, usuario, tipo_
 						'".$data."',
 						'".$_SESSION["id"]."',
 						'0')";
-$result_log = mysqli_query($conn, $log_query) or die(mysqli_error($conn));
+$result_log = $conn->query($log_query) or die(mysqli_error($conn));
 
 /*_________________________________ FECHANDO O BANCO ______________________________________*/
 
@@ -63,7 +63,7 @@ manager_inventario_obs MIO ON MIF.id_funcionario = MIO.id_funcionario
 WHERE
 MIF.id_funcionario = ".$id_funcionario."";
 
-$resultado_funcionarios = mysqli_query($conn, $query_funcionario);
+$resultado_funcionarios = $conn->query($query_funcionario);
 
 $row_fun = mysqli_fetch_assoc($resultado_funcionarios);	
 
@@ -97,7 +97,7 @@ MIE.id_funcionario =  ".$id_funcionario." AND
 MIE.tipo_equipamento IN (1, 3, 4, 2) AND
 MIE.deletar = 0";
 
-$resulado_equipamento = mysqli_query($conn, $query_equipamento);
+$resulado_equipamento = $conn->query($query_equipamento);
 
 /*CORPO DO PDF*/
 $html = "
@@ -180,7 +180,7 @@ $html = "
 							INNER JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
 							WHERE MIA.id_equipamento = ".$row_equip['id_equipamento']."";
 						$html .= "<td>";
-						$resultado_acessorios = mysqli_query($conn, $query_acessorios);	
+						$resultado_acessorios = $conn->query($query_acessorios);	
 						while ($row_acessorio = mysqli_fetch_assoc($resultado_acessorios)) {
 
 					  		$html .= $row_acessorio['acessorios']." | ";
@@ -256,5 +256,5 @@ if($_GET['pagina'] == 1){
 	$dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>1));//1 - Download 0 - Previa
 }
 
-mysqli_close($conn);
+$conn->close();
 ?>

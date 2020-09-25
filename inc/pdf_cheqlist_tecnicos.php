@@ -1,7 +1,7 @@
 <?php
 
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 /*PEGANDO DADOS DO FUNCIONARIO*/
 $query_funcionario =  "SELECT 
@@ -12,16 +12,16 @@ MDD.nome AS departamento,
 MDE.nome AS empresa
 FROM
 manager_inventario_funcionario MIF
-	INNER JOIN
+	LEFT JOIN
 manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-	INNER JOIN
+	LEFT JOIN
 manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-	INNER JOIN
+	LEFT JOIN
 manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
 WHERE
 MIF.id_funcionario = '".$_GET['id_fun']."'";
 
-$resultado_funcionarios = mysqli_query($conn, $query_funcionario);
+$resultado_funcionarios = $conn->query($query_funcionario);
 
 $row_fun = mysqli_fetch_assoc($resultado_funcionarios);	
 /*CORPO DO PDF*/
@@ -172,7 +172,7 @@ FROM
 WHERE
     MIE.id_funcionario = ".$_GET['id_fun']." AND MIE.deletar = 0";
 
-	$resulado_equipamento = mysqli_query($conn, $query_equipamento);
+	$resulado_equipamento = $conn->query($query_equipamento);
 		while ($row_equi = mysqli_fetch_assoc($resulado_equipamento)) {
 
 			if($row_equi['id_tipo_equipamento'] == 9){
@@ -324,5 +324,5 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-mysqli_close($conn);
+$conn->close();
 ?>

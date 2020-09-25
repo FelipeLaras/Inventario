@@ -1,10 +1,10 @@
 <?php
 session_start();
 //chamar o banco
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //aplicando a query
-$resultado_relatorios = mysqli_query($conn, $_SESSION['query_relatorios']);
+$resultado_relatorios = $conn->query($_SESSION['query_relatorios']);
 
 //corpo da msn
 $html = "
@@ -166,5 +166,5 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Downlaod,  0 - Prévia
 
-mysqli_close($conn);
+$conn->close();
 ?>

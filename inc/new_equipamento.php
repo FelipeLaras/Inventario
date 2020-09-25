@@ -2,7 +2,7 @@
 //iniciando a sessão
 session_start();
 //Inciando conxão com o banco
-include 'conexao.php'; //chamando banco manager
+require_once('../conexao/conexao.php');
 
 $query_new = "SELECT 
 				MIF.cpf, 
@@ -23,7 +23,7 @@ $query_new = "SELECT
 				manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa 
 			WHERE  MIF.id_funcionario = ".$_GET['id_func']."";
 
-$resultado_new = mysqli_query($conn, $query_new);
+$resultado_new = $conn->query($query_new);
 
 $row_new = mysqli_fetch_assoc($resultado_new) or die(mysqli_error($conn));
 
@@ -42,7 +42,7 @@ $_SESSION['id_departamento'] = $row_new['id_departamento'];
 $_SESSION['new_empresa'] = $row_new['empresa'];
 $_SESSION['id_empresa'] = $row_new['id_empresa'];
 
-mysqli_close($conn);
+$conn->close();
 
 header('location: inventario_add.php?id_funcio='.$_GET['id_func'].'&id_equip='.$_GET['id_equip'].'');
 ?>

@@ -3,15 +3,15 @@
    session_start();
    /*------------------------------------------------------------------------------------------------------------------*/
    //chamando conexão com o banco
-   require 'conexao.php';
+   require_once('../conexao/conexao.php');
    /*------------------------------------------------------------------------------------------------------------------*/
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
-     header('location: index.html');
+     header('location: ../front/index.html');
    
    }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
    
-       header('location: error.php');
+       header('location: ../front/error.php');
    }
 /*------------------------------------------------------------------------------------------------------------------*/
 //chamandos todos os equipamento do tipo (notebooks, desktops, ramais)
@@ -53,14 +53,14 @@ manager_dropsituacao MDS ON MIE.situacao = MDS.id_situacao
 manager_dropstatusequipamento MDST ON MIE.status = MDST.id_status
 WHERE
 MIE.tipo_equipamento = 10";
-$resultado_equip = mysqli_query($conn, $equipamentos);
+$resultado_equip = $conn->query($equipamentos);
 
 
 //contagem equipamentos alterados
 
 $cont = "SELECT COUNT(id) AS quantidade FROM manager_comparacao_ocs";
-$result_count = mysqli_query($conn, $cont);
-$row_count = mysqli_fetch_assoc($result_count);
+$result_count = $conn->query($cont);
+$row_count = $result_count->fetch_assoc();
 
 ?>
 <?php  require 'header.php'?>
@@ -92,24 +92,17 @@ $row_count = mysqli_fetch_assoc($result_count);
 </div>
 
 <?php
-        if($_GET['msn'] == 1){//equipamento com a data de vigencia aplicada
-            echo "
-                <div class='alert alert-success'>
-                    <button type='button' class='close' data-dismiss='alert'>×</button>
-                    <h4>ATENÇÃO</h4>
-                     <b style='color:red'>Data de vigencia</b> aplicado com sucesso! 
-                </div>";
-        }//end alerta erro 1
+switch ($_GET['msn']){
+   case '1':
+      echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4><b style='color:red'>Data de vigencia</b> aplicado com sucesso!</div>";
+   break;
 
-        if($_GET['msn'] == 2){//equipamento foi condenado
-         echo "
-             <div class='alert alert-success'>
-                 <button type='button' class='close' data-dismiss='alert'>×</button>
-                 <h4>ATENÇÃO</h4>
-                  <b style='color:red'>Condenado</b> com sucesso! 
-             </div>";
-     }//end alerta erro 1
-        ?>
+   case '2':
+      echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4><b style='color:red'>Condenado</b> com sucesso!</div>";
+   break;
+
+}
+?>
 
 <div class="widget ">
     <div class="widget-header">
@@ -133,19 +126,13 @@ $row_count = mysqli_fetch_assoc($result_count);
                 <i class='btn-icon-only icon-bar-chart' style="margin-left: -3px">
                      <?php 
                         if($row_count['quantidade'] != 0){
-
                            if ($row_count['quantidade'] >= 99){
-
-                              echo "<div id='contador'>+99</div>";
-   
-                           }elseif($row_count['quantidade'] >= 10){
-   
-                              echo "<div id='contador_b'>".$row_count['quantidade']."</div>";
-   
+                              echo "<div id='contador'>+99</div>";   
+                           }elseif($row_count['quantidade'] >= 10){   
+                              echo "<div id='contador_b'>".$row_count['quantidade']."</div>";   
                            }else{
                               echo "<div id='contador_a'>".$row_count['quantidade']."</div>";
-                           }                             //end IF mostrando na tela
-
+                           }                           
                         }//end IF validando o contador   
                      ?>
                 </i>
@@ -165,7 +152,6 @@ $row_count = mysqli_fetch_assoc($result_count);
         </div>
     </div>
 </div>
-
 <div class="container">
     <div class="row" style="width: 111%; margin-left: -3%;">
         <table id="example" class="table table-striped table-bordered" style="font-size: 10px;">
@@ -190,27 +176,23 @@ $row_count = mysqli_fetch_assoc($result_count);
             <tbody>
                 <?php
 //aplicando a query
-while ($row_equip = mysqli_fetch_assoc($resultado_equip)) {
+while ($row_equip = $resultado_equip->fetch_assoc()) {
    
    //trocando formato da data fim do contrato
    $data_fim = $row_equip['data_fim_contrato'];
       
-      
       echo "<tr>";
-               if($row_equip['id_situacao'] == 4){//Alugado
-                  echo "<td class='fonte'>
-                           <a href='javascript:' title='ALUGADO' style='margin-left: 20px;'>
-                              <i class='fas fa-circle' style='color: blue;'></i>
-                           </a>
-                        </td>";
-               }
-               if($row_equip['id_situacao'] == 5){//Comprado
-                  echo "<td class='fonte'>
-                           <a href='javascript:' title='COMPRADO' style='margin-left: 20px;'>
-                              <i class='fas fa-circle' style='color: green;' title='COMPRADO'></i>
-                           </a>
-                        </td>";
-               }                
+
+      switch ($row_equip['id_situacao']) {
+         case '4':
+            echo "<td class='fonte'><a href='javascript:' title='ALUGADO' style='margin-left: 20px;'><i class='fas fa-circle' style='color: blue;'></i></a></td>";
+         break;
+         
+         case '5':
+            echo "<td class='fonte'><a href='javascript:' title='COMPRADO' style='margin-left: 20px;'><i class='fas fa-circle' style='color: green;' title='COMPRADO'></i></a></td>";
+         break;
+      }
+
       echo " 
                <td class='fonte'>".$row_equip['modelo']."</td>
                <td class='fonte'>".$row_equip['serialnumber']."</td>
@@ -227,27 +209,22 @@ while ($row_equip = mysqli_fetch_assoc($resultado_equip)) {
                      ".$row_equip['nome_nota']."
                   </a>
                </td>";
-               if($row_equip['id_status'] == 1){//Ativo
-                  echo "<td class='fonte'>
-                           <a href='javascript:' title='ATIVO' style='margin-left: 15px;'>
-                              <i class='fas fa-circle' style='color: #72f91d;'></i>
-                           </a>
-                        </td>";
-               }               
-               if($row_equip['id_status'] == 6){//Disponivel
-                  echo "<td class='fonte'>
-                           <a href='javascript:' title='DISPONÍVEL' style='margin-left: 15px;'>
-                              <i class='fas fa-circle' style='color: orange;'></i>
-                           </a>
-                        </td>";
+
+               switch ($row_equip['id_status'] ){
+                  case '1':
+                     echo "<td class='fonte'><a href='javascript:' title='ATIVO' style='margin-left: 15px;'><i class='fas fa-circle' style='color: #72f91d;'></i></a></td>";
+                  break;
+                     
+                  case '6':
+                     echo "<td class='fonte'><a href='javascript:' title='DISPONÍVEL' style='margin-left: 15px;'><i class='fas fa-circle' style='color: orange;'></i></a></td>";
+                  break;
+
+                  case '11':
+                     echo "<td class='fonte'><a href='javascript:' title='CONDENADO' style='margin-left: 15px;'><i class='fas fa-circle' style='color: red;'></i></a></td>";
+                  break;
+
                }
-               if($row_equip['id_status'] == 11){//Condenado
-                  echo "<td class='fonte'>
-                           <a href='javascript:' title='CONDENADO' style='margin-left: 15px;'>
-                              <i class='fas fa-circle' style='color: red;'></i>
-                           </a>
-                        </td>";
-               }               
+
          echo "
                <td class='fonte  acao'>
                <a href='scan_edit.php?id_equip=".$row_equip['id_equipamento']."&tipo=".$row_equip['id_situacao']."' title='Editar' class='icon_acao'>
@@ -325,7 +302,7 @@ echo    "<!--MODAL VINCULAR AO USUÁRIO-->
                                           <select class='span2' style='margin-top: -40px; margin-left: 50px;' name='id_fun' required>
                                              <option value=''>---</option>";
                                              $status = "SELECT id_funcionario, nome FROM manager_inventario_funcionario WHERE deletar = 0 order by nome asc";
-                                             $result_status = mysqli_query($conn, $status);
+                                             $result_status = $conn->query($status);
 
                                              while($row_status = mysqli_fetch_assoc($result_status)){
                                                 echo "<option value='".$row_status['id_funcionario']."'>".$row_status['nome']."</option>";

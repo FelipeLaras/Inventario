@@ -2,15 +2,16 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 //Aplicando a regra de login
 if($_SESSION["perfil"] == NULL){
-  header('location: index.html');
+  header('location: ../front/index.html');
 }
-?>
-<!DOCTYPE html>
-<html>
-    <?php  require 'header.php'?><!--Chamando a Header-->
+
+require_once('header.php');
+
+
+?><!--Chamando a Header-->
     <!-- /subnavbar -->
     <div class="main">
       <div class="main-inner">
@@ -124,8 +125,7 @@ if($_SESSION["perfil"] == NULL){
 <script src="js/excanvas.min.js"></script> 
 <script src="js/chart.min.js" type="text/javascript"></script> 
 <script src="js/bootstrap.js"></script>
-<script language="javascript" type="text/javascript" src="js/full-calendar/fullcalendar.min.js"></script>
- 
+<script language="javascript" type="text/javascript" src="js/full-calendar/fullcalendar.min.js"></script> 
 <script src="js/base.js"></script> 
-  </body>
+</body>
 </html>

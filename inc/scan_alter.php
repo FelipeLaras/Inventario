@@ -1,6 +1,6 @@
 <?php
 //chamando o banco de dados
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 /*---------------------------------------------------------*/
 //data de hoje
@@ -15,7 +15,7 @@ if($_GET['alter'] == 1){
     //removendo o usuário e alterando o status
     $usuario = "UPDATE manager_inventario_equipamento  SET data_vigencia = '".$data_hoje."', id_funcionario = '0', status = '6' WHERE id_equipamento = ".$_GET['id_equip']."";
 
-    $remover = mysqli_query($conn, $usuario) or die(mysqli_error($conn));
+    $remover = $conn->query($usuario) or die(mysqli_error($conn));
     //voltando para a tela com a mensagem da data vigencia aplicado com sucesso!
     header('location: scan_disponivel.php?msn=1');
 }
@@ -24,7 +24,7 @@ if($_GET['alter'] == 1){
 
 if($_GET['del'] == 1){
     $usuario = "UPDATE manager_inventario_equipamento  SET status = 11 WHERE id_equipamento = ".$_GET['id_equip']."";
-    $remover = mysqli_query($conn, $usuario) or die(mysqli_error($conn));
+    $remover = $conn->query($usuario) or die(mysqli_error($conn));
 
     //voltando para a tela informando que foi condenado com sucesso!
     header('location: scan_disponivel.php?msn=2');
@@ -38,7 +38,7 @@ if($_POST['use'] == 1){
         id_funcionario = '".$_POST['id_fun']."',
         status = '1'
         WHERE id_equipamento = ".$_POST['id_equip']."";
-    $remover = mysqli_query($conn, $usuario) or die(mysqli_error($conn));
+    $remover = $conn->query($usuario) or die(mysqli_error($conn));
 
     //voltando para a tela informando que foi condenado com sucesso!
     header('location: scan_disponivel.php?msn=3');
@@ -46,5 +46,5 @@ if($_POST['use'] == 1){
 
 /*---------------------------------------------------------*/
 //5º agora iremos fechar a coneção com o banco de dados
-mysqli_close($conn);
+$conn->close();
 ?>

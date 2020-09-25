@@ -1,14 +1,14 @@
 <?php
 session_start(); 
 //CONEXÂO BANCO DE DADOS
-include 'conexao.php';
+require_once('../conexao/conexao.php');
 
 /*VALIDANDO USUARIO CADASTRADO E SE JÁ EXISTER IRÁ PREENCHER AUTOMATICAMENTE OS CAMPOS DO FORMULARIO*/
 	if ($_POST['nome_funcionario'] == NULL) {
 		/*VERIFICANDO SE O USUÁRIO JA EXISTE NO BD*/
 		$query_funcionario = "SELECT id_funcionario, deletar, cpf from manager_inventario_funcionario where cpf = '".$_POST['gols1']."'";//fazendo a query para buscar o funcionario
 
-		$resultado_funcionario = mysqli_query($conn, $query_funcionario);//aplicando a query no bd
+		$resultado_funcionario = $conn->query($query_funcionario);//aplicando a query no bd
 		
 		if ($row_funcionario = mysqli_fetch_assoc($resultado_funcionario)) {
 
@@ -21,7 +21,7 @@ include 'conexao.php';
 			}else{
 			header('location: inventario_edit.php?id='.$row_funcionario['id_funcionario'].'');//voltando para o formulario com as sessões já preenchidas
 			}			
-			mysqli_close($conn);//fechando a conexão com o bd
+			$conn->close();//fechando a conexão com o bd
 			exit;
 
 		}else {
@@ -78,7 +78,7 @@ include 'conexao.php';
 								'".$_SESSION['id']."',
 								'".$_POST['status_funcionario']."')";
 
-	$resultado_insert_funcionario = mysqli_query($conn, $insert_funcionario) or die(mysqli_error($conn));
+	$resultado_insert_funcionario = $conn->query($insert_funcionario);
 	/*FIM DA INSERÇÃO DO NOVO USUARIO*/
 
 	/*---------------------SALVANDO OBSERVAÇÃO---------------------*/
@@ -92,7 +92,7 @@ include 'conexao.php';
 							((SELECT max(id_funcionario) FROM manager_inventario_funcionario),
 							'".$_SESSION['id']."', 
 							'".$_POST['obs_termo']."')";
-		$result_obs = mysqli_query($conn, $obs_insert) or die(mysqli_error($conn));
+		$result_obs = $conn->query($obs_insert);
 	}
 
 	/*---------------------FIM SALVANDO OBSERVAÇÃO---------------------*/
@@ -108,14 +108,14 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 	if($_FILES['file_nota_celular'.$cont_equip.''] != NULL){
 
 		$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['file_nota_celular'.$cont_equip.'']['name']."'";
-		$resultNomeFile = mysqli_query($conn, $queryNomeFile);
+		$resultNomeFile = $conn->query($queryNomeFile);
 		
 		if($nomeFile = mysqli_fetch_assoc($resultNomeFile)){
 
 			//pegando ultima id do funcionario para mover a tela.acao
 
 			$queryUltiFuncionario = "SELECT max(id_funcionario) as id_funcionario FROM manager_inventario_funcionario";
-			$resultUltimoFuncionario = mysqli_query($conn, $queryUltiFuncionario);
+			$resultUltimoFuncionario = $conn->query($queryUltiFuncionario);
 			$ultimofuncionario = mysqli_fetch_assoc($resultUltimoFuncionario);
 
 			header('location: inventario_add.php?error=2');
@@ -144,7 +144,7 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 						WHERE 
 							id_equipamento = ".$_POST['id_equip']."";
 
-		$resultado_update_cel = mysqli_query($conn, $update_cel) or die(mysqli_error($conn));
+		$resultado_update_cel = $conn->query($update_cel);
 		$_SESSION['celular_id'.$cont_equip.''] = $_POST['id_equip'];
 
 		//atualizando os acessórios
@@ -165,21 +165,21 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 
 				//Primeiro vemos se ja temos esse acessorio
 				$tem_acessorio = "SELECT * FROM manager_inventario_acessorios WHERE tipo_acessorio = ".$IdCelular."";
-				$result_tem = mysqli_query($conn, $tem_acessorio);
+				$result_tem = $conn->query($tem_acessorio);
 
 				if($row_tem = mysqli_fetch_assoc($result_tem)){//encontrou o item
 					//já possui o equipamento selecionado então não faz nada
 				}else{
 					//não possui o acessorios, então vamos salva-lo
 					$inert_ace = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUE ('".$_POST['id_equip']."','".$IdCelular."')";
-					$rest_ace = mysqli_query($conn, $inert_ace) or die(mysqli_error($conn));
+					$rest_ace = $conn->query($inert_ace);
 
 				}//fim IF salvando acessórios que não possui				
 			}//fim FOREACH pegando os acessórios
 
 			$del_acessorios .= "')";
 
-			$result_deleted = mysqli_query($conn, $del_acessorios) or die(mysqli_error($conn));
+			$result_deleted = $conn->query($del_acessorios);
 
 		}//fim IF salvando acessório
 		
@@ -215,7 +215,7 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 										'".$_POST['data_nota_celular'.$cont_equip.'']."', 
 										'R$ ".$_POST['valor'.$cont_equip.'']."')";
 
-			$resultado_equipamento = mysqli_query($conn, $insert_equipamento) or die(mysqli_error($conn));
+			$resultado_equipamento = $conn->query($insert_equipamento);
 			
 			//salvando os acessórios
 			if (isset($_POST['acessorio_celular'.$cont_equip.''])) {
@@ -230,7 +230,7 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 										VALUES 
 											((select max(id_equipamento) FROM manager_inventario_equipamento),
 											'".$IdCelular."')";
-					$resultado_acessrios = mysqli_query($conn, $query_acessorios) or die(mysqli_error($conn));
+					$resultado_acessrios = $conn->query($query_acessorios);
 				}
 
 			}
@@ -246,7 +246,7 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 				/*VALIDAÇÃO DO FILE*/
 				$sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 		
-				$result =  mysqli_query($conn, $sql_file);//aplicando a query
+				$result =  $conn->query($sql_file);//aplicando a query
 				$row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 		
 				/*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -280,7 +280,7 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 								'".$nome_db."',
 								'4',
 								'".$_POST['data_nota_celular'.$cont_equip.'']."')";
-				$resultado_file_nota = mysqli_query($conn, $bd_nota) or die(mysqli_error($conn));
+				$resultado_file_nota = $conn->query($bd_nota);
 			}//FIM IF salvando file nota
 
 			//SOMANDO MAIS 1 PARA PEGAR OS PROXIMOS APARELHOS
@@ -301,14 +301,14 @@ if ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO
 	if($_FILES['file_nota_tablet'.$cont_equip.'']  != NULL){
 
 		$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['file_nota_tablet'.$cont_equip.''] ['name']."'";
-		$resultNomeFile = mysqli_query($conn, $queryNomeFile);
+		$resultNomeFile = $conn->query($queryNomeFile);
 		
 		if($nomeFile = mysqli_fetch_assoc($resultNomeFile)){
 
 			//pegando ultima id do funcionario para mover a tela.acao
 
 			$queryUltiFuncionario = "SELECT max(id_funcionario) as id_funcionario FROM manager_inventario_funcionario";
-			$resultUltimoFuncionario = mysqli_query($conn, $queryUltiFuncionario);
+			$resultUltimoFuncionario = $conn->query($queryUltiFuncionario);
 			$ultimofuncionario = mysqli_fetch_assoc($resultUltimoFuncionario);
 
 			header('location: inventario_add.php?error=2');
@@ -337,7 +337,7 @@ if ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO
 						  WHERE 
 						  	id_equipamento = ".$_POST['id_equip']."";
 
-		$resultado_update_tablet = mysqli_query($conn, $update_tablet) or die(mysqli_error($conn));
+		$resultado_update_tablet = $conn->query($update_tablet);
 		$_SESSION['tablet_id'.$cont_equip.''] = $_POST['id_equip'];
 
 		//atualizando os acessórios
@@ -358,21 +358,21 @@ if ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO
 
 				//Primeiro vemos se ja temos esse acessorio
 				$tem_acessorio = "SELECT * FROM manager_inventario_acessorios WHERE tipo_acessorio = ".$IdCelular."";
-				$result_tem = mysqli_query($conn, $tem_acessorio);
+				$result_tem = $conn->query($tem_acessorio);
 
 				if($row_tem = mysqli_fetch_assoc($result_tem)){//encontrou o item
 					//já possui o equipamento selecionado então não faz nada
 				}else{
 					//não possui o acessorios, então vamos salva-lo
 					$inert_ace = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUE ('".$_POST['id_equip']."','".$IdCelular."')";
-					$rest_ace = mysqli_query($conn, $inert_ace) or die(mysqli_error($conn));
+					$rest_ace = $conn->query($inert_ace);
 
 				}//fim IF salvando acessórios que não possui				
 			}//fim FOREACH pegando os acessórios
 
 			$del_acessorios .= "')";
 
-			$result_deleted = mysqli_query($conn, $del_acessorios) or die(mysqli_error($conn));
+			$result_deleted = $conn->query($del_acessorios);
 
 		}//fim IF salvando acessório
 
@@ -411,7 +411,7 @@ if ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO
 										'R$ ".$_POST['valor_tablet'.$cont_equip.'']."'
 										)";
 
-			$resultado_equipamento_tablet = mysqli_query($conn, $insert_equipamento_tablet) or die(mysqli_error($conn));
+			$resultado_equipamento_tablet = $conn->query($insert_equipamento_tablet);
 			
 
 			if (isset($_POST['acessorio_tablet'.$cont_equip.''])) {
@@ -427,7 +427,7 @@ if ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO
 													((select max(id_equipamento) 
 												FROM
 													manager_inventario_equipamento),'".$IdTablet."')";
-					$resultado_acessrios_tablet = mysqli_query($conn, $query_acessorios_tablet) or die(mysqli_error($conn));
+					$resultado_acessrios_tablet = $conn->query($query_acessorios_tablet);
 				}
 
 			}
@@ -443,7 +443,7 @@ if ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO
 				/*VALIDAÇÃO DO FILE*/
 				$sql_file = "SELECT type FROM manager_file_type WHERE type LIKE '".$tipo_file."'";//query de validação 
 		
-				$result =  mysqli_query($conn, $sql_file);//aplicando a query
+				$result =  $conn->query($sql_file);//aplicando a query
 				$row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
 		
 				/*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
@@ -477,7 +477,7 @@ if ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO
 								'".$nome_db."',
 								'4',
 								'".$_POST['data_nota_tablet'.$cont_equip.'']."')";
-				$resultado_file_nota = mysqli_query($conn, $bd_nota) or die(mysqli_error($conn));
+				$resultado_file_nota = $conn->query($bd_nota);
 			}//FIM IF salvando file nota
 
 			//SOMANDO MAIS 1 PARA PEGAR OS PROXIMOS APARELHOS
@@ -502,7 +502,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 					WHERE 
 						id_equipamento = ".$_POST['id_equip']."";
 
-		$resultado_update = mysqli_query($conn, $update) or die(mysqli_error($conn));
+		$resultado_update = $conn->query($update);
 		$_SESSION['chip_id'.$cont_equip_chip.''] = $_POST['id_equip'];
 
 	}else{
@@ -530,7 +530,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 										'".$_POST['dados'.$cont_equip_chip.'']."', 
 										'".$_POST['imei_chip'.$cont_equip_chip.'']."',
 										'".$date_hoje."')";
-		$resultado_equipamento_chip = mysqli_query($conn, $query_equipamento_chip) or die(mysqli_error($conn));
+		$resultado_equipamento_chip = $conn->query($query_equipamento_chip);
 		//SOMANDO MAIS 1 PARA PEGAR OS PROXIMOS APARELHOS
 		$cont_equip_chip++;
 	}
@@ -560,7 +560,7 @@ if ($_POST['modelo_modem'] != NULL) {
 							'".$_POST['imei_modem']."', 
 							 '".$date_hoje."')";
 
-		$resultado_modem = mysqli_query($conn, $query_modem) or die(mysqli_error($conn));
+		$resultado_modem = $conn->query($query_modem);
 		//SOMANDO MAIS 1 PARA PEGAR OS PROXIMOS APARELHOS
 }
 /*ACABOU A PUTARIA UFA!!!*/
@@ -568,10 +568,10 @@ if ($_POST['modelo_modem'] != NULL) {
 /*Pegando a ultima id para enviar via GET*/
 
 $pegando_id = "SELECT max(id_funcionario) AS id_funcionario FROM manager_inventario_funcionario";
-$re_id = mysqli_query($conn, $pegando_id);
+$re_id = $conn->query($pegando_id);
 $row_id = mysqli_fetch_assoc($re_id);
 
-mysqli_close($conn);
+$conn->close();
 
 
 if ($_POST['id_equip'] != NULL) {

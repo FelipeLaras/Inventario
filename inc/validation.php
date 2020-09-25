@@ -2,7 +2,7 @@
 //aplicando para usar varialve em outro arquivo
 session_start();
 //chamando conexão com o banco
-require 'conexao.php';
+require_once('../conexao/conexao.php');
 
 //pegando as informações que o usuário digitou
 $user = $_POST['username'];
@@ -27,21 +27,21 @@ $query_user = "SELECT
 					profile_password like '".$key."'";
 
 //Aplicando a query
-$result = mysqli_query($conn, $query_user);
+$result = $conn->query($query_user);
 
 //salvando em uma array
-$row_user = mysqli_fetch_assoc($result);
+$row_user = $result->fetch_assoc();
 
 //verificando se o usuário está ativo no sistema
 
 if(empty($row_user['nome'])){
 
-	header('location: index.php?erro=1');//usuário não encontrado
+	header('location: ../index.php?erro=1');//usuário não encontrado
 
 }else{
 	if($row_user['deletado'] == 1){
 
-		header('location: index.php?erro=2');//usuário desativado
+		header('location: ../index.php?erro=2');//usuário desativado
 
 	}else{
 		//usuário
@@ -64,5 +64,5 @@ if(empty($row_user['nome'])){
 }
 
 //fecha o banco
-mysqli_close($conn);
+$conn->close();
 ?>

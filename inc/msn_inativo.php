@@ -1,7 +1,7 @@
 <?php 
 session_start();
-require 'conexao.php';
-include 'header.php';
+require_once('../conexao/conexao.php');
+require_once('header.php');
 
 //aplicando para usar varialve em outro arquivo
 ?>
@@ -14,8 +14,8 @@ include 'header.php';
 				if ($_GET['id'] != NULL) {
 
 					$query = "SELECT deletar AS id, nome FROM manager_inventario_funcionario WHERE id_funcionario = ".$_GET['id']."";
-					$resultado = mysqli_query($conn, $query);
-					$row = mysqli_fetch_assoc($resultado);
+					$resultado = $conn->query($query);
+					$row = $resultado->fetch_assoc();
 
 					if ($row['id'] == 1) {//1 = desativado
 
@@ -101,3 +101,6 @@ include 'header.php';
 		</div> <!-- /span12 -->
 	</div> <!-- /row -->
 </div>
+<?php
+	$conn->close();
+?>
