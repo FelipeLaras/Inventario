@@ -28,10 +28,6 @@ require_once('header.php')
                    if ($_SESSION["perfil"] == 0) {//se for administrador
                       echo "
                       <div class='shortcuts'>
-                        <a href='contracts.php' class='shortcut'>
-                          <i class='fas fa-folder-open fa fa-3x' style='margin-bottom: 7px;'></i>
-                          <span class='shortcut-label'>Contratos</span>
-                        </a>
                         <a href='tecnicos_ti.php' class='shortcut'>
                           <i class='fas fa-laptop fa fa-3x' style='margin-bottom: 7px;'></i>
                           <span class='shortcut-label'>CPU / Notebook / Ramal</span>
@@ -48,10 +44,6 @@ require_once('header.php')
                     }else if ($_SESSION["perfil"] == 1){// se for usuario
                         echo "
                       <div class='shortcuts'>
-                        <a href='contracts.php' class='shortcut'>
-                          <i class='fas fa-folder-open fa fa-3x' style='margin-bottom: 7px;'></i>
-                          <span class='shortcut-label'>Contratos</span>
-                        </a>
                         <a href='inventario_ti.php' class='shortcut'>
                           <i class='fas fa-mobile-alt fa fa-3x' style='margin-bottom: 7px;'></i>
                           <span class='shortcut-label'>

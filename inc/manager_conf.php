@@ -88,7 +88,7 @@ require_once('../query/query_dropdowns.php');
                                     manager_profile MP
                               LEFT JOIN 
                                     manager_profile_type MPT ON MP.profile_type = MPT.type_profile order by MP.id_profile";
-          $resultado_show = $conn->query($query_show_user);
+          $resultado_show = $conn->query($query_show_user)or die(mysqli_error($conn));
 
             while ($row_show = mysqli_fetch_assoc($resultado_show)) {
              echo "<tbody>
