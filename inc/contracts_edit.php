@@ -368,11 +368,11 @@
                                                          </td>";
                                                          if ($row_files['type'] == $type_pdf) {// se for pdf mostra essa imagem
                                                             echo "<td class='type_doc_campo'>
-                                                            <img src='img/signin/pdf.png' class='type_doc'/>
+                                                            <img src='../img/signin/pdf.png' class='type_doc'/>
                                                          </td>";
                                                          }elseif ($row_files['type'] == $type_word) {
                                                             echo "<td class='type_doc_campo'>
-                                                            <img src='img/signin/word.png' class='type_doc'/>
+                                                            <img src='../img/signin/word.png' class='type_doc'/>
                                                          </td>";}// se for word mostra essa imagem
                                                            echo "<td class='td-actions'>                             
                                                             </a>

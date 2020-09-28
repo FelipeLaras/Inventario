@@ -5,6 +5,8 @@
    unset($_SESSION['id_funcionario']);//LIMPANDO A SESSION
    //chamando conexão com o banco
    require_once('../conexao/conexao.php');
+   require_once('../query/query.php');
+
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
      header('location: ../front/index.html');
@@ -14,7 +16,6 @@
        header('location: ../front/error.php');
    }
 
-//recebendo as informações do formulario
 
 //pegando as informações vinda do fomrulario e salvando em sessão para ser usado no EXCEl e na IMPRESSÂO
 
@@ -24,51 +25,7 @@ if ($_POST['nome_funcionario'] != NULL) {
    $nome = 0;
 }
 
-//montando a pesquisa para o relatório
-$query_relatorios = "SELECT 
-                        MIF.nome, 
-                        MIF.cpf, 
-                        MDF.nome AS funcao, 
-                        MDD.nome AS departamento, 
-                        MDE.nome AS filial, 
-                        MDEQ.nome AS tipo_equipamento, 
-                        MIE.modelo,
-                        MIE.patrimonio, 
-                        MIE.imei_chip, 
-                        MIE.numero, 
-                        MIE.valor, 
-                        MDSE.nome AS status,
-                        MIE.dominio
-                     FROM 
-                        manager_inventario_funcionario MIF
-                     RIGHT JOIN 
-                        manager_inventario_equipamento MIE ON MIF.id_funcionario = MIE.id_funcionario
-                     LEFT JOIN 
-                        manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-                     LEFT JOIN 
-                        manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-                     LEFT JOIN 
-                        manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
-                     LEFT JOIN 
-                        manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
-                     LEFT JOIN 
-                        manager_dropstatusequipamento MDSE ON MIE.status = MDSE.id_status
-                     WHERE ";                     
-                     
-                     if(($_GET['eq'] != NULL) && ($_GET['se'] != NULL)){
-                        $query_relatorios .= "MIE.tipo_equipamento = ".$_GET['eq']." AND MIE.status = ".$_GET['se']."";
-                     }elseif($_GET['eq'] != NULL){
-                        $query_relatorios .= "MIE.tipo_equipamento = ".$_GET['eq']."";
-                     }elseif($_GET['se'] != NULL){
-                        $query_relatorios .= "MIE.status = ".$_GET['se']." AND MIE.tipo_equipamento in (5, 8, 9, 10)";
-                     }else{
-                        $query_relatorios .= "MIE.tipo_equipamento in (5, 8, 9, 10)";
-                     }
-
-$resultado_relatorios = $conn->query($query_relatorios);
-
-
-$_SESSION['query_relatorios'] = $query_relatorios;//enviando query para PDF ou EXCEL
+$_SESSION['query_relatorios'] = $query_rel_equipamentos; //enviando query para PDF ou EXCEL
 
 require_once('header.php');
 
@@ -135,62 +92,33 @@ require_once('header.php');
       <table id="example" class="table table-striped table-bordered" style="width:100%; font-size: 10px; font-weight: bold;">
          <thead>
             <tr>
-               <th class="titulo">Nome</th>
-               <th class="titulo">CPF</th>
-               <th class="titulo">FUNÇÃO</th>
-               <th class="titulo">DEPARTAMENTO</th>
-               <th class="titulo">EMPRESA/FILIAL</th>
-               <th class="titulo">EQUIPAMENTOS</th>
+               <th class="titulo">ID</th>               
                <th class="titulo">MODELO</th>
+               <th class="titulo">EQUIPAMENTOS</th>
                <th class="titulo">PATRIMÔNIO</th>
                <th class="titulo">NÚMERO</th>
                <th class="titulo">STATUS</th>               
                <th class="titulo">DOMÍNIO</th>
+               <th class="titulo">DEPARTAMENTO</th>
+               <th class="titulo">EMPRESA/FILIAL</th>               
+               <th class="titulo">FUNCIONÁRIO</th>
             </tr>
          </thead>
          <tbody>
             <?php
-            while ($row_relatorio = $resultado_relatorios->fetch_assoc()) {
+            while ($row_relatorio = $resultado_rel_equipamentos->fetch_assoc()) {
                echo "
                   <tr>";
-                     if($row_relatorio['nome'] != NULL){
-                        echo "<td>".$row_relatorio['nome']."</td>";
-                     }else{
-                        echo "<td>---</td>";
-                     }
+                     echo "<td>".$row_relatorio['id_equipamento']."</td>";
 
-                     if($row_relatorio['cpf'] != NULL){
-                        echo "<td>".$row_relatorio['cpf']."</td>";
-                     }else{
-                        echo "<td>---</td>";
-                     }
-
-                     if($row_relatorio['funcao'] != NULL){
-                        echo "<td>".$row_relatorio['funcao']."</td>";
-                     }else{
-                        echo "<td>---</td>";
-                     }
-
-                     if($row_relatorio['departamento'] != NULL){
-                        echo "<td>".$row_relatorio['departamento']."</td>";
-                     }else{
-                        echo "<td>---</td>";
-                     }
-
-                     if($row_relatorio['filial'] != NULL){
-                        echo "<td>".$row_relatorio['filial']."</td>";
+                     if($row_relatorio['modelo'] != NULL){
+                        echo "<td>".$row_relatorio['modelo']."</td>";
                      }else{
                         echo "<td>---</td>";
                      }
 
                      if($row_relatorio['tipo_equipamento'] != NULL){
                         echo "<td>".$row_relatorio['tipo_equipamento']."</td>";
-                     }else{
-                        echo "<td>---</td>";
-                     }
-
-                     if($row_relatorio['modelo'] != NULL){
-                        echo "<td>".$row_relatorio['modelo']."</td>";
                      }else{
                         echo "<td>---</td>";
                      }
@@ -206,17 +134,35 @@ require_once('header.php');
                      }else{
                         echo "<td>---</td>";
                      }
-                     
+
                      if($row_relatorio['status'] != NULL){
                         echo "<td>".$row_relatorio['status']."</td>";
                      }else{
                         echo "<td>---</td>";
-                     }   
-                     
+                     }
+
                      if($row_relatorio['dominio'] == 1){
-                        echo "<td style='color: green'>OK</td>";
+                        echo "<td style='color: green'>ON</td>";
                      }else{
                         echo "<td style='color: red;'>OFF</td>";
+                     }
+
+                     if($row_relatorio['departamento'] != NULL){
+                        echo "<td>".$row_relatorio['departamento']."</td>";
+                     }else{
+                        echo "<td>---</td>";
+                     }
+
+                     if($row_relatorio['filial'] != NULL){
+                        echo "<td>".$row_relatorio['filial']."</td>";
+                     }else{
+                        echo "<td>---</td>";
+                     }
+                     
+                     if($row_relatorio['nome'] != NULL){
+                        echo "<td>".$row_relatorio['nome']."</td>";
+                     }else{
+                        echo "<td>---</td>";
                      }
                      
          echo "      </tr>";

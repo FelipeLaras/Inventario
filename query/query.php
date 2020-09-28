@@ -102,9 +102,9 @@ $equipamentos = "SELECT
                 LEFT JOIN
                     manager_droplocacao MDLB ON MIE.locacao = MDLB.id_empresa
                 WHERE
-                    MIE.deletar = 1 AND MIE.tipo_equipamento IN (9 , 5, 8)";
+                    MIE.tipo_equipamento IN (9 , 5, 8, 10) AND (MIE.status = 11 OR MIE.deletar = 1)";
 
-$resultado_equip = $conn -> query($equipamentos);
+$resultado_equip = $conn->query($equipamentos);
 
 
 //equipamentos disponiveis
@@ -166,7 +166,7 @@ $equipamentosDisponiveis = "SELECT
                                 MIE.tipo_equipamento IN (9, 5, 8) AND
                                 MIE.status IN (6, 10)";
 
-$resultadoEquipDisponivel = $conn -> query($equipamentosDisponiveis);
+$resultadoEquipDisponivel = $conn->query($equipamentosDisponiveis);
 
 //status funcionario
 $status = "SELECT 
@@ -175,7 +175,7 @@ $status = "SELECT
             FROM manager_inventario_funcionario 
             WHERE 
                 deletar = 0 ORDER BY nome ASC";
-$result_status = $conn -> query($status);
+$result_status = $conn->query($status);
 
 //recebendo a informação e distribuindo nos campos do formulario
 $query_Funcionario = "SELECT 
@@ -407,10 +407,9 @@ $row_Squip = mysqli_fetch_assoc($resultado_Squip);
 $query_scanner = "SELECT 
          COUNT(MIE.id_equipamento) AS scanner
          FROM
-         manager_inventario_equipamento MIE
+            manager_inventario_equipamento MIE
          WHERE
-            MIE.deletar = 0 AND 
-            MIE.tipo_equipamento = 10 ";
+            MIE.tipo_equipamento = 10 AND (MIE.deletar = 0 AND MIE.status != 11)";
 $resultado_scanner = $conn->query($query_scanner);
 $row_scanner = mysqli_fetch_assoc($resultado_scanner);
 
@@ -434,11 +433,299 @@ $query_condenados = "SELECT
          FROM
          manager_inventario_equipamento MIE
          WHERE
-            MIE.deletar = 1 AND
-            MIE.tipo_equipamento IN (8 , 9)";
+            MIE.tipo_equipamento IN (8 , 9, 10) AND (MIE.deletar = 1 OR status = 11)";
 $resultado_condenados = $conn->query($query_condenados);
-$row_condenados = mysqli_fetch_assoc($resultado_condenados);
+$row_condenados = $resultado_condenados->fetch_assoc();
 
 
+//RELATORIOS
+if ($_GET['relatorios'] == 1) {
 
-?>
+    //montando a pesquisa para o relatório
+    $query_rel_equipamentos = "SELECT 
+                                MIE.id_equipamento,
+                                MDE.nome AS tipo_equipamento,
+                                MIE.modelo,
+                                MIE.patrimonio,
+                                MDD.nome AS departamento,
+                                MDEM.nome AS filial,
+                                MDL.nome AS locacao,
+                                MDS.nome AS status,
+                                MIE.id_funcionario,
+                                MIF.nome,
+                                MIE.dominio,
+                                MIE.numero
+                            FROM
+                                manager_inventario_equipamento MIE
+                            LEFT JOIN
+                                manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
+                            LEFT JOIN
+                                manager_dropdepartamento MDD ON MIE.departamento = MDD.id_depart
+                            LEFT JOIN
+                                manager_dropempresa MDEM ON MIE.filial = MDEM.id_empresa
+                            LEFT JOIN
+                                manager_droplocacao MDL ON MIE.locacao = MDL.id_empresa
+                            LEFT JOIN
+                                manager_dropstatusequipamento MDS ON MIE.status = MDS.id_status
+                            LEFT JOIN
+                                manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
+                            WHERE ";
+
+    if (!empty($_GET['eq'])) {
+        $query_rel_equipamentos .= "MIE.tipo_equipamento = '" . $_GET['eq'] . "'";
+
+        if (!empty($_GET['se'])) {
+            $query_rel_equipamentos .= " AND MIE.status = '" . $_GET['se'] . "'";
+
+            if(!empty($_GET['fi'])){
+                $query_rel_equipamentos .= " AND MIE.filial = '" . $_GET['fi'] . "'";
+            }
+        }else{
+            if(!empty($_GET['fi'])){
+                $query_rel_equipamentos .= " AND MIE.filial = '" . $_GET['fi'] . "'";
+            }
+        }
+    } else {
+        if (!empty($_GET['se'])) {
+            $query_rel_equipamentos .= "MIE.status = '" . $_GET['se'] . "'";
+
+            if(!empty($_GET['fi'])){
+                $query_rel_equipamentos .= " AND MIE.filial = '" . $_GET['fi'] . "'";
+            }
+        } else {
+            if(!empty($_GET['fi'])){
+                $query_rel_equipamentos .= "MIE.filial = '" . $_GET['fi'] . "'";
+            }else{
+                header('location: ../inc/relatorio_tecnicos.php?msn=2');
+            }
+        }
+    }
+    $resultado_rel_equipamentos = $conn->query($query_rel_equipamentos);
+}
+
+if ($_GET['relatorios'] == 2) {
+    $query_relatorios = "SELECT 
+                            MIF.nome, 
+                            MIF.cpf, 
+                            MDF.nome AS funcao, 
+                            MDD.nome AS departamento, 
+                            MDE.nome AS filial, 
+                            MDEQ.nome AS tipo_equipamento, 
+                            MIE.modelo, 
+                            MIE.imei_chip, 
+                            MIE.numero, 
+                            MIE.valor, 
+                            MDSE.nome AS status
+                        FROM 
+                            manager_inventario_funcionario MIF
+                        LEFT JOIN 
+                            manager_inventario_equipamento MIE ON MIF.id_funcionario = MIE.id_funcionario
+                        LEFT JOIN 
+                            manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
+                        LEFT JOIN 
+                            manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
+                        LEFT JOIN 
+                            manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
+                        LEFT JOIN 
+                            manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
+                        LEFT JOIN 
+                            manager_dropstatusequipamento MDSE ON MIE.status = MDSE.id_status
+                        WHERE ";
+
+    if (!empty($_GET['nome'])) {
+        $query_relatorios .= "MIF.nome like '%" . $_GET['nome'] . "%'";
+
+        if (!empty($_GET['cpf'])) {
+            $query_relatorios .= " AND MIF.cpf = '" . $_GET['cpf'] . "'";
+
+            if (!empty($_GET['func'])) {
+                $query_relatorios .= " AND MIF.funcao = '" . $_GET['func'] . "'";
+
+                if (!empty($_GET['dep'])) {
+                    $query_relatorios .= " AND MIF.departamento = '" . $_GET['dep'] . "'";
+
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                }
+            } else {
+                if (!empty($_GET['dep'])) {
+                    $query_relatorios .= " AND MIF.departamento = '" . $_GET['dep'] . "'";
+
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                } else {
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                }
+            }
+        } else {
+            if (!empty($_GET['func'])) {
+                $query_relatorios .= " AND MIF.funcao = '" . $_GET['func'] . "'";
+
+                if (!empty($_GET['dep'])) {
+                    $query_relatorios .= " AND MIF.departamento = '" . $_GET['dep'] . "'";
+
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                } else {
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                }
+            } else {
+                if (!empty($_GET['dep'])) {
+                    $query_relatorios .= " AND MIF.departamento = '" . $_GET['dep'] . "'";
+
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                } else {
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                }
+            }
+        }
+    } else {
+        if (!empty($_GET['cpf'])) {
+            $query_relatorios .= "MIF.cpf = '" . $_GET['cpf'] . "'";
+
+            if (!empty($_GET['func'])) {
+                $query_relatorios .= " AND MIF.funcao = '" . $_GET['func'] . "'";
+
+                if (!empty($_GET['dep'])) {
+                    $query_relatorios .= " AND MIF.departamento = '" . $_GET['dep'] . "'";
+
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                } else {
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                }
+            } else {
+                if (!empty($_GET['dep'])) {
+                    $query_relatorios .= " AND MIF.departamento = '" . $_GET['dep'] . "'";
+
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                } else {
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                }
+            }
+        } else {
+            if (!empty($_GET['func'])) {
+                $query_relatorios .= "MIF.funcao = '" . $_GET['func'] . "'";
+
+                if (!empty($_GET['dep'])) {
+                    $query_relatorios .= " AND MIF.departamento = '" . $_GET['dep'] . "'";
+
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                } else {
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                }
+            } else {
+                if (!empty($_GET['dep'])) {
+                    $query_relatorios .= "MIF.departamento = '" . $_GET['dep'] . "'";
+
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= " AND MIF.empresa = '" . $_GET['em'] . "'";
+                    }
+                } else {
+                    if (!empty($_GET['em'])) {
+                        $query_relatorios .= "MIF.empresa = '" . $_GET['em'] . "'";
+                    } else {
+                        header('location: ../inc/relatorio_tecnicos.php?msn=2');
+                    }
+                }
+            }
+        }
+    } //end IF
+    $resultado_relatorios = $conn->query($query_relatorios);    
+}
+
+if($_GET['relatorios'] == 3){
+
+    $hoje = date('d/m/yy');
+
+    $datainicio = date('d/m/yy', strtotime($_GET['inicio_data']));
+
+    if(empty($_GET['fim_data'])){
+        $dataFim = $hoje;
+    }else{
+        $dataFim = $_GET['fim_data'];
+    }
+
+//montando a pesquisa para o relatório
+$query_rel_fiscal = "SELECT 
+                        MIF.nome,
+                        MDD.nome AS DepartamentoFuncionario,
+                        MDEM.nome AS EmpresaEquipamento,
+                        MDEQ.nome AS tipo_equipamento,
+                        MIE.modelo,
+                        MIE.imei_chip,
+                        MIE.numero_nota,
+                        MIE.data_nota,
+                        MIE.valor,
+                        MDSE.nome AS status,
+                        MIA.caminho,
+                        MIA.nome AS Nota
+                    FROM
+                        manager_inventario_equipamento MIE
+                    LEFT JOIN
+                        manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
+                    LEFT JOIN
+                        manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
+                    LEFT JOIN
+                        manager_dropempresa MDEM ON MIE.filial = MDEM.id_empresa
+                    LEFT JOIN
+                        manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
+                    LEFT JOIN
+                        manager_dropstatusequipamento MDSE ON MIE.status = MDSE.id_status
+                    LEFT JOIN
+                        manager_inventario_anexo MIA ON MIE.id_equipamento = MIA.id_equipamento
+                    WHERE ";
+
+                    if(!empty($_GET['numero_nota'])){
+                        $query_rel_fiscal .= "MIE.numero_nota = '".$_GET['numero_nota']."'";
+
+                        if(!empty($_GET['filial'])){
+                            $query_rel_fiscal .= " AND MIE.filial = '".$_GET['filial']."'";
+
+                            if(!empty($_GET['inicio_data'])){
+                                $query_rel_fiscal .= " AND MIE.data_nota BETWEEN '".$datainicio."' AND '".$dataFim."'";
+                            }
+                        }else{
+                            if(!empty($_GET['inicio_data'])){
+                                $query_rel_fiscal .= " AND MIE.data_nota BETWEEN '".$datainicio."' AND '".$dataFim."'";
+                            }
+                        }
+                    }else{
+                        if(!empty($_GET['filial'])){
+                            $query_rel_fiscal .= "MIE.filial = '".$_GET['filial']."'";  
+
+                            if(!empty($_GET['inicio_data'])){
+                                $query_rel_fiscal .= " AND MIE.data_nota BETWEEN '".$datainicio."' AND '".$dataFim."'";
+                            }
+                        }else{
+                             if(!empty($_GET['inicio_data'])){
+                                $query_rel_fiscal .= "MIE.data_nota BETWEEN '".$datainicio."' AND '".$dataFim."'";
+                            }else{
+                                header('location: ../inc/relatorio_tecnicos.php?msn=2');
+                            }
+                        }
+                    }
+$resultado_rel_fiscal = $conn->query($query_rel_fiscal);
+}

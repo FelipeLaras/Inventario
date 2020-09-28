@@ -4,6 +4,7 @@
    /*------------------------------------------------------------------------------------------------------------------*/
    //chamando conexão com o banco
    require_once('../conexao/conexao.php');
+   require_once('../query/query.php');
    /*------------------------------------------------------------------------------------------------------------------*/
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
@@ -48,7 +49,7 @@ manager_dropsituacao MDS ON MIE.situacao = MDS.id_situacao
    LEFT JOIN
 manager_dropstatusequipamento MDST ON MIE.status = MDST.id_status
 WHERE
-MIE.tipo_equipamento = 10";
+MIE.tipo_equipamento = 10 AND MIE.status != 11";
 $resultado_equip = $conn->query($equipamentos);
 
 
@@ -58,8 +59,9 @@ $cont = "SELECT COUNT(id) AS quantidade FROM manager_comparacao_ocs";
 $result_count = $conn->query($cont);
 $row_count = $result_count->fetch_assoc();
 
+require_once('header.php');
+
 ?>
-<?php  require 'header.php'?>
 <!--Chamando a Header-->
 <div class="subnavbar">
     <div class="subnavbar-inner">
@@ -133,18 +135,18 @@ switch ($_GET['msn']){
                      ?>
                 </i>
             </a>
-            <!--CONDENADOS-->
-            <a class="btn btn-default btn-xs botao" style="background-color: #ff000029;" href="equip_condenados.php" title="Equipamentos condenados">
-               <i class="far fa-trash-alt"></i>
-            </a>            
-            <!--DISPONIVEIS-->
-            <a class="btn btn-default btn-xs botao" style="background-color: #00ff4e29;"  href="equip_disponivel.php" title="Equipamentos disponíveis">
-               <i class="fas fa-laptop"></i>
-            </a>
-            <!--SCANNERS-->
-            <a class="btn btn-default btn-xs botao" href="equip.php" title="Voltar">
-               <i class="fas fa-undo-alt"></i>
-            </a>
+             <!--CONDENADOS-->
+               <a class="btn btn-default btn-xs botao" style="background-color: #ff000029;" href="equip_condenados.php" title="Equipamentos condenados">
+                  <i class="far fa-trash-alt"></i> = <?= $row_condenados['condenados'] ?>
+               </a>
+               <!--DISPONIVEIS-->
+               <a class="btn btn-default btn-xs botao" style="background-color: #00ff4e29;" href="equip_disponivel.php" title="Equipamentos disponíveis">
+                  <i class="fas fa-laptop"></i> = <?= $row_disponivel['disponivel'] ?>
+               </a>
+               <!--SCANNERS-->
+               <a class="btn btn-default btn-xs botao" href="scan_disponivel.php" title="Lista de Scanners">
+                  <i class="fas fa-print"></i> = <?= $row_scanner['scanner'] ?>
+               </a>
         </div>
     </div>
 </div>
@@ -242,7 +244,7 @@ while ($row_equip = $resultado_equip->fetch_assoc()) {
                <a href='#modalVigencia".$row_equip['id_equipamento']."' title='Data vigência' class='icon_acao' data-toggle='modal'>
                   <i class='far fa-calendar-times' style='font-size: 12px;'></i>
                </a>
-               <a href='#modalExcCPU".$row_equip['id_equipamento']."' title='Desativar' class='icon_acao' data-toggle='modal'>
+               <a href='#modalExc".$row_equip['id_equipamento']."' title='Desativar' class='icon_acao' data-toggle='modal'>
                   <i class='icon-remove' style='font-size: 12px;'></i>
                </a>";
             }
@@ -252,7 +254,7 @@ while ($row_equip = $resultado_equip->fetch_assoc()) {
                <a href='#modalVincular".$row_equip['id_equipamento']."' title='Vincular Usuário' class='icon_acao' data-toggle='modal'>
                   <i class='far fa-user' style='font-size: 12px;'></i>
                </a>
-               <a href='#modalExcCPU".$row_equip['id_equipamento']."' title='Desativar' class='icon_acao' data-toggle='modal'>
+               <a href='#modalExc".$row_equip['id_equipamento']."' title='Desativar' class='icon_acao' data-toggle='modal'>
                   <i class='icon-remove' style='font-size: 12px;'></i>
                </a>";
             }
@@ -267,7 +269,7 @@ echo    "<!--MODAL VINCULAR AO USUÁRIO-->
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/alerta.png' style='width: 10%'>
+                     <img src='../img/alerta.png' style='width: 10%'>
                         VINCULAR USUÁRIO DISPONÍVEL
                   </h3>
                   <div class='modal-body'>
@@ -314,12 +316,12 @@ echo    "<!--MODAL VINCULAR AO USUÁRIO-->
             </div>
             </div>
          <!--MODAL EXCLUIR-->
-         <div id='modalExcCPU".$row_equip['id_equipamento']."' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+         <div id='modalExc".$row_equip['id_equipamento']."' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
             <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/atencao.png' style='width: 10%'>
+                     <img src='../img/atencao.png' style='width: 10%'>
                         DESATIVAR EQUIPAMENTO!
                   </h3>
                   <div class='modal-body'>
@@ -330,7 +332,7 @@ echo    "<!--MODAL VINCULAR AO USUÁRIO-->
                         </div>                                                           
                         <div class='modal-footer'>
                            <a class='btn' data-dismiss='modal' aria-hidden='true'>NÂO</a>
-                           <a href='scan_alter.php?id_equip=".$row_equip['id_funcionario']."&del=1' class='btn btn-success' >SIM</a>
+                           <a href='scan_alter.php?id_equip=".$row_equip['id_equipamento']."&del=1' class='btn btn-success' >SIM</a>
                         </div>
                   </div>
                </div>
@@ -342,7 +344,7 @@ echo    "<!--MODAL VINCULAR AO USUÁRIO-->
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/atencao.png' style='width: 10%'>
+                     <img src='../img/atencao.png' style='width: 10%'>
                      DATA DE VIGÊNCIA
                   </h3>
                   <div class='modal-body'>
@@ -360,7 +362,7 @@ echo    "<!--MODAL VINCULAR AO USUÁRIO-->
                </div>
                <div class='modal-footer'>
                   <a class='btn' data-dismiss='modal' aria-hidden='true'>NÂO</a>
-                  <a href='scan_alter.php?id_equip=".$row_equip['id_funcionario']."&alter=1' class='btn btn-success' target='_blank'>SIM</a>
+                  <a href='scan_alter.php?id_equip=".$row_equip['id_equipamento']."&alter=1' class='btn btn-success' target='_blank'>SIM</a>
                </div>
             </div>
          </div>

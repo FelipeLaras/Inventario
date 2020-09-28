@@ -1,150 +1,154 @@
 <?php
-   session_start();
-   //aplicando para usar varialve em outro arquivo
+session_start();
+//aplicando para usar varialve em outro arquivo
 
-   unset($_SESSION['id_funcionario']);//LIMPANDO A SESSION
-   //chamando conexão com o banco
-   require_once('../conexao/conexao.php');
-   //Aplicando a regra de login
-   if($_SESSION["perfil"] == NULL){  
-     header('location: ../front/index.html');
-   
-   }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
-   
-       header('location: ../front/error.php');
-   }
+unset($_SESSION['id_funcionario']); //LIMPANDO A SESSION
+//chamando conexão com o banco
+require_once('../conexao/conexao.php');
+require_once('../query/query.php');
 
-//recebendo as informações do formulario
+//Aplicando a regra de login
+if ($_SESSION["perfil"] == NULL) {
+   header('location: ../front/index.html');
+} elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
 
-//pegando as informações vinda do fomrulario e salvando em sessão para ser usado no EXCEl e na IMPRESSÂO
-
-if ($_POST['nome_funcionario'] != NULL) {
-   $nome = $_POST['nome_funcionario'];
-}else{
-   $nome = 0;
+   header('location: ../front/error.php');
 }
 
-//montando a pesquisa para o relatório
-$query_relatorios = "SELECT 
-MIF.nome, 
-MIF.cpf, 
-MDF.nome AS funcao, 
-MDD.nome AS departamento, 
-MDE.nome AS filial, 
-MDEQ.nome AS tipo_equipamento, 
-MIE.modelo, 
-MIE.imei_chip, 
-MIE.numero, 
-MIE.valor, 
-MDSE.nome AS status
-FROM manager_inventario_funcionario MIF
-RIGHT JOIN manager_inventario_equipamento MIE ON MIF.id_funcionario = MIE.id_funcionario
-LEFT JOIN manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-LEFT JOIN manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-LEFT JOIN manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
-LEFT JOIN manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
-LEFT JOIN manager_dropstatusequipamento MDSE ON MIE.status = MDSE.id_status
-WHERE 
-MIE.tipo_equipamento = '".$_POST['equipamento']."' OR 
-MIE.status = '".$_POST['status_equipamento']."'
-";
-
-$resultado_relatorios = $conn->query($query_relatorios);
-
-
-$_SESSION['query_relatorios'] = $query_relatorios;//enviando query para PDF ou EXCEL
+$_SESSION['query_relatorios'] = $query_rel_fiscal; //enviando query para PDF ou EXCEL
 
 require_once('header.php');
 
-?><!--Chamando a Header-->
+?>
+<!--Chamando a Header-->
+
 <div class="subnavbar">
    <div class="subnavbar-inner">
       <div class="container">
          <ul class="mainnav">
             <li>
-               <a href="inventario_ti.php"><i class="icon-home"></i>
-               <span>Home</span>
-               </a>
-            </li>
-            <li>
-               <a href="inventario.php"><i class="icon-group"></i>
-               <span>Colaboradores</span>
-               </a>
-            </li>
-            <li>
-               <a href="inventario_equip.php"><i class="icon-cogs"></i>
-               <span>Equipamentos</span>
+               <a href="tecnicos_ti.php">
+                  <i class="icon-home"></i><span>Home</span>
                </a>
             </li>
             <li class="active">
-              <a href="relatorio_auditoria.php"><i class="icon-list-alt"></i>
-                <span>Relatórios</span>
-              </a>
+               <a href="equip.php">
+                  <i class="icon-table"></i><span>Inventário</span>
+               </a>
+            </li>
+            <li>
+               <a href="google.php">
+                  <i class="icon-search"></i><span>Google T.I</span>
+               </a>
             </li>
          </ul>
       </div>
+      <!-- /container -->
    </div>
+   <!-- /subnavbar-inner -->
 </div>
 <div class="widget ">
    <div class="widget-header">
-        <h3>
-          <a href="manager.php">Home</a> 
-           / 
-           <a href="relatorio_auditoria.php">Relatórios</a>
-           / 
-           Colaborador
-        </h3>
-        <!--PDF-->
-        <div id="novo_usuario">
-         <a class="botao" href="relatorio_print.php" title="Imprimir" style="margin-top: 0px;" target="_blank"> 
+      <h3>
+         <i class="icon-lithe icon-home"></i>&nbsp;
+         <a href="tecnicos_ti.php">Home</a>
+         /
+         <i class="icon-lithe icon-table"></i>&nbsp;
+         <a href="equip.php">Inventário</a>
+         /
+         <i class="icon-lithe icon-list"></i>&nbsp;
+         <a href="relatorio_tecnicos.php">Relatórios</a>
+      </h3>
+      <!--PDF-->
+      <div id="novo_usuario">
+         <a class="botao" href="relatorio_print.php" title="Imprimir" style="margin-top: 0px;" target="_blank">
             <i class="fas fa-print fa-2x" style="margin-left: -3px;"></i>
          </a>
       </div>
       <!--PDF-->
-        <div id="novo_usuario">
+      <div id="novo_usuario">
          <a class="botao" href="relatorio_excel.php" title="Exportar EXCEL" style="margin-top: 0px;" target="_blank">
-         <i class="fas fa-file-excel fa-2x"  style="margin-left: -3px;"></i> 
+            <i class="fas fa-file-excel fa-2x" style="margin-left: -3px;"></i>
          </a>
       </div>
-      </div>  
+   </div>
 </div>
 <div class="container">
    <div class="row">
       <table id="example" class="table table-striped table-bordered" style="width:100%; font-size: 10px; font-weight: bold;">
          <thead>
             <tr>
-               <th class="titulo">Nome</th>
-               <th class="titulo">CPF</th>
-               <th class="titulo">FUNÇÃO</th>
-               <th class="titulo">DEPARTAMENTO</th>
-               <th class="titulo">EMPRESA/FILIAL</th>
+               <th class="titulo">NOME FUNCIONÁRIO</th>
+               <th class="titulo">DEPARTAMENTO FUNCIONÁRIO</th>
+               <th class="titulo">EMPRESA EQUIPAMENTO</th>
                <th class="titulo">EQUIPAMENTOS</th>
                <th class="titulo">MODELO</th>
                <th class="titulo">IMEI</th>
-               <th class="titulo">NÚMERO</th>
+               <th class="titulo">NÚMERO NOTA FISCAL</th>
+               <th class="titulo">DATA NOTA FISCAL</th>
                <th class="titulo">VALOR</th>
-               <th class="titulo">STATUS</th>
+               <th class="titulo">STATUS</th>               
+               <th class="titulo">NOTA FISCAL</th>
             </tr>
          </thead>
          <tbody>
             <?php
-            while ($row_relatorio = $resultado_relatorios->fetch_assoc()) {
-            echo "
-            <tr>
-               <td>".$row_relatorio['nome']."</td>
-               <td>".$row_relatorio['cpf']."</td>
-               <td>".$row_relatorio['funcao']."</td>
-               <td>".$row_relatorio['departamento']."</td>
-               <td>".$row_relatorio['filial']."</td>
-               <td>".$row_relatorio['tipo_equipamento']."</td>
-               <td>".$row_relatorio['modelo']."</td>
-               <td>".$row_relatorio['imei_chip']."</td>
-               <td>".$row_relatorio['numero']."</td>
-               <td>".$row_relatorio['valor']."</td>
-               <td>".$row_relatorio['status']."</td>
-            </tr>
-             ";
-             } ?>
+            while ($row_relatorio = $resultado_rel_fiscal->fetch_assoc()) {
+               echo "<tr>";
+               if(!empty($row_relatorio['nome'])){
+                  echo "<td>" . $row_relatorio['nome'] . "</td>";
+               }else{
+                  echo "<td>----</td>";
+               }
+
+               if(!empty($row_relatorio['DepartamentoFuncionario'])){
+                  echo "<td>" . $row_relatorio['DepartamentoFuncionario'] . "</td>";
+               }else{
+                  echo "<td>----</td>";
+               }
+
+               echo"
+               <td>" . $row_relatorio['EmpresaEquipamento'] . "</td>
+               <td>" . $row_relatorio['tipo_equipamento'] . "</td>
+               <td>" . $row_relatorio['modelo'] . "</td>";
+
+               if(!empty($row_relatorio['imei_chip'])){
+                  echo "<td>" . $row_relatorio['imei_chip'] . "</td>";
+               }else{
+                  echo "<td>----</td>";
+               }
+
+               if(!empty($row_relatorio['numero_nota'])){
+                  echo "<td>" . $row_relatorio['numero_nota'] . "</td>";
+               }else{
+                  echo "<td>----</td>";
+               }
+
+               if(!empty($row_relatorio['data_nota'])){
+                  echo "<td>" . $row_relatorio['data_nota'] . "</td>";
+               }else{
+                  echo "<td>----</td>";
+               }   
+
+               if(!empty($row_relatorio['valor'])){
+                  echo "<td>" . $row_relatorio['valor'] . "</td>";
+               }else{
+                  echo "<td>----</td>";
+               }    
+
+               echo"
+               <td>" . $row_relatorio['status'] . "</td>"; 
+
+               if(!empty($row_relatorio['Nota'])){
+                  echo "<td><a href='".$row_relatorio['caminho'] ."' target='_blank'><img src='../img/signin/pdf.png' style='width: 25%;margin-left: 28px;'></a></td>";
+               }else{
+                  echo "<td>----</td>";
+               }
+
+            echo "</tr>";
+            }
+
+            ?>
          </tbody>
       </table>
    </div>
@@ -157,8 +161,9 @@ require_once('header.php');
 <script src="../js/tabela2.js"></script>
 <script src="../java.js"></script>
 <script src="../jquery.dataTables.min.js"></script>
-<script src="../js/dataTables.bootstrap4.min.js"></script>   
+<script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 </body>
+
 </html>

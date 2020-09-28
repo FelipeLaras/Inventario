@@ -209,7 +209,7 @@ echo    "<!--MODAL WINDOWS-->
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/alerta.png' style='width: 10%'>
+                     <img src='../img/alerta.png' style='width: 10%'>
                         RESTAURAR EQUIPAMENTO!
                   </h3>
                   <div class='modal-body'>
@@ -330,7 +330,7 @@ echo    "<!--MODAL WINDOWS-->
             <div id='pai'>
             <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/alerta.png' style='width: 10%'>
+                     <img src='../img/alerta.png' style='width: 10%'>
                         RESTAURAR EQUIPAMENTO!
                   </h3>
                   <div class='modal-body'>
@@ -387,7 +387,64 @@ echo    "<!--MODAL WINDOWS-->
             <div id='pai'>
             <div class='modal-body'>
             <h3 id='myModalLabel'>
-               <img src='img/alerta.png' style='width: 10%'>
+               <img src='../img/alerta.png' style='width: 10%'>
+                  RESTAURAR EQUIPAMENTO!
+            </h3>
+               <div class='modal-body'>
+                     <div id='button_pai'>
+                        <h5>Deseja restaurar o equipamento ?</h5>
+                        <p style='padding: 10px;background-color: aliceblue;color: red;'>Patrimônio: ".$row_equip['patrimonio']."</p>
+                        <span style='color:red;font-size:9px;'></span>
+                     </div>                                                           
+                     <div class='modal-footer'>
+                        <a class='btn' data-dismiss='modal' aria-hidden='true'>NÂO</a>
+                        <a href='equip_restaurar.php?inativar=1&id_equipamento=".$row_equip['id_equipamento']."' class='btn btn-success' >SIM</a>
+                     </div>
+               </div>
+            </div>
+            </div>
+         </div>";//end tabela  
+         }//end if = ramal
+
+         if($row_equip['id_tipo_equipamento'] == 10){//Scanner
+            
+            echo "<tr>
+            <td class='fonte'>".$row_equip['tipo_equipamento']."</td>
+            <td class='fonte'>---</td><!--ramal-->
+            <td class='fonte'>---</td><!--IPDI-->
+            <td class='fonte'>".$row_equip['patrimonio']."</td>
+            <td class='fonte'>---</td><!--ip-->
+            <td class='fonte'>".$row_equip['responsavel']."</td>
+            <td class='fonte'>".$row_equip['cpf']."</td>
+            <td class='fonte'>".$row_equip['departamento']."</td>
+            <td class='fonte'>".$row_equip['locacao']."</td>
+            
+            <td class='fonte'><!--sistema operacional-->
+               <a href='javascript:' title='não possui informação' class='icon_acao' data-toggle='modal'>
+               ---
+               </a>
+            </td>
+            <td class='fonte'><!--office-->
+               <a href='javascript:' title='Não possui Informações' class='icon_acao' data-toggle='modal'>
+               ---
+               </a>
+            </td>
+            <td class='fonte  acao'>
+               <a href='equip_edit_condenado.php?id_equip=".$row_equip['id_equipamento']."&id_fun=".$row_equip['id_funcionario']."' title='Visualizar' class='icon_acao'>
+                  <i class='icon-folder-open'></i>
+               </a>
+               <a href='#modalCheckRamal".$row_equip['id_equipamento']."' title='desativar' class='icon_acao' data-toggle='modal'>
+                  <i class='icon-large icon-ok'></i>
+               </a>
+            </td>
+         </tr>
+         <!--MODAL CHEKLIST->
+         <div id='modalCheckRamal".$row_equip['id_equipamento']."' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+            <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+            <div id='pai'>
+            <div class='modal-body'>
+            <h3 id='myModalLabel'>
+               <img src='../img/alerta.png' style='width: 10%'>
                   RESTAURAR EQUIPAMENTO!
             </h3>
                <div class='modal-body'>

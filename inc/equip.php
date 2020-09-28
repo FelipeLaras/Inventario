@@ -494,7 +494,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/atencao.png' style='width: 10%'>
+                     <img src='../img/atencao.png' style='width: 10%'>
                         DESATIVAR EQUIPAMENTO!
                   </h3>
                   <div class='modal-body'>
@@ -517,7 +517,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/alerta.png' style='width: 10%'>
+                     <img src='../img/alerta.png' style='width: 10%'>
                         CHEKLIST
                   </h3>
                   <div class='modal-body'>
@@ -545,7 +545,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/atencao.png' style='width: 10%'>
+                     <img src='../img/atencao.png' style='width: 10%'>
                         DATA DE VIGÊNCIA
                   </h3>
                   <div class='modal-body'>

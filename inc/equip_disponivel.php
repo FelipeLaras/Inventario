@@ -77,7 +77,7 @@ require_once('../query/query.php');
             <!--CONDENADOS-->
             <a class="btn btn-default btn-xs botao" style="background-color: #ff000029;" href="equip_condenados.php"
                 title="Equipamentos condenados">
-                <i class="far fa-trash-alt"></i>
+                <i class="far fa-trash-alt"></i> = <?= $row_condenados['condenados'] ?>
             </a>
             <!--ATIVOS-->
             <a class="btn btn-default btn-xs botao" href="equip.php" title="Voltar">
@@ -220,7 +220,7 @@ while ($row_equip = mysqli_fetch_assoc($resultadoEquipDisponivel)) {
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/alerta.png' style='width: 10%'>
+                     <img src='../img/alerta.png' style='width: 10%'>
                         VINCULAR A UM NOVO USUÁRIO
                   </h3>
                   <div class='modal-body'>
@@ -267,7 +267,7 @@ while ($row_equip = mysqli_fetch_assoc($resultadoEquipDisponivel)) {
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/alerta.png' style='width: 10%'>
+                     <img src='../img/alerta.png' style='width: 10%'>
                         CHEKLIST
                   </h3>
                   <div class='modal-body'>
@@ -295,7 +295,7 @@ while ($row_equip = mysqli_fetch_assoc($resultadoEquipDisponivel)) {
             <div id='pai'>
                <div class='modal-body'>
                   <h3 id='myModalLabel'>
-                     <img src='img/atencao.png' style='width: 10%'>
+                     <img src='../img/atencao.png' style='width: 10%'>
                         DATA DE VIGÊNCIA
                   </h3>
                   <div class='modal-body'>

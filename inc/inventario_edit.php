@@ -1044,7 +1044,7 @@ echo "
   <div class='modal-header'>
     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
     <h3 id='myModalLabel'>
-      <img src='img/atencao.png' style='width: 10%' />
+      <img src='../img/atencao.png' style='width: 10%' />
       ATENCÃO!
     </h3>
   </div>
@@ -1460,7 +1460,7 @@ $cont++;
   <div class='modal-header'>
     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
     <h3 id='myModalLabel'>
-      <img src='img/atencao.png' style='width: 10%' />
+      <img src='../img/atencao.png' style='width: 10%' />
       ATENCÃO - EXCLUIR ANEXO!
     </h3>
   </div>
@@ -1614,7 +1614,7 @@ $cont++;
                                 <div class='modal-header'>
                                   <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
                                     <h3 id='myModalLabel'>
-                                      <img src='img/atencao.png' style='width: 10%'/>
+                                      <img src='../img/atencao.png' style='width: 10%'/>
                                           ATENCÃO - EXCLUIR HISTÓRICO!
                                     </h3>
                                 </div>

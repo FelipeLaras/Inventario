@@ -177,7 +177,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>
@@ -284,7 +284,7 @@
                                           <div id='filho'> 
                                             <div class='modal-body'>
                                               <h3 id='myModalLabel'>
-                                                <img src='img/alerta.png' style='width: 10%'/>
+                                                <img src='../img/alerta.png' style='width: 10%'/>
                                                 ANTENÇÃO!
                                               </h3>
                                               <hr>
@@ -391,7 +391,7 @@
                                           <div id='filho'> 
                                             <div class='modal-body'>
                                               <h3 id='myModalLabel'>
-                                                <img src='img/alerta.png' style='width: 10%'/>
+                                                <img src='../img/alerta.png' style='width: 10%'/>
                                                 ANTENÇÃO!
                                               </h3>
                                               <hr>
@@ -498,7 +498,7 @@
                                           <div id='filho'> 
                                             <div class='modal-body'>
                                               <h3 id='myModalLabel'>
-                                                <img src='img/alerta.png' style='width: 10%'/>
+                                                <img src='../img/alerta.png' style='width: 10%'/>
                                                 ANTENÇÃO!
                                               </h3>
                                               <hr>
@@ -606,7 +606,7 @@
                                           <div id='filho'> 
                                             <div class='modal-body'>
                                               <h3 id='myModalLabel'>
-                                                <img src='img/alerta.png' style='width: 10%'/>
+                                                <img src='../img/alerta.png' style='width: 10%'/>
                                                 ANTENÇÃO!
                                               </h3>
                                               <hr>
@@ -714,7 +714,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>
@@ -821,7 +821,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>
@@ -928,7 +928,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>
@@ -1035,7 +1035,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>
@@ -1143,7 +1143,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>
@@ -1253,7 +1253,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>
@@ -1362,7 +1362,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>
@@ -1471,7 +1471,7 @@
                                         <div id='filho'> 
                                           <div class='modal-body'>
                                             <h3 id='myModalLabel'>
-                                              <img src='img/alerta.png' style='width: 10%'/>
+                                              <img src='../img/alerta.png' style='width: 10%'/>
                                               ANTENÇÃO!
                                             </h3>
                                             <hr>

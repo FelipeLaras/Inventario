@@ -5,6 +5,8 @@
    unset($_SESSION['id_funcionario']);//LIMPANDO A SESSION
    //chamando conexão com o banco
    require_once('../conexao/conexao.php');
+   require_once('../query/query.php');
+
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
      header('location: ../front/index.html');
@@ -20,49 +22,6 @@ if ($_GET['nome'] != NULL) {
 }else{
    $nome = 0;
 }
-
-//montando a pesquisa para o relatório
-$query_relatorios = "SELECT 
-                        MIF.nome, 
-                        MIF.cpf, 
-                        MDF.nome AS funcao, 
-                        MDD.nome AS departamento, 
-                        MDE.nome AS filial, 
-                        MDEQ.nome AS tipo_equipamento, 
-                        MIE.modelo, 
-                        MIE.imei_chip, 
-                        MIE.numero, 
-                        MIE.valor, 
-                        MDSE.nome AS status
-                    FROM 
-                        manager_inventario_funcionario MIF
-                    LEFT JOIN 
-                        manager_inventario_equipamento MIE ON MIF.id_funcionario = MIE.id_funcionario
-                    LEFT JOIN 
-                        manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-                    LEFT JOIN 
-                        manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-                    LEFT JOIN 
-                        manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
-                    LEFT JOIN 
-                        manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
-                    LEFT JOIN 
-                        manager_dropstatusequipamento MDSE ON MIE.status = MDSE.id_status
-                    WHERE ";
-
-                    if( ($_GET['nome'] == NULL) && ($_GET['cpf'] == NULL) && ($_GET['func'] == NULL) && ($_GET['dep'] == NULL) && ($_GET['em'] == NULL)){
-                        $query_relatorios .= "MIE.tipo_equipamento in (5, 8, 9, 10)";
-                    }else{
-                        $query_relatorios .= "MIE.tipo_equipamento in (5, 8, 9,10) AND (
-                                                MIF.nome LIKE '%".$nome."%' OR 
-                                                MIF.cpf = '".$_GET['cpf']."' OR 
-                                                MIF.funcao = '".$_GET['func']."' OR 
-                                                MIF.departamento = '".$_GET['dep']."' OR  
-                                                MIF.empresa = '".$_GET['em']."')";
-                     }
-
-$resultado_relatorios = $conn->query($query_relatorios);
-
 
 $_SESSION['query_relatorios'] = $query_relatorios;//enviando query para PDF ou EXCEL
 
@@ -101,6 +60,16 @@ select.form-control.form-control-sm {
     </div>
     <!-- /subnavbar-inner -->
 </div>
+<?php 
+switch ($_GET['msn']) {
+    case '1':
+        echo "<div class='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Você deve selecionar pelo menos um critério de pesquisa</div>";
+        break;
+    case '2':
+        echo "<div class='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> NF com esse nome já existe. Por favor renomeie com outro nome!</div>";
+        break;
+}
+?>
 <div class="widget ">
    <div class="widget-header">
         <h3>

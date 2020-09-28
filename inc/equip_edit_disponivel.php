@@ -562,7 +562,7 @@
                                                       <div class='modal-header'>
                                                          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                          <h3 id='myModalLabel'>
-                                                            <img src='img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
+                                                            <img src='../img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
                                                          </h3>
                                                       </div>
                                                       <div class='modal-body'>
@@ -630,7 +630,7 @@
                                                       <div class='modal-header'>
                                                          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                          <h3 id='myModalLabel'>
-                                                            <img src='img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
+                                                            <img src='../img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
                                                          </h3>
                                                       </div>
                                                       <div class='modal-body'>
@@ -695,7 +695,7 @@
                                                       <div class='modal-header'>
                                                          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                          <h3 id='myModalLabel'>
-                                                            <img src='img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
+                                                            <img src='../img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
                                                          </h3>
                                                       </div>
                                                       <div class='modal-body'>

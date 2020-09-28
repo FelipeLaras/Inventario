@@ -23,7 +23,7 @@ if($_GET['alter'] == 1){
 //2º condenando equipamento e alterando status para condenado = 11
 
 if($_GET['del'] == 1){
-    $usuario = "UPDATE manager_inventario_equipamento  SET status = 11 WHERE id_equipamento = ".$_GET['id_equip']."";
+    $usuario = "UPDATE manager_inventario_equipamento SET status = 11 WHERE id_equipamento = ".$_GET['id_equip']."";
     $remover = $conn->query($usuario) or die(mysqli_error($conn));
 
     //voltando para a tela informando que foi condenado com sucesso!
