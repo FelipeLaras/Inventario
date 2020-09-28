@@ -1,20 +1,18 @@
 <?php
 //aplicando para usar varialve em outro arquivo
 session_start();
-
-if ($_SESSION["perfil"] == NULL) {
-   header('location: ../front/index.html');
-} elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
-   header('location: ../front/error.php');
-}
-
+//chamando conexão com o banco
 require_once('../conexao/conexao.php');
-require_once('../query/query.php');
 require_once('../query/query_dropdowns.php');
-require_once('header.php')
+//Aplicando a regra de login
+if ($_SESSION["perfil"] == NULL) {
+   header('location: ../index.html');
+} elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
+   header('location: ../error.php');
+}
+require_once('header.php');
 
 ?>
-
 <style>
    #myInput2autocomplete-list {
       margin-left: -72%;
@@ -48,31 +46,111 @@ require_once('header.php')
    </div>
 </div>
 <div class="widget ">
-<?php
-   /*---------------------------  FUNCIONÁRIO ---------------------------*/
+   <?php
 
-   $query_Funcionario .= "MIF.id_funcionario = ".$_GET['id_fun']."";
-   $resultado_fun = $conn -> query($query_funcionario);
-   $funcionario = $resultado_fun -> fetch_assoc();
+   /*---------------------------  FUNCIONÁRIO ---------------------------*/
+   $query_funcionario = "SELECT 
+                              MIF.id_funcionario,
+                              MIF.nome,
+                              MIF.cpf,
+                              MIF.funcao AS id_funcao,
+                              MDF.nome AS funcao,
+                              MIF.empresa AS id_empresa,
+                              MDE.nome AS empresa,
+                              MIF.departamento AS id_departamento,
+                              MDD.nome AS departamento
+                           FROM 
+                              manager_inventario_funcionario MIF
+                           LEFT JOIN
+                              manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
+                           LEFT JOIN
+                              manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
+                           LEFT JOIN
+                              manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
+                           WHERE
+                              MIF.id_funcionario = " . $_GET['id_fun'] . "";
+
+   $resultado_fun = mysqli_query($conn, $query_funcionario);
+   $funcionario = mysqli_fetch_assoc($resultado_fun);
 
    /*---------------------------  EQUIPAMENTO  ---------------------------*/
 
-   $query_equipamento .= "MIE.id_equipamento = ".$_GET['id_equip']."";
-   $result_equip = $conn -> query($query_equipamento);
-   $equipamento = $result_equip -> fetch_assoc();
+   $query_equipamento = "SELECT 
+                           MIE.numero,
+                           MIE.tipo_equipamento,
+                           MIE.patrimonio,
+                           MIE.filial AS id_empresa,
+                           MDE.nome AS empresa,
+                           MIE.locacao AS id_locacao,
+                           MDL.nome AS locacao,
+                           MIE.departamento AS id_departamento,
+                           MDD.nome AS departamento,
+                           MIE.hostname,
+                           MIE.ip,
+                           MIE.modelo,
+                           MIE.processador,
+                           MIE.hd,
+                           MIE.memoria,
+                           MIE.situacao AS id_situacao,
+                           MDS.nome AS situacao,
+                           MIE.serialnumber
+                        FROM
+                           manager_inventario_equipamento MIE
+                        LEFT JOIN
+                           manager_dropempresa MDE ON MIE.filial = MDE.id_empresa
+                        LEFT JOIN
+                           manager_droplocacao MDL ON MIE.locacao = MDL.id_empresa
+                        LEFT JOIN
+                           manager_dropdepartamento MDD ON MIE.departamento = MDD.id_depart
+                        LEFT JOIN
+                           manager_dropsituacao MDS ON MIE.situacao = MDS.id_situacao
+                        WHERE
+                           MIE.id_equipamento =" . $_GET['id_equip'] . "";
+   $result_equip = mysqli_query($conn, $query_equipamento);
+   $equipamento = mysqli_fetch_assoc($result_equip);
 
    /*---------------------------  WINDOWS  ---------------------------*/
 
-   $query_windows .= "MSO.id_equipamento = ".$_GET['id_equip']."";
-   $result_windows = $conn -> query($query_windows);
-   $windows = $result_windows -> fetch_assoc();
+   $query_windows = "SELECT 
+                        MSO.id,
+                        MSO.versao AS id_versao,
+                        MDSO.nome AS versao,
+                        MSO.serial,
+                        MSO.fornecedor    
+                     FROM
+                        manager_sistema_operacional MSO
+                     LEFT JOIN
+                     manager_dropsistemaoperacional MDSO ON MSO.versao = MDSO.id
+                     WHERE
+                     MSO.id_equipamento = " . $_GET['id_equip'] . "";
+   $result_windows = mysqli_query($conn, $query_windows);
+   $windows = mysqli_fetch_assoc($result_windows);
 
    /*---------------------------  OFFICE  ---------------------------*/
 
-   $query_office .= "MOF.id_equipamento = ".$_GET['id_equip']."";
-   $result_office = $conn -> query($query_office);
-   $office = $result_office -> fetch_assoc();
-?>
+   $query_office = "SELECT 
+                     MOF.id,
+                     MOF.versao AS id_versao,
+                     MDOF.nome AS versao,
+                     MOF.serial,
+                     MOF.fornecedor,
+                     MOF.empresa AS id_empresa,
+                     MDE.nome AS empresa,
+                     MOF.locacao AS id_locacao,
+                     MDL.nome AS locacao    
+                  FROM
+                     manager_office MOF
+                  LEFT JOIN
+                     manager_dropoffice MDOF ON MOF.versao = MDOF.id
+                  LEFT JOIN
+                     manager_dropempresa MDE ON MOF.empresa = MDE.id_empresa
+                  LEFT JOIN
+                     manager_droplocacao MDL ON MOF.locacao = MDL.id_empresa
+                  WHERE
+                  MOF.id_equipamento = " . $_GET['id_equip'] . "";
+   $result_office = mysqli_query($conn, $query_office);
+   $office = mysqli_fetch_assoc($result_office);
+   ?>
    <div class="widget-header">
       <h3>
          <i class="icon-lithe icon-home"></i>&nbsp;
@@ -91,6 +169,14 @@ require_once('header.php')
          ?>
       </h3>
    </div>
+
+
+   <!--ALERTAS DE ERROS-->
+
+   <?= ($_GET['erro'] == 1) ? '<div class="alert alert-block"><button type="button" class="close" data-dismiss="alert"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">×</font></font></button><h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ATENÇÃO!!!!</font></font></h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dados do funcionarios estão incompletos</font></font></div>' : '' ?>
+
+   <!--FIM ALERTAS DE ERROS-->
+
    <!-- /widget-header -->
    <div class="widget-content">
       <div class="tabbable">
@@ -103,32 +189,18 @@ require_once('header.php')
             </li>
          </ul>
          <?php
-
-         //Alertas ERROS
-         switch ($_GET['erro']) {
-            case '1':
-               echo '<div class="alert alert-block"><button type="button" class="close" data-dismiss="alert"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">×</font></font></button><h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ATENÇÃO!!!!</font></font></h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dados do funcionarios estão incompletos</font></font></div>';
-               break;
-         }
-
-         //Alertas MSN
-
          switch ($_GET['msn']) {
             case '1':
                echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Dados da nota alterado com sucesso!.</div>";
                break;
-            
+
             case '2':
                echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Office cadastrado com sucesso!.</div>";
                break;
-         }
 
-         if ($_GET['msn'] == 3) {
-            echo "
-        <div class='alert alert-success'>
-           <button type='button' class='close' data-dismiss='alert'>×</button>
-           <strong>Atenção!</strong> Office transferido com sucesso!.
-        </div>";
+            case '3':
+               echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Office transferido com sucesso!.</div>";
+               break;
          }
          ?>
          <div class="tab-content">
@@ -164,7 +236,7 @@ require_once('header.php')
                            </option>
                            <option value=''>---</option>
                            <?php
-                           while ($row_funcao = $resultado_funcao -> fetch_assoc()) {
+                           while ($row_funcao = $resultado_funcao->fetch_assoc()) {
                               echo "<option value='" . $row_funcao['id_funcao'] . "'>" . $row_funcao['nome'] . "</option>";
                            }
                            ?>
@@ -180,9 +252,7 @@ require_once('header.php')
                            </option>
                            <option value=''>---</option>
                            <?php
-                           $query_empresa = "SELECT * from manager_dropempresa where deletar = 0 order by nome";
-                           $resultado_empresa = $conn -> query( $query_empresa);
-                           while ($row_empresa = mysqli_fetch_assoc($resultado_empresa)) {
+                           while ($row_empresa = $resultado_empresa->fetch_assoc()) {
                               echo "<option value='" . $row_empresa['id_empresa'] . "'>" . $row_empresa['nome'] . "</option>";
                            }
                            ?>
@@ -198,7 +268,7 @@ require_once('header.php')
                            </option>
                            <option value=''>---</option>
                            <?php
-                           while ($row_depart = $resultado_depart -> fetch_assoc()) {
+                           while ($row_depart = $resultado_depart->fetch_assoc()) {
                               echo "<option value='" . $row_depart['id_depart'] . "'>" . $row_depart['nome'] . "</option>";
                            } ?>
                         </select>
@@ -231,9 +301,12 @@ require_once('header.php')
                            <select id='t_cob' name='empresa_cpu' class='span2' style='width: 25%'>
                               <option value='" . $equipamento['id_empresa'] . "'>" . $equipamento['empresa'] . "</option>
                               <option>---</option>";
-                     while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
-                        echo "<option value='" . $row_empresa['id_empresa'] . "'>" . $row_empresa['nome'] . "</option>";
-                     }
+                                 //empresa
+                                 $query_empresa = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
+                                 $resultado_empresa = $conn -> query($query_empresa);
+                                 while ($row_empresaDesk = $resultado_empresa -> fetch_assoc()) {
+                                    echo "<option value='" . $row_empresaDesk['id_empresa'] . "'>" . $row_empresaDesk['nome'] . "</option>";
+                                 }
                      echo "
                            </select>
                         </div>
@@ -259,7 +332,11 @@ require_once('header.php')
                            <select id='t_cob' name='depart_cpu' class='span2' style='width: 23%'>
                               <option value='" . $equipamento['id_departamento'] . "'>" . $equipamento['departamento'] . "</option>
                               <option>---</option>";
-                     while ($row_departamento = $resultado_depart -> fetch_assoc()) {
+
+                              //departamento
+                              $query_depart = "SELECT * FROM manager_dropdepartamento WHERE deletar = 0 ORDER BY nome ASC";
+                              $resultado_depart = $conn -> query($query_depart);
+                        while ($row_departamento = $resultado_depart->fetch_assoc()) {
                         echo "<option value='" . $row_departamento['id_depart'] . "'>" . $row_departamento['nome'] . "</option>";
                      }
                      echo "</select>
@@ -307,7 +384,7 @@ require_once('header.php')
                            <select id='setor_1' name='situacao_cpu' class='span1' style='width: 10%'>
                               <option value='" . $equipamento['id_situacao'] . "'>" . $equipamento['situacao'] . "</option>
                               <option>---</option>";
-                     while ($row_situacao = $resultado_situacao -> fetch_assoc()) {
+                     while ($row_situacao = $resultado_situacao->fetch_assoc()) {
                         echo "<option value='" . $row_situacao['id_situacao'] . "'>" . $row_situacao['nome'] . "</option>";
                      }
                      echo "
@@ -354,7 +431,7 @@ require_once('header.php')
                                     <font style='vertical-align: inherit;'>Office:</font>
                                  </h3>
                            </div>
-                           <input value='" . $office['id'] . "' style='display:none' name='id' />
+                           <input value='" . $office['id'] . "' style='display:none' name='id_office' />
                            <div class='control-group'>
                               <label class='control-label'>Office:</label>
                               <div class='controls'>
@@ -375,9 +452,9 @@ require_once('header.php')
                               <select id='t_cob' name='locacao_office_cpu' class='span3'>
                                     <option value='" . $office['id_locacao'] . "'>" . $office['locacao'] . "</option>
                                     <option>---</option>";
-                           while ($office_locacao = $resultado_locacao -> fetch_assoc()) {
-                              echo "<option value='" . $office_locacao['id_empresa'] . "'>" . $office_locacao['nome'] . "</option>";
-                           }
+                        while ($office_locacao = $resultado_locacao->fetch_assoc()) {
+                           echo "<option value='" . $office_locacao['id_empresa'] . "'>" . $office_locacao['nome'] . "</option>";
+                        }
                         echo "
                                  </select>
                               </div>
@@ -388,9 +465,9 @@ require_once('header.php')
                               <select id='t_cob' name='empresa_office_cpu' class='span3'>
                                     <option value='" . $office['id_empresa'] . "'>" . $office['empresa'] . "</option>
                                     <option>---</option>";
-                           while ($row_cpu_officeE = $resultado_empresa -> fetch_assoc()) {
-                              echo "<option value='" . $row_cpu_officeE['id_empresa'] . "'>" . $row_cpu_officeE['nome'] . "</option>";
-                           }
+                        while ($row_cpu_officeE = mysqli_fetch_assoc($resultado_empresa)) {
+                           echo "<option value='" . $row_cpu_officeE['id_empresa'] . "'>" . $row_cpu_officeE['nome'] . "</option>";
+                        }
                         echo "
                                  </select>
                               </div>
@@ -429,7 +506,7 @@ require_once('header.php')
                        <select id='t_cob' name='empresa_notebook' class='span2' style='width: 25%'>
                           <option value='" . $equipamento['id_empresa'] . "'>" . $equipamento['empresa'] . "</option>
                           <option>---</option>";
-                     while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
+                     while ($row_empresa = $resultado_empresa->mysqli_fetch_assoc()) {
                         echo "<option value='" . $row_empresa['id_empresa'] . "'>" . $row_empresa['nome'] . "</option>";
                      }
                      echo "
@@ -444,7 +521,7 @@ require_once('header.php')
                        <select id='t_cob' name='locacao_notebook' class='span2' style='width: 25%'>
                           <option value='" . $equipamento['id_locacao'] . "'>" . $equipamento['locacao'] . "</option> 
                           <option>---</option>";
-                     while ($row_locacao = $resultado_locacao -> fetch_assoc()) {
+                     while ($row_locacao = $resultado_locacao->fetch_assoc()) {
                         echo "<option value='" . $row_locacao['id_empresa'] . "'>" . $row_locacao['nome'] . "</option>";
                      }
                      echo "
@@ -457,7 +534,7 @@ require_once('header.php')
                        <select id='t_cob' name='depart_notebook' class='span2' style='width: 23%'>
                           <option value='" . $equipamento['id_departamento'] . "'>" . $equipamento['departamento'] . "</option>
                           <option>---</option>";
-                     while ($row_departamento = $resultado_depart -> fetch_assoc()) {
+                     while ($row_departamento = $resultado_depart->fetch_assoc()){
                         echo "<option value='" . $row_departamento['id_depart'] . "'>" . $row_departamento['nome'] . "</option>";
                      }
                      echo "</select>
@@ -505,7 +582,7 @@ require_once('header.php')
                        <select id='setor_1' name='situacao_note' class='span1' style='width: 10%'>
                           <option value='" . $equipamento['id_situacao'] . "'>" . $equipamento['situacao'] . "</option>
                           <option>---</option>";
-                     while ($row_situacao = $resultado_situacao -> fetch_assoc()) {
+                     while ($row_situacao = $resultado_situacao->fetch_assoc()) {
                         echo "<option value='" . $row_situacao['id_situacao'] . "'>" . $row_situacao['nome'] . "</option>";
                      }
                      echo "
@@ -552,7 +629,7 @@ require_once('header.php')
                                 <font style='vertical-align: inherit;'>Office:</font>
                              </h3>
                        </div>
-                       <input value='" . $office['id'] . "' style='display:none' name='id' />
+                       <input value='" . $office['id'] . "' style='display:none' name='id_office' />
                        <div class='control-group'>
                           <label class='control-label'>Office:</label>
                           <div class='controls'>
@@ -573,7 +650,7 @@ require_once('header.php')
                           <select id='t_cob' name='local_note_office' class='span3'>
                                 <option value='" . $office['id_locacao'] . "'>" . $office['locacao'] . "</option>
                                 <option>---</option>";
-                        while ($row_cpu_officeL = $resultado_locacao -> fetch_assoc()) {
+                        while ($row_cpu_officeL = $resultado_locacao ->fetch_assoc()) {
                            echo "<option value='" . $row_cpu_officeL['id_empresa'] . "'>" . $row_cpu_officeL['nome'] . "</option>";
                         }
                         echo "
@@ -586,7 +663,7 @@ require_once('header.php')
                           <select id='t_cob' name='empresa_note_office' class='span3'>
                                 <option value='" . $office['id_empresa'] . "'>" . $office['empresa'] . "</option>
                                 <option>---</option>";
-                        while ($row_cpu_officeE = $resultado_empresa -> fetch_assoc()) {
+                        while ($row_cpu_officeE = $resultado_empresa->fetch_assoc()) {
                            echo "<option value='" . $row_cpu_officeE['id_empresa'] . "'>" . $row_cpu_officeE['nome'] . "</option>";
                         }
                         echo "
@@ -631,7 +708,7 @@ require_once('header.php')
                   <select id='t_cob' name='empresa_ramal' class='span3'>
                         <option value='" . $equipamento['id_empresa'] . "'>" . $equipamento['empresa'] . "</option>
                         <option>---</option>";
-                     while ($row_cpu_officeE = $resultado_empresa -> fetch_assoc()) {
+                     while ($row_cpu_officeE = $resultado_empresa->fetch_assoc()) {
                         echo "<option value='" . $row_cpu_officeE['id_empresa'] . "'>" . $row_cpu_officeE['nome'] . "</option>";
                      }
                      echo "
@@ -644,7 +721,7 @@ require_once('header.php')
                   <select id='t_cob' name='local_ramal' class='span3'>
                         <option value='" . $equipamento['id_locacao'] . "'>" . $equipamento['locacao'] . "</option>
                         <option>---</option>";
-                     while ($row_cpu_officeE = $resultado_locacao -> fetch_assoc()) {
+                     while ($row_cpu_officeE = $resultado_locacao->fetch_assoc()) {
                         echo "<option value='" . $row_cpu_officeE['id_empresa'] . "'>" . $row_cpu_officeE['nome'] . "</option>";
                      }
                      echo "
@@ -661,25 +738,25 @@ require_once('header.php')
 
                      if ($office['id'] == NULL) {
                         echo "<a href='#myModalOffice' class='btn btn-warning' data-toggle='modal' style='margin-left: -142px;'>
-                     Adicionar Office
-               </a>";
+                                    Adicionar Office
+                              </a>";
                      } else {
                         echo "<a href='#myModalOfficeDrop' class='btn btn-danger' data-toggle='modal' style='margin-left: -142px;'>
-                  Transferir Office
-               </a>";
+                                 Transferir Office
+                              </a>";
                      } //não tem office
 
                   } //end IF adicionar office
                   ?>
                   <a href="#modalSalvar" type="submit" class="btn btn-primary pull-right" data-toggle="modal" id="salve">SALVAR</a>
-                  <a href="pdf_termo_tecnicos.php?id_funcionario=<?=$_GET['id_fun']?>&tipo=<?= $equipamento['tipo_equipamento'] ?>&patrimonio=<?= $equipamento['patrimonio'] ?>" class="btn btn-success pull-right" style="margin-right: 10px;" target="_blanck">EMITIR TERMO</a>
+                  <a href="pdf_termo_tecnicos.php?id_funcionario=<?= $_GET['id_fun'] ?>&tipo=<?= $equipamento['tipo_equipamento'] ?>&patrimonio=<?= $equipamento['patrimonio'] ?>" class="btn btn-success pull-right" style="margin-right: 10px;" target="_blanck">EMITIR TERMO</a>
                   <!--Modal alerta salvar-->
                   <div id="modalSalvar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                      <div id="pai">
                         <div class="modal-body">
                            <h3 id="myModalLabel">
-                              <img src="img/alerta.png" style="width: 10%">
+                              <img src="../img/alerta.png" style="width: 10%">
                               Editando Equipamento!
                            </h3>
                            <div class="modal-body">
@@ -727,38 +804,52 @@ require_once('header.php')
                         <tbody>
                            <?php
                            /*--------------------WINDOWS-------------------------*/
-                           $query_windows .= "MSO.id_equipamento = " . $_GET['id_equip'] . " AND MSO.data_nota != '9999-12-30' AND MSO.deletar = 0";
+                           //pesquisando os arquivos criados.
+                           $query_doc_windows = "SELECT 
+                                    MSO.id AS id_windows,
+                                    MSO.file_nota AS caminho_so,
+                                    MSO.file_nota_nome AS nome_nota_so,
+                                    MDS.nome AS versao_so,
+                                    MSO.data_nota AS data_nota_so
+                                FROM
+                                    manager_sistema_operacional MSO
+                                        LEFT JOIN
+                                    manager_dropsistemaoperacional MDS ON MSO.versao = MDS.id
+                                WHERE
+                                    MSO.id_equipamento = " . $_GET['id_equip'] . "
+                                        AND MSO.data_nota != '9999-12-30'
+                                        AND MSO.deletar = 0";
 
-                           $result_cod_windows = $conn -> query($query_windows);
+                           $result_cod_windows = mysqli_query($conn, $query_doc_windows);
 
-                           while ($row_windows = $result_cod_windows -> fetch_assoc()) {
+                           while ($row_windows = mysqli_fetch_assoc($result_cod_windows)) {
                               echo "<tr>
                                                    <td>
                                                       <a href='" . $row_windows['caminho_so'] . "' target='_blank'>" . $row_windows['nome_nota_so'] . "</a>
                                                    </td>
                                                    <td>
-                                                      " . $row_windows['versao'] . "
+                                                      " . $row_windows['versao_so'] . "
                                                    </td>
                                                    <td>
                                                       " . $row_windows['data_nota_so'] . "
                                                    </td>
                                                    <td style='padding-top: 13px;'>
                                                       <!--Editar-->
-                                                      <a href='#myModalEditar" . $row_windows['id'] . "' role='button' data-toggle='modal' title='Editar'>
+                                                      <a href='#myModalEditar" . $row_windows['id_windows'] . "' role='button' data-toggle='modal' title='Editar'>
                                                          <i class='btn-icon-only icon-pencil'></i>
                                                       </a>
                                                       <!--Excluir-->
-                                                      <a href='#myModalExcluir" . $row_windows['id'] . "' role='button' data-toggle='modal' title='Excluir'>
+                                                      <a href='#myModalExcluir" . $row_windows['id_windows'] . "' role='button' data-toggle='modal' title='Excluir'>
                                                          <i class='btn-icon-only icon-trash lixeira' ></i>
                                                       </a>
                                                    </td>
                                                 </tr>                                                
                                                 <!--MODAL EDIÇÃO-->
-                                                <div id='myModalEditar" . $row_windows['id'] . "' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                                                <div id='myModalEditar" . $row_windows['id_windows'] . "' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                                    <div class='modal-header'>
                                                       <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                       <h3 id='myModalLabel'>
-                                                         <img src='../img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
+                                                         <img src='img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
                                                       </h3>
                                                    </div>
                                                    <div class='modal-body'>
@@ -768,7 +859,7 @@ require_once('header.php')
                                                          method='post'>
                                                             <input type='text' name='id_equip' style='display:none ;' value='" . $_GET['id_equip'] . "'>
                                                             <input type='text' name='id_fun' style='display:none ;' value='" . $_GET['id_fun'] . "'>
-                                                            <input type='text' name='id_win' style='display:none ;' value='" . $row_windows['id'] . "'>
+                                                            <input type='text' name='id_win' style='display:none ;' value='" . $row_windows['id_windows'] . "'>
                                                             <input type='text' name='programa' style='display:none ;' value='1'>
                                                             <input type='text' name='tipo' style='display:none ;' value='" . $_GET['tipo'] . "'>
                                                             <div class='control-group'>
@@ -803,11 +894,11 @@ require_once('header.php')
                                                 </div>
                                                 <!--FIM EDIÇÃO--> 
                                                 <!--MODAL EXCLUIR-->
-                                          <div id='myModalExcluir" . $row_windows['id'] . "' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                                          <div id='myModalExcluir" . $row_windows['id_windows'] . "' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                              <div class='modal-header'>
                                                 <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                 <h3 id='myModalLabel'>
-                                                   <img src='../img/atencao.png' style='width: 10%'>Excluindo Nota Windows
+                                                   <img src='img/atencao.png' style='width: 10%'>Excluindo Nota Windows
                                                 </h3>
                                              </div>
                                              <div class='modal-body'>
@@ -817,7 +908,7 @@ require_once('header.php')
                                                    method='post'>
                                                       <input type='text' name='id_equip' style='display:none ;' value='" . $_GET['id_equip'] . "'>
                                                       <input type='text' name='id_fun' style='display:none ;' value='" . $_GET['id_fun'] . "'>
-                                                      <input type='text' name='id_win' style='display:none ;' value='" . $row_windows['id'] . "'>
+                                                      <input type='text' name='id_win' style='display:none ;' value='" . $row_windows['id_windows'] . "'>
                                                       <input type='text' name='programa' style='display:none ;' value='1'>   
                                                       <input type='text' name='tipo' style='display:none ;' value='" . $_GET['tipo'] . "'>                                                 
                                                       <h6>
@@ -842,39 +933,51 @@ require_once('header.php')
                            } //end WHILE windows
                            /*--------------------OFFICE-------------------------*/
                            //pesquisando os arquivos criados.
-                           
-                           $query_office .= "MO.id_equipamento = " . $_GET['id_equip'] . " AND MO.data_nota != '9999-12-30' AND MO.deletar = 0";
+                           $query_doc_office = "SELECT 
+                                    MO.id AS id_office,
+                                    MO.file_nota AS caminho_of,
+                                    MO.file_nota_nome AS nome_nota_of,
+                                    MDO.nome AS versao_of,
+                                    MO.data_nota AS data_nota_of
+                                FROM
+                                    manager_office MO
+                                        LEFT JOIN
+                                    manager_dropoffice MDO ON MO.versao = MDO.id
+                                WHERE
+                                    MO.id_equipamento = " . $_GET['id_equip'] . "
+                                        AND MO.data_nota != '9999-12-30'
+                                        AND MO.deletar = 0";
 
-                           $result_cod_office = $conn -> query($query_doc_office);
+                           $result_cod_office = mysqli_query($conn, $query_doc_office);
 
-                           while ($row_office = $result_cod_office -> fetch_assoc()) {
+                           while ($row_office = mysqli_fetch_assoc($result_cod_office)) {
                               echo "<tr>
                                              <td>
                                                 <a href='" . $row_office['caminho_of'] . "' target='_blank'>" . $row_office['nome_nota_of'] . "</a>
                                              </td>
                                              <td>
-                                                " . $row_office['versao'] . "
+                                                " . $row_office['versao_of'] . "
                                              </td>
                                              <td>
                                                 " . $row_office['data_nota_of'] . "
                                              </td>
                                              <td style='padding-top: 13px;'>
                                                       <!--Editar-->
-                                                      <a href='#myModalEditar" . $row_office['id'] . "' role='button' data-toggle='modal' title='Editar'>
+                                                      <a href='#myModalEditar" . $row_office['id_office'] . "' role='button' data-toggle='modal' title='Editar'>
                                                          <i class='btn-icon-only icon-pencil'></i>
                                                       </a>
                                                       <!--Excluir-->
-                                                      <a href='#myModalExcluir" . $row_office['id'] . "' role='button' data-toggle='modal' title='Excluir'>
+                                                      <a href='#myModalExcluir" . $row_office['id_office'] . "' role='button' data-toggle='modal' title='Excluir'>
                                                          <i class='btn-icon-only icon-trash lixeira' ></i>
                                                       </a>
                                                    </td>
                                           </tr>                                                
                                                 <!--MODAL EDIÇÃO-->
-                                                <div id='myModalEditar" . $row_office['id'] . "' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                                                <div id='myModalEditar" . $row_office['id_office'] . "' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                                    <div class='modal-header'>
                                                       <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                       <h3 id='myModalLabel'>
-                                                         <img src='../img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
+                                                         <img src='img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
                                                       </h3>
                                                    </div>
                                                    <div class='modal-body'>
@@ -884,7 +987,7 @@ require_once('header.php')
                                                          method='post'>
                                                             <input type='text' name='id_equip' style='display:none ;' value='" . $_GET['id_equip'] . "'>
                                                             <input type='text' name='id_fun' style='display:none ;' value='" . $_GET['id_fun'] . "'>
-                                                            <input type='text' name='id_win' style='display:none ;' value='" . $row_office['id'] . "'>
+                                                            <input type='text' name='id_win' style='display:none ;' value='" . $row_office['id_office'] . "'>
                                                             <input type='text' name='programa' style='display:none ;' value='2'>
                                                             <input type='text' name='tipo' style='display:none ;' value='" . $_GET['tipo'] . "'>
                                                             <div class='control-group'>
@@ -919,11 +1022,11 @@ require_once('header.php')
                                                 <!--FIM EDIÇÃO-->  
                                              </div>
                                              <!--MODAL EXCLUIR-->
-                                          <div id='myModalExcluir" . $row_office['id'] . "' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                                          <div id='myModalExcluir" . $row_office['id_office'] . "' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                              <div class='modal-header'>
                                                 <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                 <h3 id='myModalLabel'>
-                                                   <img src='../img/atencao.png' style='width: 10%'>Excluindo Nota Office
+                                                   <img src='img/atencao.png' style='width: 10%'>Excluindo Nota Office
                                                 </h3>
                                              </div>
                                              <div class='modal-body'>
@@ -933,7 +1036,7 @@ require_once('header.php')
                                                    method='post'>
                                                       <input type='text' name='id_equip' style='display:none ;' value='" . $_GET['id_equip'] . "'>
                                                       <input type='text' name='id_fun' style='display:none ;' value='" . $_GET['id_fun'] . "'>
-                                                      <input type='text' name='id_win' style='display:none ;' value='" . $row_office['id'] . "'>
+                                                      <input type='text' name='id_win' style='display:none ;' value='" . $row_office['id_office'] . "'>
                                                       <input type='text' name='programa' style='display:none ;' value='2'>                                                   
                                                       <h6>
                                                          Deseja excluir a nota do office citada abaixo ?
@@ -955,12 +1058,22 @@ require_once('header.php')
                                           <!--FIM EXCLUIR-->";
                            } //end WHILE OFFICE
                            /*--------------------TERMO-------------------------*/
-                           
-                           $query_doc_termo .= "MIA.id_equipamento = ".$_GET['id_equip']." AND MIA.deletar = 0";
+                           //pesquisando os arquivos criados.
+                           $query_doc_termo = "SELECT 
+                                    MIA.id_anexo,
+                                    MIA.caminho,
+                                    MIA.nome,
+                                    MIA.data_criacao,
+                                    MIA.tipo
+                                FROM
+                                    manager_inventario_anexo MIA
+                                    WHERE
+                                    MIA.id_equipamento = " . $_GET['id_equip'] . "
+                                        AND MIA.deletar = 0";
 
-                           $result_cod_termo = $conn -> query($query_doc_termo);
+                           $result_cod_termo = mysqli_query($conn, $query_doc_termo);
 
-                           while ($row_termo = $result_cod_termo -> fetch_assoc()) {
+                           while ($row_termo = mysqli_fetch_assoc($result_cod_termo)) {
 
                               if ($row_termo['tipo'] == 3) {
                                  $tipo = "TERMO DE RESPONSABILIDADE";
@@ -994,7 +1107,7 @@ require_once('header.php')
                                              <div class='modal-header'>
                                                 <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                 <h3 id='myModalLabel'>
-                                                   <img src='../img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
+                                                   <img src='img/alerta.png' style='width: 10%'>Alterando dados da Nota Fiscal
                                                 </h3>
                                              </div>
                                              <div class='modal-body'>
@@ -1042,7 +1155,7 @@ require_once('header.php')
                                              <div class='modal-header'>
                                                 <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>                                                      
                                                 <h3 id='myModalLabel'>
-                                                   <img src='../img/atencao.png' style='width: 10%'>Excluindo Termo
+                                                   <img src='img/atencao.png' style='width: 10%'>Excluindo Termo
                                                 </h3>
                                              </div>
                                              <div class='modal-body'>
@@ -1090,8 +1203,8 @@ require_once('header.php')
 <!--JAVASCRITPS TABELAS-->
 <script src="../js/tabela.js"></script>
 <script src="../js/tabela2.js"></script>
-<script src="../java.js"></script>
-<script src="../jquery.dataTables.min.js"></script>
+<script src="java.js"></script>
+<script src="jquery.dataTables.min.js"></script>
 <script src="../js/dataTables.bootstrap4.min.js"></script>
 <!--Paginação entre filho arquivo e pai-->
 <script src="../js/jquery-1.7.2.min.js"></script>
@@ -1108,8 +1221,8 @@ require_once('header.php')
    <div class="modal-body">
       <!--Colocar a tabela Aqui!-->
       <form id="edit-profile" class="form-horizontal" enctype="multipart/form-data" action="equip_add_doc.php" method="post">
-         <input type="text" name="id_fun" style="display:none" value="<?= $_GET['id_fun']; ?>">
-         <input type="text" name="id_equip" style="display:none" value="<?= $_GET['id_equip']; ?>">
+         <input type="text" name="id_fun" style="display:none ;" value="<?= $_GET['id_fun']; ?>">
+         <input type="text" name="id_equip" style="display:none ;" value="<?= $_GET['id_equip']; ?>">
          <div class="control-group">
          </div>
 
@@ -1117,15 +1230,14 @@ require_once('header.php')
             <label class="control-label required">Tipo:</label>
             <div class="controls">
                <select id="nota" name="tipo" class="span2" required="">
-                  <option value=''>---</option>
                   <?php
                   if ($office['id'] != NULL) {
-                     echo "
+                     echo "<option value=''>---</option>
                                     <option value='1'>Nota Windows</option>
                                     <option value='2'>Nota Office</option>
                                     <option value='3'>Termo</option>";
                   } else {
-                     echo "
+                     echo "<option value=''>---</option>
                                     <option value='1'>Nota Windows</option>
                                     <option value='3'>Termo de Responsabilidade</option>";
                   }
@@ -1178,10 +1290,12 @@ require_once('header.php')
                <div class='controls'>
                   <select id='t_cob' name='tipo_office' class='span3'>
                      <option>---</option>";
-                     while ($row = $resultado_office -> fetch_assoc()) {
-                        echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
-                     }
-                     echo "   
+      $office_cpu = "SELECT * from manager_dropoffice where deletar = 0 order by nome";
+      $resultado = mysqli_query($conn, $office_cpu);
+      while ($row = mysqli_fetch_assoc($resultado)) {
+         echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
+      } //end WHILE office
+      echo "   
                   </select>
                </div>
             </div>
@@ -1196,10 +1310,12 @@ require_once('header.php')
                <div class='controls'>
                   <select id='t_cob' name='local_office' class='span3'>
                      <option>---</option>";
-                     while ($row_officeNEW = $resultado_locacao -> fetch_assoc()) {
-                        echo "<option value='" . $row_officeNEW['id_empresa'] . "'>" . $row_officeNEW['nome'] . "</option>";
-                     }
-                     echo "   
+      $officeNEW = "SELECT * from manager_droplocacao  where deletar = 0 ORDER BY nome";
+      $resultado_officeNEW = mysqli_query($conn, $officeNEW);
+      while ($row_officeNEW = mysqli_fetch_assoc($resultado_officeNEW)) {
+         echo "<option value='" . $row_officeNEW['id_empresa'] . "'>" . $row_officeNEW['nome'] . "</option>";
+      }
+      echo "   
                   </select>   
                </div>
             </div>
@@ -1208,10 +1324,12 @@ require_once('header.php')
                <div class='controls'>
                   <select id='t_cob' name='empresa_office' class='span3'>
                      <option>---</option>";
-                     while ($row_office = $resultado_empresa -> fetch_assoc()) {
-                        echo "<option value='" . $row_office['id_empresa'] . "'>" . $row_office['nome'] . "</option>";
-                     }
-                     echo "   
+      $officeEmpresa = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
+      $resultado_office = mysqli_query($conn, $officeEmpresa);
+      while ($row_office = mysqli_fetch_assoc($resultado_office)) {
+         echo "<option value='" . $row_office['id_empresa'] . "'>" . $row_office['nome'] . "</option>";
+      }
+      echo "   
                   </select>   
                </div>
             </div>
@@ -1254,7 +1372,7 @@ require_once('header.php')
    <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h3 id="myModalLabel">
-         <img src="img/alerta.png" style="width: 10%">
+         <img src="../img/alerta.png" style="width: 10%">
          Transferir Office para outro usuário
       </h3>
    </div>
@@ -1284,10 +1402,12 @@ require_once('header.php')
                   <select id='t_cob' name='local_office' class='span3'>
                      <option value='" . $office['id_locacao'] . "'>" . $office['locacao'] . "</option>
                      <option>---</option>";
-                     while ($row_officeE = $resultado_locacao->fetch_assoc()) {
-                        echo "<option value='" . $row_officeE['id_empresa'] . "'>" . $row_officeE['nome'] . "</option>";
-                     }
-                     echo "   
+      $officeE = "SELECT * from manager_droplocacao  where deletar = 0 ORDER BY nome";
+      $resultado_officeE = mysqli_query($conn, $officeE);
+      while ($row_officeE = mysqli_fetch_assoc($resultado_officeE)) {
+         echo "<option value='" . $row_officeE['id_empresa'] . "'>" . $row_officeE['nome'] . "</option>";
+      }
+      echo "   
                   </select>   
                </div>
             </div>
@@ -1297,10 +1417,12 @@ require_once('header.php')
                   <select id='t_cob' name='empresa_office' class='span3'>
                      <option value='" . $office['id_empresa'] . "'>" . $office['empresa'] . "</option>
                      <option>---</option>";
-                     while ($row_officeEM = $resultado_empresa->fetch_assoc()) {
-                        echo "<option value='" . $row_officeEM['id_empresa'] . "'>" . $row_officeEM['nome'] . "</option>";
-                     }
-                     echo "   
+      $officeEM = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
+      $resultado_officeEM = mysqli_query($conn, $officeEM);
+      while ($row_officeEM = mysqli_fetch_assoc($resultado_officeEM)) {
+         echo "<option value='" . $row_officeEM['id_empresa'] . "'>" . $row_officeEM['nome'] . "</option>";
+      }
+      echo "   
                   </select>   
                </div>
             </div>
@@ -1316,17 +1438,25 @@ require_once('header.php')
             <div class='controls'>
                <select id='t_cob' name='new_office' class='span2'>
                   <option value=''>---</option>";
-                  
-                  $query_office .= "MIE.tipo_equipamento IN (8,9)";
+      $buscando_usuario = "SELECT 
+            MO.id AS id_office,
+            MIE.id_equipamento,
+            MIE.patrimonio
+            FROM
+            manager_inventario_equipamento MIE
+               LEFT JOIN
+            manager_office MO ON MIE.id_equipamento = MO.id_equipamento
+            WHERE
+            MIE.tipo_equipamento IN (8,9)";
 
-                  $result_search_user = $conn -> query($query_office);
+      $result_search_user = mysqli_query($conn, $buscando_usuario);
 
-                  while ($row_search = $result_search_user->fetch_assoc()) {
+      while ($row_search = mysqli_fetch_assoc($result_search_user)) {
 
-                     if ($row_search['id'] == NULL) {
-                        echo "<option value='" . $row_search['id_equipamento'] . "'>" . $row_search['patrimonio'] . "</option>";
-                     } //end IF equipamento sem office
-                  } //end While equipamento que recebera o OFFICE   
+         if ($row_search['id_office'] == NULL) {
+            echo "<option value='" . $row_search['id_equipamento'] . "'>" . $row_search['patrimonio'] . "</option>";
+         } //end IF equipamento sem office
+      } //end While equipamento que recebera o OFFICE   
 
       echo "</select>                     
                <i class='icon-lithe icon-question-sign' title='Equipamento que irá receber o Office!'></i>
@@ -1411,4 +1541,4 @@ require_once('header.php')
 </script>
 
 <!-------------- FIM JAVA SCRIPTS------------>
-<?php $conn -> close(); ?>
+<?php mysqli_close($conn); ?>

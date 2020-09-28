@@ -178,7 +178,7 @@ $status = "SELECT
 $result_status = $conn->query($status);
 
 //recebendo a informação e distribuindo nos campos do formulario
-$query_Funcionario = "SELECT 
+$query_funcionario = "SELECT 
                         F.id_funcionario,
                         F.nome,
                         F.cpf,

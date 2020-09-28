@@ -13,7 +13,7 @@ $resultado_funcao = $conn -> query($query_funcao);
 $query_depart = "SELECT * FROM manager_dropdepartamento WHERE deletar = 0 ORDER BY nome ASC";
 $resultado_depart = $conn -> query($query_depart);
 
-//empresa ou locacao
+//empresa
 $query_empresa = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
 $resultado_empresa = $conn -> query($query_empresa);
 
