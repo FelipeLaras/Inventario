@@ -21,6 +21,9 @@
   <link href="../css/style.css" rel="stylesheet" type="text/css">
   <link href="../css/pages/signin.css" rel="stylesheet" type="text/css">
 
+  <script src="https://cdn.tiny.cloud/1/dqzhgrnm6i4pdh6dtzylwat5bntthf86t9852obx0fvy58ei/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+                           
+
   <link rel="stylesheet" href="../css/style_tabela.css">
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->

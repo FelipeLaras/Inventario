@@ -17,30 +17,35 @@
 
   
 ?>
-<script src="ckeditor/ckeditor.js"></script>
-<body>
+<!--Chamando a Header-->
 <div class="subnavbar">
-   <div class="subnavbar-inner">
-      <div class="container">
-         <ul class="mainnav">
-            <li class="active"><a href="google.php"><i class="icon-google-plus"></i><span>Google</span> </a></li>
-         </ul>
-      </div>
-      <!-- /container --> 
-   </div>
-   <!-- /subnavbar-inner --> 
+    <div class="subnavbar-inner">
+        <div class="container">
+            <ul class="mainnav">
+                <li><a href="tecnicos_ti.php"><i class="icon-home"></i><span>Home</span> </a> </li>
+                <li><a href="equip.php"><i class="icon-table"></i><span>Inventário</span> </a> </li>
+                <li class="active"><a href="google.php"><i class="icon-search"></i><span>Google T.I</span> </a></li>
+            </ul>
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /subnavbar-inner -->
 </div>
 
 <div class="widget ">
-   <div class="widget-header">
-      <h3>
-         <i class="icon-lithe icon-home"></i> <a href="tecnicos_ti.php">Home</a> 
-         / 
-         <a href="google.php">Google</a>
-         / 
-         Editar Informação
-      </h3>
-   </div>
+    <div class="widget-header">
+        <h3>
+            <i class="icon-lithe icon-home"></i>&nbsp;
+            <a href="tecnicos_ti.php">Home</a>
+            /
+            <i class="fab fa-google"></i>&nbsp;
+            <a href="google.php">Google T.I</a>
+            /
+            <i class="fas fa-pen"></i>&nbsp;
+            Editando
+        </h3>
+    </div>
+</div>
    <!-- /widget-header -->
    <div class="widget-content">
       <div class="tabbable">
@@ -125,7 +130,14 @@
    </div>
    <!-- /widget-content -->
 </div>
-
+<script>
+tinymce.init({
+selector: 'textarea',
+plugins: '',
+toolbar: '',
+toolbar_mode: 'floating',
+});
+</script>
 <!-- Placed at the end of the document so the pages load faster --> 
 <script src="../js/jquery-1.7.2.min.js"></script> 
 <script src="../js/excanvas.min.js"></script> 

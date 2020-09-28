@@ -14,9 +14,10 @@
    
        header('location: ../front/error.php');
    }   
-?>
 
-<?php  require 'header.php'?>
+ require_once('header.php');
+ 
+ ?>
 <!--Chamando a Header-->
 <div class="subnavbar">
     <div class="subnavbar-inner">
@@ -97,9 +98,9 @@
                            $query_body = "SELECT body from google WHERE cod_tabela = ".$_GET['id_pesquisa']."";
                            $result_body = $conn_db->query($query_body);
                            $row_body = $result_body->fetch_assoc();
-                           echo "<textarea id='txtArtigo' name='txtArtigo'>".$row_body['body']."</textarea>";
+                           echo "<textarea>".$row_body['body']."</textarea>";
                         }else{
-                           echo "<textarea id='txtArtigo' name='txtArtigo'></textarea>";
+                           echo "<textarea> Insira o seu Conteudo aqui! </textarea>";
                         }
                       ?>
 
@@ -133,6 +134,14 @@
 </div>
 
 <!-- Placed at the end of the document so the pages load faster -->
+<script>
+tinymce.init({
+selector: 'textarea',
+plugins: '',
+toolbar: '',
+toolbar_mode: 'floating',
+});
+</script>
 <script src="../js/jquery-1.7.2.min.js"></script>
 <script src="../js/excanvas.min.js"></script>
 <script src="../js/chart.min.js" type="text/javascript"></script>

@@ -2403,10 +2403,6 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 .tabbable:after {
 	clear: both;
 }
-.tab-content {
-	display: table;
-	width: 100%;
-}
 .tabs-below .nav-tabs, .tabs-right .nav-tabs, .tabs-left .nav-tabs {
 	border-bottom: 0;
 }
