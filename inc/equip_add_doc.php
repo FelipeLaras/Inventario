@@ -44,11 +44,13 @@ if($_POST['tipo'] == 1){
        numero_nota = '".$_POST['numero_nota']."', 
        file_nota = '".$caminho_db."',
        file_nota_nome = '".$nome_db."',
-       data_nota = '".$data."',
+       data_nota = '".$_POST['data']."',
        deletar = 0
    WHERE
        id_equipamento = '".$_POST['id_equip']."'";
+
    $result_update_windows = $conn -> query($update_windows);
+
 }//end teminando de salvar o WINDOWS
 
 
@@ -216,7 +218,7 @@ if($_POST['tipo'] == 3){
 
  /*---------------------------------------------------------------------------------*/
 
-/*  switch ($_POST['tipo']) {
+switch ($_POST['tipo']) {
      case '10':
          header('location: scan_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
          break;
@@ -224,7 +226,7 @@ if($_POST['tipo'] == 3){
      default:
         header('location: equip_edit.php?id_equip='.$_POST['id_equip'].'&id_fun='.$_POST['id_fun'].'&msn=1');
          break;
- } */
+ }
 
  //fechando conexão com o banco de dados
  $conn -> close($conn);
