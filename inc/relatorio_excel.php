@@ -24,104 +24,77 @@ $html = "
 		<table class='table table-sm' style='font-size:12px;'>
 		  <thead>
 		    <tr>
-				<th scope='col'>NOME</th>
-				<th scope='col'>CPF</th>
-				<th scope='col'>FUNCAO</th>
-				<th scope='col'>DEPART.</th>
-				<th scope='col'>EMPRESA/FILIAL</th>
-				<th scope='col'>EQUIP.</th>
-				<th scope='col'>PATRI.</th>
+				<th scope='col'>ID</th>
 				<th scope='col'>MODELO</th>
-				<th scope='col'>IMEI</th>
+				<th scope='col'>EQUIPAMENTO</th>
+				<th scope='col'>PATRIMONIO</th>
 				<th scope='col'>NUMERO</th>
-				<th scope='col'>VALOR</th>
+				<th scope='col'>IMEI-CHIP</th>
 				<th scope='col'>STATUS</th>
-				<th scope='col'>DOMINIO</th>
+				<th scope='col'>DEPARTAMENTO</th>
+				<th scope='col'>EMPRESA</th>
+				<th scope='col'>FUNCIONARIO</th>
 		    </tr>
 		  </thead>
 		  <tbody>";
 
 		  while ($row_relatorio = mysqli_fetch_assoc($resultado_relatorios)) {
 $html .="
-			<tr>";
-				//nome
-				if($row_relatorio['nome'] != NULL){
-	$html .= "<td>".$row_relatorio['nome']."</td>";         
+			<tr><td>".$row_relatorio['id_equipamento']."</td>";
+				//modelo
+				if($row_relatorio['modelo'] != NULL){
+	$html .= "<td>".$row_relatorio['modelo']."</td>";         
 			}else{
 	$html .=  "<td>---</td>";         
 			}
 			//cpf
-			if($row_relatorio['cpf'] != NULL){
-	$html .= "<td>".$row_relatorio['cpf']."</td>";         
+			if($row_relatorio['equipamento'] != NULL){
+	$html .= "<td>".$row_relatorio['equipamento']."</td>";         
 			}else{
 	$html .=  "<td>---</td>";         
 			}
 			//funcao
-			if($row_relatorio['funcao'] != NULL){
-	$html .= "<td>".$row_relatorio['funcao']."</td>";         
+			if($row_relatorio['patrimonio'] != NULL){
+	$html .= "<td>".$row_relatorio['patrimonio']."</td>";         
 			}else{
 	$html .=  "<td>---</td>";         
 			}
 			//departamento
-			if($row_relatorio['departamento'] != NULL){
-	$html .= "<td>".$row_relatorio['departamento']."</td>";         
+			if($row_relatorio['numero'] != NULL){
+	$html .= "<td>".$row_relatorio['numero']."</td>";         
 			}else{
 	$html .=  "<td>---</td>";         
 			}
 			//filial
-			if($row_relatorio['filial'] != NULL){
-	$html .= "<td>".$row_relatorio['filial']."</td>";         
+			if($row_relatorio['imei_chip'] != NULL){
+	$html .= "<td>".$row_relatorio['imei_chip']."</td>";         
 			}else{
 	$html .=  "<td>---</td>";         
 			}
 			//tipo_equipamento
-			if($row_relatorio['tipo_equipamento'] != NULL){
-	$html .= "<td>".$row_relatorio['tipo_equipamento']."</td>";         
+			if($row_relatorio['status'] != NULL){
+	$html .= "<td>".$row_relatorio['status']."</td>";         
 			}else{
 	$html .=  "<td>---</td>";         
 			}
                //patrimonio
-               if($row_relatorio['patrimonio'] != NULL){
-	$html .= "<td>".$row_relatorio['patrimonio']."</td>";         
+               if($row_relatorio['departamento'] != NULL){
+	$html .= "<td>".$row_relatorio['departamento']."</td>";         
                }else{
 	$html .=  "<td>---</td>";         
                }
                //modelo
-               if($row_relatorio['modelo'] != NULL){
-	$html .=  "<td>".$row_relatorio['modelo']."</td>";         
+               if($row_relatorio['empresa'] != NULL){
+	$html .=  "<td>".$row_relatorio['empresa']."</td>";         
                }else{
 	$html .= "<td>---</td>";         
                }
                //imei
-               if($row_relatorio['imei_chip'] != NULL){
-	$html .= "<td>".$row_relatorio['imei_chip']."</td>";         
+               if($row_relatorio['funcionario'] != NULL){
+	$html .= "<td>".$row_relatorio['funcionario']."</td>";         
                }else{
 	$html .= "<td>---</td>";         
                }
-               //numero
-               if($row_relatorio['numero'] != NULL){
-	$html .= "<td>".$row_relatorio['numero']."</td>";         
-               }else{
-	$html .="<td>---</td>";         
-               }
-               //valor
-               if($row_relatorio['valor'] != NULL){
-	$html .= "<td>".$row_relatorio['valor']."</td>";         
-                  }else{
-	$html .= "<td>---</td>";         
-                  }
-               //status
-               if($row_relatorio['status'] != NULL){
-	$html .= "<td>".$row_relatorio['status']."</td>";         
-                  }else{
-	$html .= "<td>---</td>";         
-				  }
-				//Dominio
-				if($row_relatorio['dominio'] == 1){
-	$html .= "<td>OFF</td>";         
-					}else{
-	$html .= "<td>ON</td>";         
-				}
 	$html .= "
 		    </tr>";
 		    }

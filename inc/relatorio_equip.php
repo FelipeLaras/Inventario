@@ -26,33 +26,29 @@ if ($_GET['nome_funcionario'] != NULL) {
 
 //montando a pesquisa para o relatório
 $query_relatorios = "SELECT 
-                        MIF.nome,
-                        MIF.cpf,
-                        MDF.nome AS funcao,
-                        MDD.nome AS departamento,
-                        MDE.nome AS filial,
+                        MIE.id_equipamento,
+                        MIE.modelo,
                         MDEQ.nome AS tipo_equipamento,
                         MIE.patrimonio,
-                        MIE.modelo,
-                        MIE.imei_chip,
                         MIE.numero,
-                        MIE.valor,
-                        MDSE.nome AS status
-                     FROM
+                        MDSE.nome AS status,
+                        MDD.nome AS departamento,
+                        MDE.nome AS filial,
+                        MIE.imei_chip,
+                        MIF.nome
+                    FROM
                         manager_inventario_equipamento MIE
-                           LEFT JOIN
-                          manager_inventario_funcionario MIF ON MIF.id_funcionario = MIE.id_funcionario
-                           LEFT JOIN
-                        manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-                           LEFT JOIN
-                        manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-                           LEFT JOIN
-                        manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
-                           LEFT JOIN
+                    LEFT JOIN
+                        manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
+                    LEFT JOIN
+                        manager_dropdepartamento MDD ON MIE.departamento = MDD.id_depart
+                    LEFT JOIN
+                        manager_dropempresa MDE ON MIE.filial = MDE.id_empresa
+                    LEFT JOIN
                         manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
-                           LEFT JOIN
-                        manager_dropstatusequipamento MDSE ON MIE.status = MDSE.id_status
-                     WHERE ";
+                    LEFT JOIN
+                        manager_dropstatusequipamento MDSE ON MIE.status = MDSE.id_status 
+                    WHERE ";
 
                      if(($_GET['equipamento'] != NULL) && ($_GET['status_equipamento'] != NULL)){
 
@@ -143,40 +139,51 @@ require_once('header.php')
             style="width:100%; font-size: 10px; font-weight: bold;">
             <thead>
                 <tr>
-                    <th class="titulo">Nome</th>
-                    <th class="titulo" style="width: 75px;">CPF</th>
-                    <th class="titulo">FUNÇÃO</th>
-                    <th class="titulo">DEPARTAMENTO</th>
-                    <th class="titulo">EMPRESA/FILIAL</th>
-                    <th class="titulo">EQUIPAMENTOS</th>
-                    <th class="titulo">PATRIMÔNIO</th>
+                    <th class="titulo">ID</th>
                     <th class="titulo">MODELO</th>
+                    <th class="titulo">EQUIPAMENTO</th>
+                    <th class="titulo">PATRIMÔNIO</th>
+                    <th class="titulo">NÚMERO</th>
                     <th class="titulo">IMEI</th>
-                    <th class="titulo" style="width: 90px;">NÚMERO</th>
-                    <th class="titulo" style="width: 60px;">VALOR</th>
                     <th class="titulo">STATUS</th>
+                    <th class="titulo">DEPARTAMENTO</th>
+                    <th class="titulo">EMPRESA</th>
+                    <th class="titulo">FUNCIONÁRIO</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
             while ($row_relatorio = mysqli_fetch_assoc($resultado_relatorios)) {
             echo "
-            <tr>";
+            <tr>
+            <td>".$row_relatorio['id_equipamento']."</td>";
                //nome
-               if($row_relatorio['nome'] != NULL){
-         echo "<td>".$row_relatorio['nome']."</td>";         
+               if($row_relatorio['modelo'] != NULL){
+         echo "<td>".$row_relatorio['modelo']."</td>";         
                }else{
          echo "<td>---</td>";         
                }
-               //cpf
-               if($row_relatorio['cpf'] != NULL){
-         echo "<td>".$row_relatorio['cpf']."</td>";         
+               //tipo equipamento
+               if($row_relatorio['tipo_equipamento'] != NULL){
+         echo "<td>".$row_relatorio['tipo_equipamento']."</td>";         
                }else{
          echo "<td>---</td>";         
                }
-               //funcao
-               if($row_relatorio['funcao'] != NULL){
-         echo "<td>".$row_relatorio['funcao']."</td>";         
+               //patrimonio
+               if($row_relatorio['patrimonio'] != NULL){
+         echo "<td>".$row_relatorio['patrimonio']."</td>";         
+               }else{
+         echo "<td>---</td>";         
+               }
+               //numero
+               if($row_relatorio['numero'] != NULL){
+         echo "<td>".$row_relatorio['numero']."</td>";         
+               }else{
+         echo "<td>---</td>";         
+               }
+               //status
+               if($row_relatorio['status'] != NULL){
+         echo "<td>".$row_relatorio['status']."</td>";         
                }else{
          echo "<td>---</td>";         
                }
@@ -192,51 +199,19 @@ require_once('header.php')
                }else{
          echo "<td>---</td>";         
                }
-               //tipo_equipamento
-               if($row_relatorio['tipo_equipamento'] != NULL){
-         echo "<td>".$row_relatorio['tipo_equipamento']."</td>";         
-               }else{
-         echo "<td>---</td>";         
-               }
-               //patrimonio
-               if($row_relatorio['patrimonio'] != NULL){
-         echo "<td>".$row_relatorio['patrimonio']."</td>";         
-               }else{
-         echo "<td>---</td>";         
-               }
-               //modelo
-               if($row_relatorio['modelo'] != NULL){
-         echo "<td>".$row_relatorio['modelo']."</td>";         
-               }else{
-         echo "<td>---</td>";         
-               }
-               //imei
+               //imei_chip
                if($row_relatorio['imei_chip'] != NULL){
          echo "<td>".$row_relatorio['imei_chip']."</td>";         
                }else{
          echo "<td>---</td>";         
                }
-               //numero
-               if($row_relatorio['numero'] != NULL){
-         echo "<td>".$row_relatorio['numero']."</td>";         
+               //nome
+               if($row_relatorio['nome'] != NULL){
+         echo "<td>".$row_relatorio['nome']."</td>";         
                }else{
          echo "<td>---</td>";         
                }
-               //valor
-               if($row_relatorio['valor'] != NULL){
-            echo "<td>".$row_relatorio['valor']."</td>";         
-                  }else{
-            echo "<td>---</td>";         
-                  }
-               //status
-               if($row_relatorio['status'] != NULL){
-            echo "<td>".$row_relatorio['status']."</td>";         
-                  }else{
-            echo "<td>---</td>";         
-                  }
-            echo "
-            </tr>
-             ";
+        echo "</tr>";
              } ?>
             </tbody>
         </table>

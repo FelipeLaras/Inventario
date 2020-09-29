@@ -24,7 +24,7 @@ $html = "
 	</head>
 	<body>		
 		<header>
-			<img id='logo' src='./img/logo.png' width='150' alt='Logo'>
+			<img id='logo' src='../img/logo.png' width='150' alt='Logo'>
 		</header>
 		<div class='container-fluid'>
  			<p class='text-center'><b>RELATÓRIO DE EQUIPAMENTOS CORPORATIVOS</b></p>
@@ -76,11 +76,11 @@ $html = "
 	</body>
 </html>";
 
-require_once 'dompdf/autoload.inc.php';
-require_once 'dompdf/lib/html5lib/Parser.php';
-require_once 'dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
-require_once 'dompdf/lib/php-svg-lib/src/autoload.php';
-require_once 'dompdf/src/Autoloader.php';
+require_once '../dompdf/autoload.inc.php';
+require_once '../dompdf/lib/html5lib/Parser.php';
+require_once '../dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
+require_once '../dompdf/lib/php-svg-lib/src/autoload.php';
+require_once '../dompdf/src/Autoloader.php';
 Dompdf\Autoloader::register();
 
 // reference the Dompdf namespace

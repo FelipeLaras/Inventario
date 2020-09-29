@@ -1,4 +1,3 @@
-
 <?php
    session_start();
    //aplicando para usar varialve em outro arquivo
@@ -108,7 +107,7 @@
 
    $_SESSION['query_relatorios'] = $query_relatorios;//enviando query para PDF ou EXCEL
 
-   require_once('header.php');
+require_once('header.php');
 
 ?><!--Chamando a Header-->
 <div class="subnavbar">

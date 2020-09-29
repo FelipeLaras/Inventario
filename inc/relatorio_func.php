@@ -175,13 +175,13 @@ require_once('header.php');
       </h3>
       <!--PDF-->
       <div id="novo_usuario">
-         <a class="botao" href="relatorio_print.php" title="Imprimir" style="margin-top: 0px;" target="_blank">
+         <a class="botao" href="relatorio_print_funcionario.php" title="Imprimir" style="margin-top: 0px;" target="_blank">
             <i class="fas fa-print fa-2x" style="margin-left: -3px;"></i>
          </a>
       </div>
       <!--PDF-->
       <div id="novo_usuario">
-         <a class="botao" href="relatorio_excel.php" title="Exportar EXCEL" style="margin-top: 0px;" target="_blank">
+         <a class="botao" href="relatorio_excel_funcionario.php" title="Exportar EXCEL" style="margin-top: 0px;" target="_blank">
             <i class="fas fa-file-excel fa-2x" style="margin-left: -3px;"></i>
          </a>
       </div>
