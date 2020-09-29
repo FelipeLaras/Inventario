@@ -46,6 +46,7 @@
         //SALVANDO A INFORMAÇÃO
         $inst = "INSERT INTO google (titulo, body, usuario, data_created) VALUES ('".$_POST['titulo']."', '".$_POST['txtArtigo']."', '".$_SESSION["id"]."', '".$date."')";
         
+ 
         $inst_replace = str_replace("\\", "/", $inst);
 
         $result = $conn_db->query($inst_replace);       

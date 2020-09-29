@@ -78,7 +78,7 @@
                                 .$row_pequisa['titulo']."
                                         <div class='icone' style='margin-top: -43px;'>
                                             <a href='google_upt.php?id_pesquisa=".$row_pequisa['cod_tabela']."' class='ajuste_botao' title='Editar Manual'><i class='icon-large icon-pencil'></i></a>
-                                            <a href='google_pdf.php?id_pesquisa=".$row_pequisa['cod_tabela']."' class='ajuste_botao' title='Editar '><i class='icon-large icon-print'></i></a>
+                                            <a href='google_pdf.php?id_pesquisa=".$row_pequisa['cod_tabela']."' class='ajuste_botao' title='Editar' target='_blank'><i class='icon-large icon-print'></i></a>
                                             <a href='#myModal".$row_pequisa['cod_tabela']."' data-toggle='modal' class='ajuste_botao'><i class='icon-large icon-trash'></i></a>
                                         </div>
                                 </a>

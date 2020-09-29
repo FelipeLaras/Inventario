@@ -98,9 +98,9 @@
                            $query_body = "SELECT body from google WHERE cod_tabela = ".$_GET['id_pesquisa']."";
                            $result_body = $conn_db->query($query_body);
                            $row_body = $result_body->fetch_assoc();
-                           echo "<textarea>".$row_body['body']."</textarea>";
+                           echo "<textarea name='txtArtigo'>".$row_body['body']."</textarea>";
                         }else{
-                           echo "<textarea> Insira o seu Conteudo aqui! </textarea>";
+                           echo "<textarea name='txtArtigo'></textarea>";
                         }
                       ?>
 
