@@ -103,28 +103,6 @@ require_once('../conexao/conexao.php');
 
 if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALVA-LOS
 
-	//verificando se a nota do celular já não possui uma com o mesmo nome salvo no Banco de dados
-
-	if($_FILES['file_nota_celular'.$cont_equip.''] != NULL){
-
-		$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['file_nota_celular'.$cont_equip.'']['name']."'";
-		$resultNomeFile = $conn->query($queryNomeFile);
-		
-		if($nomeFile = mysqli_fetch_assoc($resultNomeFile)){
-
-			//pegando ultima id do funcionario para mover a tela.acao
-
-			$queryUltiFuncionario = "SELECT max(id_funcionario) as id_funcionario FROM manager_inventario_funcionario";
-			$resultUltimoFuncionario = $conn->query($queryUltiFuncionario);
-			$ultimofuncionario = mysqli_fetch_assoc($resultUltimoFuncionario);
-
-			header('location: inventario_add.php?error=2');
-
-			exit;
-		}
-	}
-
-
 	if ($_POST['id_equip'] != NULL) {
 
 		//altualizando o equipamento
@@ -295,28 +273,6 @@ $cont_equip = 0;
 /*SALVANDO TABLET*/
 
 if ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALVA-LOS
-
-	//verificando se a nota do celular já não possui uma com o mesmo nome salvo no Banco de dados
-
-	if($_FILES['file_nota_tablet'.$cont_equip.'']  != NULL){
-
-		$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['file_nota_tablet'.$cont_equip.''] ['name']."'";
-		$resultNomeFile = $conn->query($queryNomeFile);
-		
-		if($nomeFile = mysqli_fetch_assoc($resultNomeFile)){
-
-			//pegando ultima id do funcionario para mover a tela.acao
-
-			$queryUltiFuncionario = "SELECT max(id_funcionario) as id_funcionario FROM manager_inventario_funcionario";
-			$resultUltimoFuncionario = $conn->query($queryUltiFuncionario);
-			$ultimofuncionario = mysqli_fetch_assoc($resultUltimoFuncionario);
-
-			header('location: inventario_add.php?error=2');
-
-			exit;
-		}
-	}
-
 
 	if ($_POST['id_equip'] != NULL) {
 
