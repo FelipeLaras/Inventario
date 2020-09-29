@@ -235,14 +235,14 @@ if($_POST['tipo_equipamento'] == 3){
 }//end IF CHIP
 
 //voltando para a tela do funcionario
-if($_POST['page'] == 1){
+/* if($_POST['page'] == 1){
 	header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&msn=1');
 }
 if($_POST['page'] == 2){
 	header('location: inventario_equip_edit.php?id_equip='.$_POST['id_equipamento'].'&tipo='.$_POST['tipo_equipamento'].'&msn=1');
 }else{
 	header('location: inventario_equip.php?msn=1');
-}
+} */
 
 //fechando o banco de dados
 $conn->close();

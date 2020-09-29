@@ -68,11 +68,11 @@ $html = "
 	<body>
 
 		<div id='logo2'>
-			<img class='logo2' src='./img/logo2.png' width='130' alt='Logo'>
+			<img class='logo2' src='../img/logo2.png' width='130' alt='Logo'>
 		</div>
 
 		<div id='logo'>
-			<img class='logo' src='./img/logo.png' width='150' alt='Logo'>
+			<img class='logo' src='../img/logo.png' width='150' alt='Logo'>
 		</div>
 
 		<div id='tabela'>

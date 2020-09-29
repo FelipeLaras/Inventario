@@ -59,7 +59,7 @@ $html = "
 	</head>
 	<body>
 		<header>
-			<img id='logo' src='./img/logo.png' width='150' alt='Logo'>
+			<img id='logo' src='../img/logo.png' width='150' alt='Logo'>
 		</header>
 		<div id='termo_header'>
 			<p class='text-center'>&ldquo;TERMO DE ENTREGA E DECLARAÇÃO&rdquo;</p>
