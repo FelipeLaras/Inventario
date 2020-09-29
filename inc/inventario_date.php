@@ -296,7 +296,7 @@ switch ($_POST['drop']) {
 		header('location: inventario_edit.php?id='.$_POST['id_funcionario'].'&msn=3');
 		break;
 	case 2:
-		header('location: inventario_equip_edit.php?id_equip='.$_POST['id_equipamento'].'&tipo='.$_POST['tipo_equip'].'&msn=2');
+		header('location: inventario_equip_edit.php?id_equip='.$_POST['id_equipamento'].'&tipo='.$_POST['tipo_equipamento'].'&msn=2');
 		break;
 
 	default:
