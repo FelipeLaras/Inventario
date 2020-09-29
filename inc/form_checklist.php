@@ -27,7 +27,7 @@ if($_POST['id_equip'] != NULL){
 						'".$data."',
 						'".$_SESSION["id"]."',
 						'1')";
-		$result_log = $conn->query($log_query)
+		$result_log = $conn->query($log_query);
 	}
 	
 	$liberar_equip .= "'')";
@@ -195,11 +195,11 @@ $html = "
 	<body>
 
 		<div id='logo2'>
-			<img class='logo2' src='./img/logo2.png' width='130' alt='Logo'>
+			<img class='logo2' src='../img/logo2.png' width='130' alt='Logo'>
 		</div>
 
 		<div id='logo'>
-			<img class='logo' src='./img/logo.png' width='150' alt='Logo'>
+			<img class='logo' src='../img/logo.png' width='150' alt='Logo'>
 		</div>
 		
 		<div id='alerta'>
@@ -413,11 +413,11 @@ $html = "
 	</body>
 </html>";
 
-require_once 'dompdf/autoload.inc.php';
-require_once 'dompdf/lib/html5lib/Parser.php';
-require_once 'dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
-require_once 'dompdf/lib/php-svg-lib/src/autoload.php';
-require_once 'dompdf/src/Autoloader.php';
+require_once '../dompdf/autoload.inc.php';
+require_once '../dompdf/lib/html5lib/Parser.php';
+require_once '../dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
+require_once '../dompdf/lib/php-svg-lib/src/autoload.php';
+require_once '../dompdf/src/Autoloader.php';
 Dompdf\Autoloader::register();
 
 // reference the Dompdf namespace
@@ -437,5 +437,4 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-$conn->close();
 ?>

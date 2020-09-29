@@ -12,10 +12,10 @@
        header('location: ../front/error.php');
    }
 
-   require_once('header.php');
    require_once('../query/queryColaborador.php');
    require_once('../conexao/conexao.php');
 
+   require_once('header.php');
 ?>
 <style>
 select.form-control.form-control-sm {
