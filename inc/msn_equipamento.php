@@ -95,7 +95,7 @@ if($_GET['msn'] == 3){//caso seja algum equipamento dos inventarios usuário
 								<!-- /widget-header -->
 								<div class='widget-content'>
 									<div class='shortcuts'> 										
-										<a href='add_new.php.php' class='shortcut'>
+										<a href='add_new.php' class='shortcut'>
 											<i class='shortcut-icon fas fa-plus-square'></i>
 											<span class='shortcut-label'>Novo Equipamento</span> 
 										</a>

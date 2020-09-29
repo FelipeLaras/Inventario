@@ -1,13 +1,10 @@
 <?php
-  require_once('header.php');
-
-  require_once('../query/query.php');
-
   //aplicando para usar varialve em outro arquivo
   session_start();
   unset($_SESSION['id_funcionario']);//LIMPANDO A SESSION
   //chamando conexão com o banco
-  require_once('conexao.php');
+  require_once('../conexao/conexao.php');  
+  require_once('../query/query.php');
   //Aplicando a regra de login
   if($_SESSION["perfil"] == NULL){  
     header('location: ../front/index.html');
@@ -19,6 +16,7 @@
 
   $data = date("d/m/Y", strtotime($row['data_nota']));  
 
+  require_once('header.php');
 ?>
 <div class="subnavbar">
     <div class="subnavbar-inner">

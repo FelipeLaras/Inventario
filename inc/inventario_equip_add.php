@@ -10,8 +10,10 @@
    }elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 1) && ($_SESSION["perfil"] != 4)) {
        header('location: ../front/error.php');
    }
-   require_once('header.php');
+
    require_once('../query/query_dropdowns.php');
+   
+   require_once('header.php');
 
 ?>
 <div class="subnavbar">
@@ -68,7 +70,9 @@ switch ($_GET['error']) {
             <a href="inventario_equip.php">
                 Equipamentos
             </a>
-            /
+            /            
+            <i class="icon-plus"></i> &nbsp;
+
             Novo Equipamento
       </h3>
    </div>
@@ -297,8 +301,11 @@ switch ($_GET['error']) {
                                  <select id="t_cob" name="filial_tablet0" class="span2">
                                     <option value="">---</option>
                                     <?php
-                                       while ($row_empresa = $resultado_empresa->fetch_assoc()) {
-                                          echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
+                                    $query_empresaT = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
+                                    $resultado_empresaT = $conn -> query($query_empresaT);
+
+                                       while ($row_empresaT = $resultado_empresaT->fetch_assoc()) {
+                                          echo "<option value='".$row_empresaT['id_empresa']."'>".$row_empresaT['nome']."</option>";
                                        }
                                        ?>
                                  </select>
@@ -311,8 +318,10 @@ switch ($_GET['error']) {
                                  <select id="t_cob" name="situacao_tablet0" class="span2">
                                     <option value=''>---</option>
                                  <?php
-                                    while ($row_situacao = $resultado_situacao->fetch_assoc()) {
-                                       echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['nome']."</option>";
+                                 $query_situacaoT = "SELECT * FROM manager_dropsituacao WHERE deletar = 0 ORDER BY nome ASC";
+                                 $resultado_situacaoT = $conn -> query($query_situacaoT);
+                                    while ($row_situacaoT = $resultado_situacaoT->fetch_assoc()) {
+                                       echo "<option value='".$row_situacaoT['id_situacao']."'>".$row_situacaoT['nome']."</option>";
                                     }
                                     ?>
                                  </select>
@@ -325,8 +334,10 @@ switch ($_GET['error']) {
                                  <select id="t_cob" name="estado_tablet0" class="span2">
                                     <option value=''>---</option>
                                     <?php
-                                       while ($row_estado = $resultado_empresa->fetch_assoc()) {
-                                          echo "<option value='".$row_estado['id']."'>".$row_estado['nome']."</option>";
+                                    $query_statusT = "SELECT * FROM manager_dropestado WHERE deletar = 0 ORDER BY nome ASC";
+                                    $resultado_statusT = $conn->query($query_statusT);
+                                       while ($row_estadoT = $resultado_statusT->fetch_assoc()) {
+                                          echo "<option value='".$row_estadoT['id']."'>".$row_estadoT['nome']."</option>";
                                        }
                                     ?>
                                  </select>
@@ -359,8 +370,10 @@ switch ($_GET['error']) {
                                  <select id="t_cob" name="status_tablet0" class="span2">
                                     <option value=''>---</option>
                                     <?php
-                                       while ($row_situacao = $resultado_status_equip->fetch_assoc()) {
-                                          echo "<option value='".$row_situacao['id_status']."'>".$row_situacao['nome']."</option>";
+                                    $query_status_equipT= "SELECT * FROM manager_dropstatusequipamento WHERE deletar = 0 ORDER BY nome ASC";
+                                    $resultado_status_equipT = $conn->query($query_status_equipT);
+                                       while ($row_situacaoT = $resultado_status_equipT->fetch_assoc()) {
+                                          echo "<option value='".$row_situacaoT['id_status']."'>".$row_situacaoT['nome']."</option>";
                                        }
                                     ?>
                                  </select>
@@ -458,8 +471,10 @@ switch ($_GET['error']) {
                                           <select id="t_cob" name="filial_chip0" class="span2">
                                             <option value="">---</option>
                                           <?php
-                                             while ($row_empresa = $resultado_empresa->fetch_assoc()) {
-                                               echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
+                                          $query_empresaC = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
+                                          $resultado_empresaC = $conn -> query($query_empresaC);
+                                             while ($row_empresaC = $resultado_empresaC->fetch_assoc()) {
+                                               echo "<option value='".$row_empresaC['id_empresa']."'>".$row_empresaC['nome']."</option>";
                                              }
                                              ?>
                                           </select>
