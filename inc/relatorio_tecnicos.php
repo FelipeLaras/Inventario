@@ -42,7 +42,7 @@ require_once('../query/query_dropdowns.php');
                         <i class="icon-home"></i><span>Home</span>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="equip.php">
                         <i class="icon-table"></i><span>Inventário</span>
                     </a>
@@ -50,6 +50,11 @@ require_once('../query/query_dropdowns.php');
                 <li>
                     <a href="google.php">
                         <i class="icon-search"></i><span>Google T.I</span>
+                    </a>
+                </li>                
+                <li class="active">
+                    <a href="relatorio_tecnicos.php"><i class="icon-list-alt"></i>
+                        <span>Relatórios</span>
                     </a>
                 </li>
             </ul>
@@ -81,7 +86,7 @@ switch ($_GET['msn']) {
             <i class="icon-lithe icon-table"></i>&nbsp;
             <a href="equip.php">Inventário</a>
             /
-            <i class="icon-lithe icon-list"></i>&nbsp;
+            <i class="icon-lithe icon-list-alt"></i>&nbsp;
             Relatórios
         </h3>
     </div>

@@ -40,7 +40,8 @@ require_once('header.php');
                <a href="google.php"><i class="icon-search"></i>
                   <span>Google T.I</span>
                </a>
-            </li>
+            </li>                                           
+            <li><a href="relatorio_tecnicos.php"><i class="icon-list-alt"></i><span>Relatórios</span></a></li>
          </ul>
       </div>
    </div>
@@ -506,7 +507,7 @@ require_once('header.php');
                        <select id='t_cob' name='empresa_notebook' class='span2' style='width: 25%'>
                           <option value='" . $equipamento['id_empresa'] . "'>" . $equipamento['empresa'] . "</option>
                           <option>---</option>";
-                     while ($row_empresa = $resultado_empresa->mysqli_fetch_assoc()) {
+                     while ($row_empresa = $resultado_empresa->fetch_assoc()) {
                         echo "<option value='" . $row_empresa['id_empresa'] . "'>" . $row_empresa['nome'] . "</option>";
                      }
                      echo "

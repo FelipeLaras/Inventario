@@ -9,9 +9,10 @@ if ($_SESSION["perfil"] == NULL) {
     header('location: ../front/error.php');
 }
 
-require_once('header.php'); 
 require_once('../conexao/conexao.php');
-require_once('../query/query_dropdowns.php')
+require_once('../query/query_dropdowns.php');
+
+require_once('header.php'); 
 
 ?>
 <div class="subnavbar">
@@ -53,6 +54,8 @@ require_once('../query/query_dropdowns.php')
                 Home
             </a>
             /
+            <i class="icon-lithe icon-list-alt"></i>&nbsp;
+
             Relatórios
         </h3>
     </div>

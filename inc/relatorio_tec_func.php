@@ -52,7 +52,8 @@ select.form-control.form-control-sm {
                 <li>
                     <a href="google.php">
                         <i class="icon-search"></i><span>Google T.I</span>
-                    </a>
+                    </a>                               
+                <li><a href="relatorio_tecnicos.php"><i class="icon-list-alt"></i><span>Relatórios</span></a></li>
                 </li>
             </ul>
         </div>

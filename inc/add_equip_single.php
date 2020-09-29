@@ -30,7 +30,8 @@ header('location: ../front/error.php');
                     <a href="google.php">
                         <i class="icon-search"></i><span>Google T.I</span>
                     </a>
-                </li>
+                </li>                                               
+                <li><a href="relatorio_tecnicos.php"><i class="icon-list-alt"></i><span>Relatórios</span></a></li>
             </ul>
         </div>
     </div>

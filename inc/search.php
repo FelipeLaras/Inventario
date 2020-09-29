@@ -24,7 +24,8 @@
             <ul class="mainnav">
                 <li><a href="tecnicos_ti.php"><i class="icon-home"></i><span>Home</span> </a> </li>
                 <li><a href="equip.php"><i class="icon-table"></i><span>Inventário</span> </a> </li>
-                <li class="active"><a href="google.php"><i class="icon-search"></i><span>Google T.I</span> </a></li>
+                <li class="active"><a href="google.php"><i class="icon-search"></i><span>Google T.I</span> </a></li>                               
+                <li><a href="relatorio_tecnicos.php"><i class="icon-list-alt"></i><span>Relatórios</span></a></li>
             </ul>
         </div>
         <!-- /container -->
