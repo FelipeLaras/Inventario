@@ -22,7 +22,7 @@ if ($_GET['cod'] != NULL) { //excluindo uma informação
 		$tipo_file = $_FILES['file']['type'];//Pegando qual é a extensão do arquivo
 		$nome_db = $_FILES['file']['name'];
 		$caminho = "/var/www/html/ti/documentos/google/" . $_FILES['file']['name'];//caminho onde será salvo o FILE
-		$caminho_db = "documentos/google/".$_FILES['file']['name'];//pasta onde está o FILE para salvar no Bando de dados
+		$caminho_db = "../documentos/google/".$_FILES['file']['name'];//pasta onde está o FILE para salvar no Bando de dados
 
 		/*VALIDAÇÃO DO FILE*/
 		$sql_file = "SELECT tipo_arquivo FROM google_validacao_arquivo WHERE tipo_arquivo LIKE '".$tipo_file."'";//query de validação 

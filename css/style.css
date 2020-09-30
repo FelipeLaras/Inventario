@@ -123,6 +123,10 @@ div#botao {
 
 
 /*FELIPE*/
+#eyePDF {    
+    margin-left: -25px;
+    margin-top: 10px;
+}
 .spinner {
     position: absolute;
     left: 50%;

@@ -70,6 +70,8 @@
 
                     $contador = 0;
                     //laço de repetição para que todas as pesquisas sejam mostradas na pagina search.php
+
+                if($result_pesquisa->fetch_assoc()){
                     while ($row_pequisa = $result_pesquisa->fetch_assoc()) {
                         echo"
                         <div class='accordion' id='accordion".$contador."'>
@@ -122,8 +124,11 @@
                         ";
 
                     $contador ++; 
-                    }
-                    ?>
+
+                    }//end while
+
+                }else{ echo "Não foi encontrado nenhum manual com a seguinte informação '".$_POST['pesquisa']."'"; }
+                ?>
                 <!--TITUlO-->
                     </div>
                 </div>

@@ -65,27 +65,58 @@
                   <div class="controls">
 
                     <?php
-
-                    if ($_GET['id_pesquisa'] != NULL) {
-                      
-                      $query = "SELECT titulo from google WHERE cod_tabela = ".$_GET['id_pesquisa']."";
-                      $result_titulo = $conn_db->query($query);
-                      $row_titulo = $result_titulo->fetch_assoc();
-                      echo "<input type='text' name='titulo' id='gols1' class='cpfcnpj span2' onkeydown='javascript: fMasc( this, mCPF );'' value='".$row_titulo['titulo']."'>";
-                    }else{
-                      echo "<input type='text' name='titulo' id='gols1' class='cpfcnpj span2' onkeydown='javascript: fMasc( this, mCPF );'' >";
-                    }    
+                     if ($_GET['id_pesquisa'] != NULL) {
+                        
+                        $query = "SELECT * from google WHERE cod_tabela = ".$_GET['id_pesquisa']."";
+                        $result = $conn_db->query($query);
+                        $row = $result->fetch_assoc();
+                        echo "<input type='text' name='titulo' id='gols1' class='cpfcnpj span2' onkeydown='javascript: fMasc( this, mCPF );'' value='".$row['titulo']."'>";
+                     }else{
+                        echo "<input type='text' name='titulo' id='gols1' class='cpfcnpj span2' onkeydown='javascript: fMasc( this, mCPF );'' >";
+                     }    
                     ?>
 
                   </div>
-               </div>               
-               <label class="control-label">Arquivo PDF:</label>
-               <div class="control-group">
-                  <div class="controls">
-                     <input type='file' name='file' id='gols1' class='span2'>
-                     <span class="pdf">Apenas se for PDF*</span>
-                  </div>
                </div>
+                  <?php
+                     if(empty($row['caminho_arquivo'])){
+                        echo '               
+                        <label class="control-label">Arquivo PDF:</label>
+                        <div class="control-group">
+                           <div class="controls">
+                              <input type="file" name="file" id="gols1" class="span2"><br />
+                              <span class="pdf">Apenas PDF*</span>
+                           </div>
+                        </div>';                    
+                     }else{
+                        echo '
+                        <div class="control-group">											
+                           <label class="control-label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Deseja alterar PDF ?</font></font></label>
+                           <div class="controls">
+                              <label class="radio inline">
+                                 <input type="radio" name="radiobtns" value="1" onclick="mostrar()"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> Sim</font></font>
+                              </label>
+                              <label class="radio inline">
+                                 <input type="radio" name="radiobtns" value="0" onclick="esconder()"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> Não</font></font>
+                              </label>
+                              <label class="radio inline">
+                                 <div id="eyePDF"><a href="'.$row['caminho_arquivo'].'" target="_blanck" title="Visualizar PDF"><i class="icon-large icon-eye-open"></i></a></div>
+                              </label>
+                           </div>	<!-- /controls -->		
+                        </div>
+
+                        <!--ADICIONAR NOVO PDF-->
+                        <div id="esconderPDF" style="display:none;">
+                           <label class="control-label">Arquivo PDF:</label>
+                           <div class="control-group">
+                              <div class="controls">
+                                 <input type="file" name="file" id="gols1" class="span2"><br />
+                                 <span class="pdf">Apenas PDF*</span>
+                              </div>
+                           </div>
+                        </div>';
+                     }
+                  ?>
                <div class="control-group">
                   <label class="control-label required">Conteúdo:</label>
                     <div class="controls">                    
@@ -131,6 +162,16 @@
    </div>
    <!-- /widget-content -->
 </div>
+<!-- mostrar/esconder PDF -->
+<script>
+function mostrar(){
+   document.getElementById("esconderPDF").style.display = "block";
+}
+
+function esconder(){
+   document.getElementById("esconderPDF").style.display = "none";
+}
+</script>
 <script>
 tinymce.init({
 selector: 'textarea',
