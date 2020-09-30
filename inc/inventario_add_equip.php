@@ -34,19 +34,6 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 
 	while ($_POST['modelo_celular'.$cont_equip.''] != NULL) {
 
-		if($_FILES['file_nota_celular'.$cont_equip.''] != NULL){
-
-			$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['file_nota_celular'.$cont_equip.'']['name']."'";
-			$resultNomeFile = $conn->query($queryNomeFile);
-			
-			if($nomeFile = $resultNomeFile->fetch_assoc()){
-		
-				header('location: inventario_equip_add.php?error=2');
-		
-				exit;
-			}
-		}
-
 		//SALVANDO O EQUIPAMENTO NO BANCO DE DADOS
 		$insert_equipamento = "INSERT INTO manager_inventario_equipamento 
 									(tipo_equipamento,
@@ -159,17 +146,6 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 $cont_equip = 0;
 
 if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALVA-LOS
-
-	if($_FILES['file_nota_tablet'.$cont_equip.''] != NULL){
-
-		$queryNomeFile = "SELECT nome FROM manager_inventario_anexo WHERE nome = '".$_FILES['file_nota_tablet'.$cont_equip.'']['name']."'";
-		$resultNomeFile = $conn->query($queryNomeFile);
-
-		if($nomeFile = $resultNomeFile->fetch_assoc()){	
-			header('location: inventario_equip_add.php?error=2');	
-			exit;
-		}
-	}
 
 	while ($_POST['modelo_tablet'.$cont_equip.''] != NULL) {
 
