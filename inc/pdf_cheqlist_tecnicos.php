@@ -1,7 +1,6 @@
 <?php
-
 //chamar o banco
-require_once('.../conexao/conexao.php');
+require_once('../conexao/conexao.php');
 
 /*PEGANDO DADOS DO FUNCIONARIO*/
 $query_funcionario =  "SELECT 
@@ -24,6 +23,7 @@ MIF.id_funcionario = '".$_GET['id_fun']."'";
 $resultado_funcionarios = $conn->query($query_funcionario);
 
 $row_fun = mysqli_fetch_assoc($resultado_funcionarios);	
+
 /*CORPO DO PDF*/
 $html = "
 <html>
@@ -300,11 +300,11 @@ WHERE
 	</body>
 </html>";
 
-require_once '.../dompdf/autoload.inc.php';
-require_once '.../dompdf/lib/html5lib/Parser.php';
-require_once '.../dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
-require_once '.../dompdf/lib/php-svg-lib/src/autoload.php';
-require_once '.../dompdf/src/Autoloader.php';
+require_once '../dompdf/autoload.inc.php';
+require_once '../dompdf/lib/html5lib/Parser.php';
+require_once '../dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
+require_once '../dompdf/lib/php-svg-lib/src/autoload.php';
+require_once '../dompdf/src/Autoloader.php';
 Dompdf\Autoloader::register();
 
 // reference the Dompdf namespace
@@ -324,5 +324,4 @@ $dompdf->render();
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
 
-$conn->close();
 ?>
