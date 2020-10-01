@@ -246,6 +246,16 @@ while ($row_equip = mysqli_fetch_assoc($resultadoEquipDisponivel)) {
                               <div class='controls'>
                                  <select class='span2' style='margin-top: -40px; margin-left: 61px;' name='id_funcionario' required>
                                     <option value=''>---</option>";
+                                    //status funcionario
+                                       $status = "SELECT 
+                                                   id_funcionario, 
+                                                   nome 
+                                                FROM 
+                                                   manager_inventario_funcionario 
+                                                WHERE 
+                                                   deletar = 0 ORDER BY nome ASC";
+                                       $result_status = mysqli_query($conn, $status);
+
                                           while($row_status = mysqli_fetch_assoc($result_status)){
                                              echo "<option value='".$row_status['id_funcionario']."'>".$row_status['nome']."</option>";
                                           }                                             

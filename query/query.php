@@ -46,6 +46,7 @@ $query = "SELECT
 
 $resultado = $conn->query($query);
 
+
 //equipamentos Versão 2
 
 $equipamentos = "SELECT 
