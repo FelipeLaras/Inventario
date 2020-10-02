@@ -608,7 +608,7 @@ $query_contrato = "SELECT
                             <?php
                               if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
 
-                                 $query_tem_office = "SELECT id FROM manager_office WHERE id_equipamento = ".$_GET['id_equip'] .";";
+                                 $query_tem_office = "SELECT id FROM manager_office WHERE id_equipamento = ".$_GET['id_equip']."";
                                  $result_tem_office = $conn -> query($query_tem_office);
                                  $row_tem_office = $result_tem_office -> fetch_assoc();
 
@@ -631,6 +631,16 @@ $query_contrato = "SELECT
                 <div class="tab-pane" id="anexos">
                     <div class="span3" style="width: 802px;">
                         <div class="widget stacked widget-table action-table">
+                        <div class="widget-header">
+                           <div class="control-group">
+                              <div class="controls">
+                                 <!-- Button to trigger modal -->
+                                 <a href="#myModalanexos" role="button" class="btn btn-info pull-left filho" data-toggle="modal" title="Adicionar">Nota Fiscal / Termo</a>
+                              </div>
+                              <!-- /controls -->
+                           </div>
+                           <!-- /control-group -->
+                        </div>
                             <!-- /widget-header -->
                             <div class="widget-content">
                                 <table class="table table-striped table-bordered">

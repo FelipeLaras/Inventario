@@ -1,7 +1,6 @@
 <?php
 //chamando a sessão
 session_start();
-
 //chamar o banco
 require_once('../conexao/conexao.php');
 require_once('../query/query.php');
@@ -23,8 +22,10 @@ if($rowNota['numero_nota'] === "semNota"){
 
 
 $query_windows .= $queryWhere;
-$result_windows = $conn->query($query_windows);
-$windows_row = $result_windows->fetch_assoc();
+
+$result_windows = mysqli_query($conn, $query_windows);
+
+$windows_row = mysqli_fetch_assoc($result_windows);
 
 $somando = 0;
 
@@ -51,7 +52,7 @@ $body = "
   <table class='table table-bordered'>
     <thead>
       <tr>
-        <th colspan='2'><img class='logo' src='./img/logo.png' width='150' alt='Logo'></th>
+        <th colspan='2'><img class='logo' src='../img/logo.png' width='150' alt='Logo'></th>
         <th colspan='3'>Ficha do Windows</th>
       </tr>
     </thead>
@@ -64,10 +65,10 @@ $body = "
       </tr>
       <tr>
         <td colspan='3'>Nota Fiscal: <span class='font'>".$windows_row['numero_nota']."</span></td>
-        <td colspan='2'>Data: <span class='font'>".$windows_row['data_nota']."</span></td>
+        <td colspan='2'>Data: <span class='font'>".$windows_row['data_nota_so']."</span></td>
       </tr>
       <tr>
-        <td colspan='5'>Software: <span class='font'>".$windows_row['windows']."</span></td>
+        <td colspan='5'>Software: <span class='font'>".$windows_row['versao']."</span></td>
       </tr>
       <tr>
         <td colspan='5'>Fornecedor: <span class='font'>".$windows_row['fornecedor']."</span></td>
@@ -80,13 +81,13 @@ $body = "
         //trazendo os dados do usuário
         $query_equipamento .= $queryWhere;
         
-        $result_user_windows = $conn->query($query_equipamento);
+        $result_user_windows = mysqli_query($conn, $query_equipamento);
             
-        while($windows_user = $result_user_windows->fetch_assoc()){
+        while($windows_user = mysqli_fetch_assoc($result_user_windows)){
                 $body .="          
                 <tr>
                     <td class='user font'>".$windows_user['patrimonio']."</td>
-                    <td colspan='2' class='user font'>".$windows_user['nome']."</td>
+                    <td colspan='2' class='user font'>".$windows_user['nome_funcionario']."</td>
                     <td colspan='2' class='user font'>".$windows_user['departamento']."</td>
                 </tr>";
         }//end While query
@@ -101,11 +102,11 @@ $body = "
 
 //terminou a contagem verifica se tem office, se sim enviar
 
-require_once 'dompdf/autoload.inc.php';
-require_once 'dompdf/lib/html5lib/Parser.php';
-require_once 'dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
-require_once 'dompdf/lib/php-svg-lib/src/autoload.php';
-require_once 'dompdf/src/Autoloader.php';
+require_once '../dompdf/autoload.inc.php';
+require_once '../dompdf/lib/html5lib/Parser.php';
+require_once '../dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
+require_once '../dompdf/lib/php-svg-lib/src/autoload.php';
+require_once '../dompdf/src/Autoloader.php';
 Dompdf\Autoloader::register();
 
 // reference the Dompdf namespace
@@ -124,6 +125,4 @@ $dompdf->render();
 
 // Output the generated PDF to Browser
 $dompdf->stream('termo_'.$row_fun['nome'].'.pdf',array("Attachment"=>0));//1 - Download 0 - Previa
-
-$conn->close();
 ?>

@@ -277,7 +277,8 @@ $query_equipamento = "SELECT
                         MIE.memoria,
                         MIE.situacao AS id_situacao,
                         MDS.nome AS situacao,
-                        MIE.serialnumber
+                        MIE.serialnumber,
+                        MIF.nome AS nome_funcionario
                     FROM
                         manager_inventario_equipamento MIE
                     LEFT JOIN
@@ -288,6 +289,10 @@ $query_equipamento = "SELECT
                         manager_dropdepartamento MDD ON MIE.departamento = MDD.id_depart
                     LEFT JOIN
                         manager_dropsituacao MDS ON MIE.situacao = MDS.id_situacao
+                    LEFT JOIN
+                        manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
+                    LEFT JOIN
+                        manager_sistema_operacional MSO ON MIE.id_equipamento = MSO.id_equipamento
                     WHERE ";
 //windows                    
 $query_windows = "SELECT 
@@ -298,11 +303,18 @@ $query_windows = "SELECT
                         MSO.fornecedor,
                         MSO.file_nota AS caminho_so,
                         MSO.file_nota_nome AS nome_nota_so,
-                        MSO.data_nota AS data_nota_so 
+                        MSO.numero_nota,
+                        MSO.data_nota AS data_nota_so,
+                        MDE.nome AS empresa,
+                        MDL.nome AS locacao
                     FROM
                         manager_sistema_operacional MSO
                     LEFT JOIN
                         manager_dropsistemaoperacional MDSO ON MSO.versao = MDSO.id
+                    LEFT JOIN
+                        manager_dropempresa MDE ON MSO.empresa = MDE.id_empresa
+                    LEFT JOIN
+                        manager_droplocacao MDL ON MSO.locacao = MDL.id_empresa
                     WHERE ";
 
 //Office
