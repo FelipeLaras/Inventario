@@ -108,8 +108,7 @@ require_once('../query/query_dropdowns.php');
         <div class="tabbable">
             <div id="formulario">
                 <!--CRIADO FORMULARIO PARA FAZER AS VALIDAÇÕES-->
-                <form id='form2' class='form-horizontal' action='equip_validacao.php' method='POST'
-                    enctype='multipart/form-data' autocomplete='off' style="display: none;">
+                <form id='form2' class='form-horizontal' action='equip_validacao.php' method='POST' enctype='multipart/form-data' autocomplete='off' style="display: none;">
                     <!--CPF-->
                     <input type="text" id="cpf_validacao" value="" name="gols1" />
                     <!--PATRIMONIO CPU-->
@@ -118,8 +117,7 @@ require_once('../query/query_dropdowns.php');
                     <input type="text" id="notebook_validacao" value="" name="gols3" />
                 </form>
                 <!--Buscando inforação pelo apollo-->
-                <form id='form1' class='form-horizontal' action='equip_add_insert.php' method='POST'
-                    enctype='multipart/form-data' autocomplete='off'>
+                <form id='form1' class='form-horizontal' action='equip_add_insert.php' method='POST' enctype='multipart/form-data' autocomplete='off'>
                     <div class="control-group">
                         <h3 style="color: red;">
                             <font style="vertical-align: inherit;">Cadastro - Equipamento / Responsável</font>
@@ -398,7 +396,7 @@ require_once('../query/query_dropdowns.php');
                             <div class="controls">
                                 <?php
                                     if($_SESSION['numero_patrimonio'] != NULL){
-                                        echo "<input class='cpfcnpj span2' id='gols2' name='num_patrimonio_cpu' type='text' value='".$_SESSION['numero_patrimonio']."'/>";
+                                        echo "<input class='cpfcnpj span2' name='num_patrimonio_cpu' type='text' value='".$_SESSION['numero_patrimonio']."'/>";
                                         unset($_SESSION['numero_patrimonio']);
                                     }else{
                                         echo "<input class='cpfcnpj span2' id='gols2' name='num_patrimonio_cpu' type='text'/>";
@@ -407,7 +405,7 @@ require_once('../query/query_dropdowns.php');
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for='gols2'>Domínio:</label>
+                            <label class="control-label" >Domínio:</label>
                             <div class="controls">
                                 <?php
                                     if($_SESSION['dominio'] != NULL){
@@ -423,7 +421,7 @@ require_once('../query/query_dropdowns.php');
                                         }
                                         unset($_SESSION['dominio']);
                                     }else{
-                                        echo "<input class='span1' id='gols2' name='dominio' type='text' disabled/>";
+                                        echo "<input class='span1' id='gols4' name='dominio' type='text' disabled/>";
                                     }
                                 ?>
                             </div>
@@ -841,7 +839,7 @@ require_once('../query/query_dropdowns.php');
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for='gols2'>Domínio:</label>
+                <label class="control-label" for='gols3'>Domínio:</label>
                 <div class="controls">
                     <?php
                         if($_SESSION['dominio_note'] != NULL){
@@ -857,7 +855,7 @@ require_once('../query/query_dropdowns.php');
                             }
                             unset($_SESSION['dominio_note']);
                         }else{
-                            echo "<input class='span1' id='gols2' name='dominio_note' type='text' disabled/>";
+                            echo "<input class='span1' id='gols3' name='dominio_note' type='text' disabled/>";
                         }
                     ?>
                 </div>

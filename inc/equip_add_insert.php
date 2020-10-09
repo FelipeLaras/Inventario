@@ -25,6 +25,7 @@ if( ($_POST['num_patrimonio_cpu'] == NULL) AND ($_POST['num_patrimonio_notebook'
 /*------------------------------------------------------------------------------------------------ */
 //2º Vamos salvar um CPU
 
+
 if ($_POST['num_patrimonio_cpu'] != NULL) {
 
     if($_POST['nome_cpu'] == NULL){
@@ -60,6 +61,9 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
             $_SESSION['serial_office'] = $row_patrimonio['chave_office'];
             /*---VOLTANDO PARA A TELA---*/
             header('location: equip_add.php');
+
+            exit;
+
         }else{
             /*---CASO O USUÁRO TENHA DIGITADO ALGUMA COISA---*/
             $_SESSION['cpf_nao_encontrado'] = $_POST['gols1'];
@@ -70,6 +74,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
             /*---VOLTANDO PARA A TELA - ERRO 2 EQUIPAMENTO NÃO ENCONTRADO---*/
             header('location: equip_add.php?error=2');
         }//end IF = encontrando equipamento 
+
     }elseif($_POST['empresa_cpu'] == 0){
         $existe_patrimonio_cadastrado = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['num_patrimonio_cpu']."%'";
         $resultado_patrimonio = $conn -> query($existe_patrimonio_cadastrado);
@@ -570,7 +575,10 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
             $_SESSION['serial_office_note'] = $row_patrimonio['chave_office'];
             /*---VOLTANDO PARA A TELA---*/
             header('location: equip_add.php');
+
+            exit;
         }else{
+            
             /*---CASO O USUÁRO TENHA DIGITADO ALGUMA COISA---*/
             $_SESSION['cpf_nao_encontrado'] = $_POST['gols1'];
             $_SESSION['nome_nao_cadastrado'] = $_POST['nome_funcionario'];
@@ -579,6 +587,7 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
             $_SESSION['empresa_nao_cadastrado'] = $_POST['empresa_funcionario'];
             /*---VOLTANDO PARA A TELA - ERRO 2 EQUIPAMENTO NÃO ENCONTRADO---*/
             header('location: equip_add.php?error=2');
+
         }//end IF = encontrando equipamento 
     }elseif($_POST['empresa_notebook'] == 0){
         $existe_patrimonio_cadastrado = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['num_patrimonio_notebook']."%'";

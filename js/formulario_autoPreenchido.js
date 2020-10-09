@@ -25,7 +25,6 @@
         if ($gols2.value){
             var $cpu_validacao = document.getElementById('cpu_validacao');
             if ($cpu_validacao.value)
-            document.getElementById('form1');
             $cpu_validacao.value = $gols2.value;
             document.getElementById('form1').submit();
         }    
