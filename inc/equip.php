@@ -94,8 +94,14 @@ if ($_GET['status'] != NULL) {
    $equipamentos .= "AND MIE.tipo_equipamento IN (9 , 5, 8)";
 }
 
-$resultado_equip = $conn->query($equipamentos);
+$resultado_equip = $conn->query($equipamentos);    
 
+$nenhumfuncionario = $resultado_equip -> fetch_assoc();
+
+if ($nenhumfuncionario['id_funcionario'] == NULL) {//forçando deixar disponivel
+   $updateDisponivel = "UPDATE manager_inventario_equipamento SET status = '6' WHERE (id_equipamento = ".$row_equip['id_equipamento'].")";
+   $aplicarUpdate = $conn -> query($updateDisponivel);
+}
 
 //contagem equipamentos alterados
 $cont = "SELECT COUNT(id) AS quantidade FROM manager_comparacao_ocs";
@@ -204,45 +210,6 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
 
 
 <div class="container">
-   <!-- <div id='botoes_status_tec'>
-      <ul class='list-group list-group-horizontal tec_1'>
-         <li class='list-group-item tec'>
-            <a class='btn btn-default btn-xs ' href='equip.php?status=4' title='Termos Ativos'>
-               <i class='far fa-check-circle' style='color:green'></i>
-            </a>
-            <span>Ativo(s): <?= $row_a["ativo"]; ?></span>
-         </li>
-
-         <li class='list-group-item tec'>
-            <a class='btn btn-default btn-xs' href='equip.php?status=3&cpu=1' title='Falta Termo'>
-               <i class='fas fa-ban' style='color:#f3b37c7a'></i>
-            </a>
-            <span>Falta Termo: <?= $row_f["faltaTermo"]; ?></span>
-         </li>
-
-         <li class='list-group-item tec'>
-            <a class='btn btn-default btn-xs ' href='equip.php?status=8' title='Demitidos'>
-               <i class='far fa-times-circle' style='color:black'></i>
-            </a>
-            <span>Demitido(s): <?= $row_d["demitido"]; ?></span>
-         </li>
-
-         <li class='list-group-item tec'>
-            <a class='btn btn-default btn-xs ' href='equip.php?status=9' title='Sem equipamentos'>
-               <i class='fas fa-desktop' style='color:darkgray'></i>
-            </a>
-            <span>Sem Equipamento(s): <?= $row_Squip["sem_equip"]; ?></span>
-         </li>
-
-         <li class='list-group-item tec'>
-            <a class='btn btn-default btn-xs ' href='equip.php' title='Mostrar todos'>
-               <i class='far fa-check-square' style='color:blue'></i>
-            </a>
-            <span>Mostrar todos</span>
-         </li>
-
-      </ul>
-   </div> -->
 
    <!--botões para chamar os status-->
    <div class="row" style="width: 111%;  margin-left: -4%;">
@@ -268,6 +235,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
             <?php
             //aplicando a query
             while ($row_equip = $resultado_equip->fetch_assoc()) {
+
                echo "<tr>";
                if ($row_equip['id_tipo_equipamento'] == 5) { #RAMAL
                   echo "<td class='fonte'>" . $row_equip['modelo'] . "</td>";
@@ -384,12 +352,6 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
                   } elseif ($row_equip['id_tipo_equipamento'] != 5) {
                      echo "<i class='fas fa-circle' style='color: red;'></i> Falta Nota Fiscal";
                   } //Fim IF nota windows//Fim IF nota windows
-                  echo "</td>";
-               }
-
-               if ($row_equip['id_funcionario'] == NULL) {
-                  echo "<td>";
-                  echo "<i class='fas fa-circle' style='color: yellow;'></i> Nenhum Funcionario";
                   echo "</td>";
                }
 
