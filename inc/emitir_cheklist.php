@@ -137,26 +137,17 @@ require_once('header.php');
                             </ul>
                         </div>
                     </div>
-                </div>  
-                
-                <?php
-                    if($_SESSION["perfil"] == 3){
-                        echo '
+                </div>
                         <div class="control-group">
                             <div class="controls">
                                 <h5 style="color: red; font-weight: bold;">3-) Funcionário foi demitido ?</h5>
-                                <select class="span1 subtitulo" id="selectEquip"  name="demitido"';  
-                                    if(!empty($_GET['status'])){
-                                        echo 'required';
-                                    }  
-                                    echo '>
+                                <select class="span1 subtitulo" id="selectEquip"  name="demitido" required>
                                     <option value="">---</option>
                                     <option value="1">Sim</option>
                                     <option value="0">Não</option>
                                 </select>
                             </div>
-                        </div>';
-                    }
+                        </div>
                 ?>
                 <div class="form-actions">
                     <button type="submit" tar class="btn btn-primary pull-right" id="salvarTermo">Emitir</button>
