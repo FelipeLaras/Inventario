@@ -153,6 +153,9 @@ if ($_GET['msn'] == 1) {
                 case 17: //Não Localizado
                   echo "<td class='fonte'><i class='fas fa-circle' style='color: #504d4d; margin-left: 12px;' title=".$row['status']."></i></td>";
                 break;
+                case '18': //Equipamento Extraviado
+                   echo "<td class='fonte'><i class='fas fa-circle' style='color: purple; margin-left: 12px;' title='".$row['status']."'></i></td>";
+                break;
               }    
 
                //buscando as observações
@@ -190,7 +193,7 @@ if ($_GET['msn'] == 1) {
 
                 if (($row['id_status'] == 6) || ($row['id_status'] == 10) || ($row['id_status'] == 15)) {
                   echo "<a href='inventario_add.php?id_equip=".$row['id_equipamento']."' role='button' class='icon_acao' title='Vincular a um usuário'><i class='btn-icon-only icon-plus-sign' style='font-size: 15px;'></i></a>";
-                }elseif($row['id_status'] == 1){
+                }elseif(!empty($row['id_funcionario'])){
                   echo "<a href='inventario_edit.php?id=".$row['id_funcionario']."' role='button' class='icon_acao' title='Funcionario: ".$row['funcionario']."'><i class='btn-icon-only icon-user' style='font-size: 15px;'></i></a>";
                 }
                  
