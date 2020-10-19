@@ -26,7 +26,7 @@ require_once('../inc/header.php');
 				</div> <!-- /error-details -->
 				
 				<div class="error-actions">
-					<a href="manager.php" class="btn btn-large btn-primary">
+					<a href="../inc/manager.php" class="btn btn-large btn-primary">
 						Voltar
 					</a>
 					

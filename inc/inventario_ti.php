@@ -56,8 +56,14 @@ require_once('header.php')
          <ul class="mainnav">
             <li class="active"><a href="inventario_ti.php"><i class="icon-home"></i><span>Home</span></a></li>
             <li><a href="inventario.php"><i class="icon-group"></i><span>Colaborador</span></a> </li>
-            <li><a href="inventario_equip.php"><i class="icon-cogs"></i><span>Equipamentos</span></a></li>
-            <li><a href="relatorio_auditoria.php"><i class="icon-list-alt"></i><span>Relatórios</span></a></li>
+            <?php 
+               if(($_SESSION["perfil"] != 3)){
+                  echo '
+                  <li><a href="inventario_equip.php"><i class="icon-cogs"></i><span>Equipamentos</span></a></li>
+                  <li><a href="relatorio_auditoria.php"><i class="icon-list-alt"></i><span>Relatórios</span></a></li>';
+               }            
+            ?>
+            
          </ul>
       </div>
       <!-- /container --> 

@@ -62,6 +62,13 @@ require_once('header.php');
         Chek-List
     </h3>
 </div>
+<?php
+    switch ($_GET['status']) {
+        case '1':
+            echo '<div class="alert alert-block"><button type="button" class="close" data-dismiss="alert">×</button><h4>Atenção!</h4>Preencha o campo "3"!</div>';
+            break;
+    }
+?>
 <!-- /widget-header -->
 <h3 style="color: red;">
     <div class="titulo_check">
@@ -73,13 +80,13 @@ require_once('header.php');
 <div class="widget-content">
     <div class="tabbable">
         <div id="formulario">
-            <form id='edit-profile' class='form-horizontal' action='form_checklist.php' method='post'
-                style="margin-left: -12%" autocomplete="off" target="_blank">
+            <form id='edit-profile' class='form-horizontal' action='form_checklist.php' method='post' style="margin-left: -12%" autocomplete="off" target="_blank">
                 <input name='id_fun' value='<?= $_GET['id_fun'] ?>' style='display: none' />
                 <div class="control-group">
                     <div class="controls">
                         <h5>1-) Chek-List do funcionário:</h5>
                         <p class="subtitulo"><?= $_GET['nome'] ?></p>
+                        <input name='nomeFuncionario' value='<?= $_GET['nome'] ?>' style='display: none' />
                     </div>
                 </div>
                 <div class="control-group">
@@ -92,6 +99,7 @@ require_once('header.php');
                         </select>
                     </div>
                 </div>
+                
                 <div id='equip_select' style='display: none'>
                     <div class="control-group">
                         <div class="controls">
@@ -129,7 +137,27 @@ require_once('header.php');
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div>  
+                
+                <?php
+                    if($_SESSION["perfil"] == 3){
+                        echo '
+                        <div class="control-group">
+                            <div class="controls">
+                                <h5 style="color: red; font-weight: bold;">3-) Funcionário foi demitido ?</h5>
+                                <select class="span1 subtitulo" id="selectEquip"  name="demitido"';  
+                                    if(!empty($_GET['status'])){
+                                        echo 'required';
+                                    }  
+                                    echo '>
+                                    <option value="">---</option>
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
+                                </select>
+                            </div>
+                        </div>';
+                    }
+                ?>
                 <div class="form-actions">
                     <button type="submit" tar class="btn btn-primary pull-right" id="salvarTermo">Emitir</button>
                 </div>

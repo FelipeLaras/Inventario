@@ -8,6 +8,21 @@ require_once('../conexao/conexao.php');
 //data de hoje
 $data = date('d/m/Y G:i:s');
 
+/*------------------------ ALTERANDO STATUS DO FUNCIONARIO CASO O MESMO FOI DEMITIDO ------------------------*/
+
+if($_POST['demitido'] == 1){
+	//ALTERANDO O STATUS DO FUNCIONÁRIO PARA DEMITIDO
+	$queryDemitido = "UPDATE manager_inventario_funcionario SET status = 8 WHERE id_funcionario = ".$_POST['id_fun']."";
+	$resultadoDemitido = $conn -> query($queryDemitido);
+
+}
+
+if($_POST['demitido'] == NULL){
+	header('location: emitir_cheklist.php?nome='.$_POST['nomeFuncionario'].'&id_fun='.$_POST['id_fun'].'&status=1');
+	exit;
+}
+
+
 /*------------------------ LIBERANDO OS EQUIPAMENTOS PARA DISVINCULAR DE UM FUNCIONÁRIO ------------------------*/
 
 //montando a query para liberar
