@@ -328,10 +328,11 @@ $query_office = "SELECT
                     MDE.nome AS empresa,
                     MOF.locacao AS id_locacao,
                     MDL.nome AS locacao,                       
-                    MO.file_nota AS caminho_of,
-                    MO.file_nota_nome AS nome_nota_of,
-                    MDO.nome AS versao_of,
-                    MO.data_nota AS data_nota_of
+                    MOF.file_nota AS caminho_of,
+                    MOF.file_nota_nome AS nome_nota_of,
+                    MDOF.nome AS versao_of,
+                    MOF.data_nota AS data_nota_of,
+                    MOF.numero_nota
                  FROM
                     manager_office MOF
                  LEFT JOIN

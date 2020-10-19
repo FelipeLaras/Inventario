@@ -15,9 +15,9 @@ $resultadoNota = $conn->query($queryNota);
 $rowNota = $resultadoNota->fetch_assoc();
 
 if($rowNota['numero_nota'] === "semNota"){
-  $queryWhere = "MO.id = ".$_GET['id_off']."";
+  $queryWhere = "MOF.id = ".$_GET['id_off']."";
 }else{
-  $queryWhere = "MO.numero_nota = (SELECT numero_nota FROM manager_office WHERE id = '".$_GET['id_off']."')";
+  $queryWhere = "MOF.numero_nota = (SELECT numero_nota FROM manager_office WHERE id = '".$_GET['id_off']."')";
 }
 
 //1º vamos coletar todas as informações que iremos usar no termo
@@ -28,9 +28,9 @@ $somando = 0;
 $query_office .= $queryWhere;
 
 $result_windows = $conn->query($query_office);
-$windows_row = $result_windows->fetch_assoc();
+$office_row = $result_windows->fetch_assoc();
 
-$data_nota = $windows_row['data_nota'];
+$data_nota = $office_row['data_nota_of'];
 
 $body = "
 <!DOCTYPE html>
@@ -54,26 +54,26 @@ $body = "
   <table class='table table-bordered'>
     <thead>
       <tr>
-        <th colspan='2'><img class='logo' src='./img/logo.png' width='150' alt='Logo'></th>
+        <th colspan='2'><img class='logo' src='../img/logo.png' width='150' alt='Logo'></th>
         <th colspan='3'>Ficha do Office</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td colspan='5'>Empresa: <span class='font'>".$windows_row['empresa']."</span></td> 
+        <td colspan='5'>Empresa: <span class='font'>".$office_row['empresa']."</span></td> 
       </tr>
       <tr>
-        <td colspan='5'>Locacão: <span class='font'>".$windows_row['locacao']."</span></td>
+        <td colspan='5'>Locacão: <span class='font'>".$office_row['locacao']."</span></td>
       </tr>
       <tr>
-        <td colspan='3'>Nota Fiscal: <span class='font'>".$windows_row['numero_nota']."</span></td>
+        <td colspan='3'>Nota Fiscal: <span class='font'>".$office_row['numero_nota']."</span></td>
         <td colspan='2'>Data: <span class='font'>".$data_nota."</span></td>
       </tr>
       <tr>
-        <td colspan='5'>Software: <span class='font'>".$windows_row['windows']."</span></td>
+        <td colspan='5'>Software: <span class='font'>".$office_row['versao']."</span></td>
       </tr>
       <tr>
-        <td colspan='5'>Fornecedor: <span class='font'>".$windows_row['fornecedor']."</span></td>
+        <td colspan='5'>Fornecedor: <span class='font'>".$office_row['fornecedor']."</span></td>
       </tr>
       <tr>
         <th>Patrimônio</th>
@@ -91,7 +91,7 @@ $body = "
                 LEFT JOIN
             manager_dropdepartamento MDD ON MIE.departamento = MDD.id_depart
                 LEFT JOIN
-            manager_office MO ON MIE.id_equipamento = MO.id_equipamento    
+            manager_office MOF ON MIE.id_equipamento = MOF.id_equipamento    
             WHERE ".$queryWhere."";
             $result_user_windows = $conn->query($user_windows);
         
@@ -114,12 +114,11 @@ $body = "
 </html>";
 
 //terminou a contagem verifica se tem office, se sim enviar
-
-require_once 'dompdf/autoload.inc.php';
-require_once 'dompdf/lib/html5lib/Parser.php';
-require_once 'dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
-require_once 'dompdf/lib/php-svg-lib/src/autoload.php';
-require_once 'dompdf/src/Autoloader.php';
+require_once '../dompdf/autoload.inc.php';
+require_once '../dompdf/lib/html5lib/Parser.php';
+require_once '../dompdf/lib/php-font-lib/src/FontLib/Autoloader.php';
+require_once '../dompdf/lib/php-svg-lib/src/autoload.php';
+require_once '../dompdf/src/Autoloader.php';
 Dompdf\Autoloader::register();
 
 // reference the Dompdf namespace
