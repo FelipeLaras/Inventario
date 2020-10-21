@@ -63,13 +63,12 @@
         unset($_SESSION['salvo']);
       }
 
-      if ($_SESSION['edit'] != NULL) {
+      if (!empty($_GET['editado'])) {
         echo 
           "<div class='alert alert-success'>
               <button type='button' class='close' data-dismiss='alert'>×</button>
               <strong>ATENÇÃO!</strong> Menu editado com sucesso!.
           </div>";
-        unset($_SESSION['edit']);
       }
       if ($_SESSION['exc'] != NULL) {
         echo 
@@ -85,24 +84,24 @@
     <div class="widget-content">
         <div class="tabbable">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#funcao" data-toggle="tab">Função</a></li>
-                <li><a href="#departamento" data-toggle="tab">Departamento</a></li>
-                <li><a href="#empresa_filial" data-toggle="tab">Empresa</a></li>
-                <li><a href="#locacao" data-toggle="tab">Locacão</a></li>
-                <li><a href="#status_colaborador" data-toggle="tab">Status do Colaborador</a></li>
-                <li><a href="#equipamentos" data-toggle="tab">Equipamentos</a></li>
-                <li><a href="#situacao" data-toggle="tab">Situação</a></li>
-                <li><a href="#estado" data-toggle="tab">Estado</a></li>
-                <li><a href="#acessorios" data-toggle="tab">Acessorios</a></li>
-                <li><a href="#operadora" data-toggle="tab">Operadora</a></li>
-                <li><a href="#status_equipamento" data-toggle="tab">Status de Equipamento</a></li>
-                <li><a href="#office" data-toggle="tab">Office</a></li>
-                <li><a href="#windows" data-toggle="tab">Sistema Operacional</a></li>
+                <li <?php if($_SESSION['activeFun'] == 1) {echo "class='active'";} ?>><a href="#funcao" data-toggle="tab">Função</a></li>
+                <li <?php if($_SESSION['activeDep'] == 1) {echo "class='active'";} ?>><a href="#departamento" data-toggle="tab">Departamento</a></li>
+                <li <?php if($_SESSION['activeEmp'] == 1) {echo "class='active'";} ?>><a href="#empresa_filial" data-toggle="tab">Empresa</a></li>
+                <li <?php if($_SESSION['activeLoc'] == 1) {echo "class='active'";} ?>><a href="#locacao" data-toggle="tab">Locacão</a></li>
+                <li <?php if($_SESSION['activeSt'] == 1) {echo "class='active'";} ?>><a href="#status_colaborador" data-toggle="tab" title="Estatus dos Colaboradores">Est. Colaborador</a></li>
+                <li <?php if($_SESSION['activeEquip'] == 1) {echo "class='active'";} ?>><a href="#equipamentos" data-toggle="tab">Equipamentos</a></li>
+                <li <?php if($_SESSION['activeSit'] == 1) {echo "class='active'";} ?>><a href="#situacao" data-toggle="tab">Situação</a></li>
+                <li <?php if($_SESSION['activeEst'] == 1) {echo "class='active'";} ?>><a href="#estado" data-toggle="tab">Estado</a></li>
+                <li <?php if($_SESSION['activeAce'] == 1) {echo "class='active'";} ?>><a href="#acessorios" data-toggle="tab">Acessorios</a></li>
+                <li <?php if($_SESSION['activeOp'] == 1) {echo "class='active'";} ?>><a href="#operadora" data-toggle="tab">Operadora</a></li>
+                <li <?php if($_SESSION['activeStEquip'] == 1) {echo "class='active'";} ?>><a href="#status_equipamento" data-toggle="tab" title="Estatus dos Equipamentos">Est. Equipamento</a></li>
+                <li <?php if($_SESSION['activeOf'] == 1) {echo "class='active'";} ?>><a href="#office" data-toggle="tab">Office</a></li>
+                <li <?php if($_SESSION['activeOs'] == 1) {echo "class='active'";} ?>><a href="#windows" data-toggle="tab" title="Sistema Operacional">S.O</a></li>
             </ul>
             <br>
             <div class="tab-content">
                 <!--FUNÇÃO-->
-                <div class="tab-pane active" id="funcao">
+                <div class="tab-pane <?php if($_SESSION['activeFun'] == 1) {echo "active"; unset($_SESSION['activeFun']);} ?>" id="funcao">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -209,7 +208,7 @@
 
                 </div>
                 <!--DEPARTAMENTO-->
-                <div class="tab-pane" id="departamento">
+                <div class="tab-pane <?php if($_SESSION['activeDep'] == 1) {echo "active"; unset($_SESSION['activeDep']);} ?>" id="departamento">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -316,7 +315,7 @@
                     </div>
                 </div>
                 <!--EMPRESA/FILIAL-->
-                <div class="tab-pane" id="empresa_filial">
+                <div class="tab-pane <?php if($_SESSION['activeEmp'] == 1) {echo "active"; unset($_SESSION['activeEmp']);} ?>" id="empresa_filial">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -423,7 +422,7 @@
                     </div>
                 </div>
                 <!--LOCAÇÃO-->
-                <div class="tab-pane" id="locacao">
+                <div class="tab-pane <?php if($_SESSION['activeLoc'] == 1) {echo "active"; unset($_SESSION['activeLoc']);} ?>" id="locacao">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -530,7 +529,7 @@
                     </div>
                 </div>
                 <!--STATUS DO COLABORADOR-->
-                <div class="tab-pane" id="status_colaborador">
+                <div class="tab-pane <?php if($_SESSION['activeSt'] == 1) {echo "active"; unset($_SESSION['activeSt']);} ?>" id="status_colaborador">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -583,7 +582,7 @@
       <hr>
       <br>
       <form id='edit-profile' class='form-horizontal' action='edit_drop.php' method='post'>
-        <input value='".$row_status['id_status']."' style='display:none' name='id_status'/>
+        <input value='".$row_status['id_status']."' style='display:none' name='id_statusFun'/>
         <div class='control-group'>
            <label class='control-label'>Status Colaborador:</label>
            <div class='controls'>
@@ -638,7 +637,7 @@
                     </div>
                 </div>
                 <!--EQUIPAMENTOS-->
-                <div class="tab-pane" id="equipamentos">
+                <div class="tab-pane <?php if($_SESSION['activeEquip'] == 1) {echo "active"; unset($_SESSION['activeEquip']);} ?>" id="equipamentos">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -746,7 +745,7 @@
                     </div>
                 </div>
                 <!--SITUAÇÃO-->
-                <div class="tab-pane" id="situacao">
+                <div class="tab-pane  <?php if($_SESSION['activeSit'] == 1) {echo "active"; unset($_SESSION['activeSit']);} ?>" id="situacao">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -853,7 +852,7 @@
                     </div>
                 </div>
                 <!--ESTADO-->
-                <div class="tab-pane" id="estado">
+                <div class="tab-pane <?php if($_SESSION['activeEst'] == 1) {echo "active"; unset($_SESSION['activeEst']);} ?>" id="estado">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -960,7 +959,7 @@
                     </div>
                 </div>
                 <!--ACESSORIOS-->
-                <div class="tab-pane" id="acessorios">
+                <div class="tab-pane <?php if($_SESSION['activeAce'] == 1) {echo "active"; unset($_SESSION['activeAce']);} ?>" id="acessorios">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -1067,7 +1066,7 @@
                     </div>
                 </div>
                 <!--OPERADORA-->
-                <div class="tab-pane" id="operadora">
+                <div class="tab-pane <?php if($_SESSION['activeOp'] == 1) {echo "active"; unset($_SESSION['activeOp']);} ?>" id="operadora">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -1103,16 +1102,16 @@
                                         <td>".$row_operadora['nome']."</td>
                                         <!--AÇÃO-->
                                         <td class='td-actions'>
-                                            <a href='#modalEditarA".$row_operadora['id_operadora']."' class='btn btn-small btn-success' title='Editar' data-toggle='modal'>
+                                            <a href='#modalEditarOP".$row_operadora['id_operadora']."' class='btn btn-small btn-success' title='Editar' data-toggle='modal'>
                                               <i class='btn-icon-only icon-edit'> </i>
                                             </a>
-                                            <a href='#modalExcluirA".$row_operadora['id_operadora']."' class='btn btn-danger btn-small' title='Excluir' data-toggle='modal'>
+                                            <a href='#modalExcluirOP".$row_operadora['id_operadora']."' class='btn btn-danger btn-small' title='Excluir' data-toggle='modal'>
                                               <i class='btn-icon-only icon-remove'> </i>
                                             </a>
                                           </td>
                                        </tr>
 <!-- MODAL EDITAR -->
-<div id='modalEditarA".$row_operadora['id_operadora']."' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' style='width: 23%;'>
+<div id='modalEditarOP".$row_operadora['id_operadora']."' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' style='width: 23%;'>
   <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
   <div id='filho'> 
     <div class='modal-body'>
@@ -1138,7 +1137,7 @@
   </div>
 </div>
 <!-- MODAL EXCLUIR -->
-<div id='modalExcluirA".$row_operadora['id_operadora']."' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' style='width: 33%;'>
+<div id='modalExcluirOP".$row_operadora['id_operadora']."' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' style='width: 33%;'>
   <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
   <div id='filho'> 
     <div class='modal-body'>
@@ -1176,7 +1175,7 @@
                     </div>
                 </div>
                 <!--STATUS DE EQUIPAMENTO-->
-                <div class="tab-pane" id="status_equipamento">
+                <div class="tab-pane <?php if($_SESSION['activeStEquip'] == 1) {echo "active"; unset($_SESSION['activeStEquip']);} ?>" id="status_equipamento">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -1286,7 +1285,7 @@
                     </div>
                 </div>
                 <!--OFFICE-->
-                <div class="tab-pane" id="office">
+                <div class="tab-pane <?php if($_SESSION['activeOf'] == 1) {echo "active"; unset($_SESSION['activeOf']);} ?>" id="office">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">
@@ -1395,7 +1394,7 @@
                     </div>
                 </div>
                 <!--WINDOWS-->
-                <div class="tab-pane" id="windows">
+                <div class="tab-pane <?php if($_SESSION['activeOs'] == 1) {echo "active"; unset($_SESSION['activeOs']);} ?>" id="windows">
                     <div class="span3" style="width: 25%;">
                         <div class="widget stacked widget-table action-table">
                             <div class="widget-header">

@@ -23,6 +23,7 @@ if ($_POST['name_funcao'] != NULL) {
 		$insert_funcao = "INSERT INTO manager_dropfuncao (nome) VALUES ('".$_POST['name_funcao']."')";
 		$result_insert_funcao = $conn->query($insert_funcao) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeFun'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -38,6 +39,7 @@ if ($_POST['name_departamento'] != NULL) {
 		$insert_depart = "INSERT INTO manager_dropdepartamento (nome) VALUES ('".$_POST['name_departamento']."')";
 		$result_insert_depart = $conn->query($insert_depart) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeDep'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -53,6 +55,7 @@ if ($_POST['name_empresa'] != NULL) {
 		$insert_empresa = "INSERT INTO manager_dropempresa (nome) VALUES ('".$_POST['name_empresa']."')";
 		$result_insert_empresa = $conn->query($insert_empresa) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeEmp'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -68,6 +71,7 @@ if ($_POST['name_locacao'] != NULL) {
 		$insert_locacao = "INSERT INTO manager_droplocacao (nome) VALUES ('".$_POST['name_locacao']."')";
 		$result_insert_locacao = $conn->query($insert_locacao) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeLoc'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -77,12 +81,13 @@ if ($_POST['name_status_colaborador'] != NULL) {
 	$result_chek_status_colaborador = $conn->query($chek_status_colaborador);
 
 	if ($row_status_colaborador = mysqli_fetch_assoc($result_chek_status_colaborador)) {
-		$_SESSION['id_menu'] = $row_status_colaborador['id_status'];
+		$_SESSION['id_menu'] = $row_status_colaborador['id_statusFun'];
 		header('location: manager_drop_inventario.php');
 	}else{
 		$insert_status_colaborador = "INSERT INTO manager_dropstatus (nome) VALUES ('".$_POST['name_status_colaborador']."')";
 		$result_insert_status_colaborador = $conn->query($insert_status_colaborador) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeSt'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -99,6 +104,7 @@ if ($_POST['name_equipamentos'] != NULL) {
 		$insert_equipamento = "INSERT INTO manager_dropequipamentos (nome) VALUES ('".$_POST['name_equipamentos']."')";
 		$result_insert_equipamento = $conn->query($insert_equipamento) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeEquip'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -115,6 +121,7 @@ if ($_POST['name_situacao'] != NULL) {
 		$insert_situacao = "INSERT INTO manager_dropsituacao (nome) VALUES ('".$_POST['name_situacao']."')";
 		$result_insert_situacao = $conn->query($insert_situacao) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeSit'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -131,6 +138,7 @@ if ($_POST['name_estado'] != NULL) {
 		$insert_estado = "INSERT INTO manager_dropestado (nome) VALUES ('".$_POST['name_estado']."')";
 		$result_insert_estado = $conn->query($insert_estado) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeEst'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -147,6 +155,7 @@ if ($_POST['name_acessorios'] != NULL) {
 		$insert_acessorios = "INSERT INTO manager_dropacessorios (nome) VALUES ('".$_POST['name_acessorios']."')";
 		$result_insert_acessorios = $conn->query($insert_acessorios) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeAce'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -163,6 +172,7 @@ if ($_POST['name_operadora'] != NULL) {
 		$insert_operadora = "INSERT INTO manager_dropoperadora (nome) VALUES ('".$_POST['name_operadora']."')";
 		$result_insert_operadora = $conn->query($insert_operadora) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeOp'] = 1;
 		echo "olá";
 		header('location: manager_drop_inventario.php');
 	}
@@ -180,6 +190,7 @@ if ($_POST['name_status_equipamento'] != NULL) {
 		$insert_status_equipamento = "INSERT INTO manager_dropstatusequipamento (nome) VALUES ('".$_POST['name_status_equipamento']."')";
 		$result_status_equipamento = $conn->query($insert_status_equipamento) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeStEquip'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -196,6 +207,7 @@ if ($_POST['name_office'] != NULL) {
 		$insert_office = "INSERT INTO manager_dropoffice (nome) VALUES ('".$_POST['name_office']."')";
 		$result_office = $conn->query($insert_office) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeOf'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }
@@ -212,6 +224,7 @@ if ($_POST['name_windows'] != NULL) {
 		$insert_windows = "INSERT INTO manager_dropsistemaoperacional (nome) VALUES ('".$_POST['name_windows']."')";
 		$result_windows = $conn->query($insert_windows) or die(mysqli_error($conn));
 		$_SESSION['salvo'] = 1;
+		$_SESSION['activeOs'] = 1;
 		header('location: manager_drop_inventario.php');
 	}
 }

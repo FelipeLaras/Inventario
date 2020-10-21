@@ -13,6 +13,7 @@ if ($_POST['id_funcao'] != NULL) {
 	$update_funcao = "UPDATE manager_dropfuncao SET deletar = 1 WHERE id_funcao = '".$_POST['id_funcao']."'";
 	$result_funcao = $conn->query($update_funcao);
 	$_SESSION['exc'] = $_POST['id_funcao'];
+	$_SESSION['activeFun'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -22,6 +23,7 @@ if ($_POST['id_depart'] != NULL) {
 	$update_departamento = "UPDATE manager_dropdepartamento SET deletar = 1 WHERE id_depart = '".$_POST['id_depart']."'";
 	$result_departamento = $conn->query($update_departamento);
 	$_SESSION['exc'] = $_POST['id_depart'];
+	$_SESSION['activeDep'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -30,6 +32,7 @@ if ($_POST['id_empresa'] != NULL) {
 	$update_empresa = "UPDATE manager_dropempresa SET deletar = 1 WHERE id_empresa = '".$_POST['id_empresa']."'";
 	$result_empresa = $conn->query($update_empresa);
 	$_SESSION['exc'] = $_POST['id_empresa'];
+	$_SESSION['activeEmp'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -38,15 +41,17 @@ if ($_POST['id_locacao'] != NULL) {
 	$update_locacao = "UPDATE manager_droplocacao SET deletar = 1 WHERE id_empresa  = '".$_POST['id_locacao']."'";
 	$result_locacao = $conn->query($update_locacao);
 	$_SESSION['exc'] = $_POST['id_locacao'];
+	$_SESSION['activeLoc'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
 
 //STATUS DO COLABORADOR
-if ($_POST['id_status'] != NULL) {
-	$update_status_colaborador = "UPDATE manager_dropstatus SET deletar = 1 WHERE id_status = '".$_POST['id_status']."'";
+if ($_POST['id_statusFun'] != NULL) {
+	$update_status_colaborador = "UPDATE manager_dropstatus SET deletar = 1 WHERE id_status = '".$_POST['id_statusFun']."'";
 	$result_status_colaborador = $conn->query($update_status_colaborador);
-	$_SESSION['exc'] = $_POST['id_status'];
+	$_SESSION['exc'] = $_POST['id_statusFun'];
+	$_SESSION['activeSt'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -55,6 +60,7 @@ if ($_POST['id_equip'] != NULL) {
 	$update_equip = "UPDATE manager_dropequipamentos SET deletar = 1 WHERE id_equip = '".$_POST['id_equip']."'";
 	$result_equip = $conn->query($update_equip);
 	$_SESSION['exc'] = $_POST['id_equip'];
+	$_SESSION['activeEquip'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -63,6 +69,7 @@ if ($_POST['id_situacao'] != NULL) {
 	$update_situacao = "UPDATE manager_dropsituacao SET deletar = 1 WHERE id_situacao = '".$_POST['id_situacao']."'";
 	$result_situacao = $conn->query($update_situacao);
 	$_SESSION['exc'] = $_POST['id_situacao'];
+	$_SESSION['activeSit'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -71,6 +78,7 @@ if ($_POST['id_estado'] != NULL) {
 	$update_estado= "UPDATE manager_dropestado SET deletar = 1 WHERE id = '".$_POST['id_estado']."'";
 	$result_estado = $conn->query($update_estado);
 	$_SESSION['exc'] = $_POST['id_estado'];
+	$_SESSION['activeEst'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -79,6 +87,7 @@ if ($_POST['id_acessorio'] != NULL) {
 	$update_acessorios = "UPDATE manager_dropacessorios SET deletar = 1 WHERE id_acessorio = '".$_POST['id_acessorio']."'";
 	$result_acessorios = $conn->query($update_acessorios);
 	$_SESSION['exc'] = $_POST['id_acessorio'];
+	$_SESSION['activeAce'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -87,6 +96,7 @@ if ($_POST['id_operadora'] != NULL) {
 	$update_operadora = "UPDATE manager_dropoperadora SET deletar = 1 WHERE id_operadora = '".$_POST['id_operadora']."'";
 	$result_operadora = $conn->query($update_operadora);
 	$_SESSION['exc'] = $_POST['id_operadora'];
+	$_SESSION['activeOp'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -95,6 +105,7 @@ if ($_POST['id_status'] != NULL) {
 	$update_status_equipamento = "UPDATE manager_dropstatusequipamento SET deletar = 1 WHERE id_status = '".$_POST['id_status']."'";
 	$result_status_equipamento = $conn->query($update_status_equipamento);
 	$_SESSION['exc'] = $_POST['id_status'];
+	$_SESSION['activeStEquip'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -103,6 +114,7 @@ if ($_POST['id_office'] != NULL) {
 	$update_office = "UPDATE manager_dropoffice SET deletar = 1 WHERE id = '".$_POST['id_office']."'";
 	$result_office = $conn->query($update_office);
 	$_SESSION['exc'] = $_POST['id_office'];
+	$_SESSION['activeOf'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
@@ -111,6 +123,7 @@ if ($_POST['id_windows'] != NULL) {
 	$update_windows = "UPDATE manager_dropsistemaoperacional SET deletar = 1 WHERE id = '".$_POST['id_windows']."'";
 	$result_windows = $conn->query($update_windows);
 	$_SESSION['exc'] = $_POST['id_windows'];
+	$_SESSION['activeOs'] = 1;
 	header('location: manager_drop_inventario.php');
 }
 
