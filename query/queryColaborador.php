@@ -37,19 +37,6 @@ $query_d = "SELECT
 $resultado_d = $conn -> query($query_d);
 $row_d = $resultado_d -> fetch_assoc();
 
-/*-----------------------------------------------------------------------------*/
-         
-$query_Squip = "SELECT 
-                    COUNT(status) AS sem_equip
-                FROM
-                    manager_inventario_funcionario
-                WHERE
-                    status = 9 AND 
-                    deletar = 0 AND
-                    funcao != ''
-                    ";
-$resultado_Squip = $conn -> query($query_Squip);
-$row_Squip = $resultado_Squip -> fetch_assoc();
 
 ?>
 

@@ -114,14 +114,6 @@ select.form-control.form-control-sm {
             <span>Demitido(s): ".$row_d["demitido"]."</span>
 
             <li class='list-group-item'>
-               <!--botão que informa quantos usuários que estão sem equipamento-->
-               <a class='btn btn-default btn-xs botao' href='inventario.php?status=9' title='Sem equipamentos'>               
-                  <i class='fas fa-desktop' style='color:darkgray'></i>
-               </a>
-            </li>
-            <span>Sem Equipamento(s): ".$row_Squip["sem_equip"]."</span>
-
-            <li class='list-group-item'>
                <a class='btn btn-default btn-xs botao' href='inventario.php' title='Mostrar todos'>
                   <i class='far fa-check-square' style='color:blue'></i>
                </a>
@@ -176,7 +168,7 @@ select.form-control.form-control-sm {
                         LEFT JOIN
                               manager_dropstatus S ON F.status = S.id_status
                         WHERE
-                              F.deletar = 0 AND F.funcao IS NOT NULL "; 
+                           F.deletar = 0 AND F.status != 9 AND F.funcao IS NOT NULL "; 
 
                            if($_GET['status'] != NULL){
                               $query .= "AND F.status = ".$_GET['status']."";
