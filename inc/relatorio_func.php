@@ -1,7 +1,5 @@
 <?php
 
-use FontLib\Table\Type\head;
-
 session_start();
 //aplicando para usar varialve em outro arquivo
 
@@ -26,31 +24,46 @@ if ($_GET['nome_funcionario'] != NULL) {
    $nome = 0;
 }
 
+//validando Falta termo
+
+if($_GET['status_funcionario'] == 3){
+   $statusFuncionario = "termo = 1";
+}else{
+   $statusFuncionario = "MIF.status = " . $_GET['status_funcionario'];
+}
+
 //montando a pesquisa para o relatório
 $query_relatorios = "SELECT 
-MIF.nome, 
-MIF.cpf, 
-MDF.nome AS funcao, 
-MDD.nome AS departamento, 
-MDE.nome AS filial, 
-MDEQ.nome AS tipo_equipamento, 
-MIE.patrimonio,
-MIE.modelo, 
-MIE.imei_chip,
-MIE.numero, 
-MIE.valor,
-MDSE.nome AS status
-FROM manager_inventario_funcionario MIF
-LEFT JOIN manager_inventario_equipamento MIE ON MIF.id_funcionario = MIE.id_funcionario
-LEFT JOIN manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-LEFT JOIN manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-LEFT JOIN manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
-LEFT JOIN manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
-LEFT JOIN manager_dropstatus MDSE ON MIF.status = MDSE.id_status
-WHERE 
+                        MIF.nome, 
+                        MIF.cpf, 
+                        MDF.nome AS funcao, 
+                        MDD.nome AS departamento, 
+                        MDE.nome AS filial, 
+                        MDEQ.nome AS tipo_equipamento, 
+                        MIE.patrimonio,
+                        MIE.modelo, 
+                        MIE.imei_chip,
+                        MIE.numero, 
+                        MIE.valor,
+                        MDSE.nome AS status
+                     FROM 
+                        manager_inventario_funcionario MIF
+                     LEFT JOIN 
+                        manager_inventario_equipamento MIE ON MIF.id_funcionario = MIE.id_funcionario
+                     LEFT JOIN 
+                        manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
+                     LEFT JOIN 
+                        manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
+                     LEFT JOIN 
+                        manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
+                     LEFT JOIN 
+                        manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
+                     LEFT JOIN 
+                        manager_dropstatus MDSE ON MIF.status = MDSE.id_status
+                     WHERE 
 
-MIF.deletar = 0 AND 
-MIE.tipo_equipamento in (1, 3, 4, 2) AND
+                        MIF.deletar = 0 AND 
+                        MIE.tipo_equipamento in (1, 3, 4, 2) AND
 
 (";
 
@@ -60,7 +73,7 @@ if (empty($_GET['funcao_funcionario'])) {
          if (empty($_GET['status_funcionario'])) {
             header('location: http://rede.paranapart.com.br/ti/relatorio_auditoria.php?erro=1');
          } else {
-            $query_relatorios .= "MIF.status = '" . $_GET['status_funcionario']."'";
+            $query_relatorios .= $statusFuncionario;
          }
       } else {
          $query_relatorios .= "MIF.empresa = '" . $_GET['empresa_funcionario'] . "'";
@@ -69,7 +82,7 @@ if (empty($_GET['funcao_funcionario'])) {
 
          } else {
 
-            $query_relatorios .= " AND MIF.status = '" . $_GET['status_funcionario'] . "'";
+            $query_relatorios .= " AND ".$statusFuncionario ."'";
          }
       }
    } else {
@@ -82,7 +95,7 @@ if (empty($_GET['funcao_funcionario'])) {
          $query_relatorios .= " AND MIF.empresa = '" . $_GET['empresa_funcionario'] . "'";
          if (empty($_GET['status_funcionario'])) {
          } else {
-            $query_relatorios .= " AND MIF.status = '" . $_GET['status_funcionario'] . "'";
+            $query_relatorios .= " AND ".$statusFuncionario ."'";
          }
       }
    }
@@ -93,14 +106,14 @@ if (empty($_GET['funcao_funcionario'])) {
       if (empty($_GET['empresa_funcionario'])) {
          if (empty($_GET['status_funcionario'])) {
          } else {
-            $query_relatorios .= " AND MIF.status = '" . $_GET['status_funcionario'] . "'";
+            $query_relatorios .= " AND ".$statusFuncionario ."'";
          }
       } else {
          $query_relatorios .= " AND MIF.empresa = '" . $_GET['empresa_funcionario'] . "'";
 
          if (empty($_GET['status_funcionario'])) {
          } else {
-            $query_relatorios .= " AND MIF.status = '" . $_GET['status_funcionario'] . "'";
+            $query_relatorios .= " AND ".$statusFuncionario ."'";
          }
       }
    } else {
@@ -114,7 +127,7 @@ if (empty($_GET['funcao_funcionario'])) {
 
          if (empty($_GET['status_funcionario'])) {
          } else {
-            $query_relatorios .= " AND MIF.status = '" . $_GET['status_funcionario'] . "'";
+            $query_relatorios .= " AND ".$statusFuncionario ."'";
          }
       }
    }
@@ -208,55 +221,32 @@ require_once('header.php');
          </thead>
          <tbody>
             <?php
-            while ($row_relatorio = $resultado_relatorios->fetch_assoc()) {
-               echo "
-            <tr>
-               <td>" . $row_relatorio['nome'] . "</td>
-               <td>" . $row_relatorio['cpf'] . "</td>
-               <td>" . $row_relatorio['funcao'] . "</td>
-               <td>" . $row_relatorio['departamento'] . "</td>
-               <td>" . $row_relatorio['filial'] . "</td>
-               <td>" . $row_relatorio['tipo_equipamento'] . "</td>";
-               //patrimonio
-               if ($row_relatorio['patrimonio'] != NULL) {
-                  echo "<td>" . $row_relatorio['patrimonio'] . "</td>";
-               } else {
-                  echo "<td>---</td>";
-               }
-               //modelo
-               if ($row_relatorio['modelo'] != NULL) {
-                  echo "<td>" . $row_relatorio['modelo'] . "</td>";
-               } else {
-                  echo "<td>---</td>";
-               }
-               //imei
-               if ($row_relatorio['imei_chip'] != NULL) {
-                  echo "<td>" . $row_relatorio['imei_chip'] . "</td>";
-               } else {
-                  echo "<td>---</td>";
-               }
-               //numero
-               if ($row_relatorio['numero'] != NULL) {
-                  echo "<td>" . $row_relatorio['numero'] . "</td>";
-               } else {
-                  echo "<td>---</td>";
-               }
-               //valor
-               if ($row_relatorio['valor'] != NULL) {
-                  echo "<td>" . $row_relatorio['valor'] . "</td>";
-               } else {
-                  echo "<td>---</td>";
-               }
-               //status
-               if ($row_relatorio['status'] != NULL) {
-                  echo "<td>" . $row_relatorio['status'] . "</td>";
-               } else {
-                  echo "<td>---</td>";
-               }
-               echo "
-            </tr>
-             ";
-            } ?>
+               while ($row_relatorio = $resultado_relatorios->fetch_assoc()) {
+                  echo "
+                     <tr>
+                        <td>" . $row_relatorio['nome'] . "</td>
+                        <td>" . $row_relatorio['cpf'] . "</td>
+                        <td>" . $row_relatorio['funcao'] . "</td>
+                        <td>" . $row_relatorio['departamento'] . "</td>
+                        <td>" . $row_relatorio['filial'] . "</td>
+                        <td>" . $row_relatorio['tipo_equipamento'] . "</td>";
+                        //patrimonio
+                        echo !empty($row_relatorio['patrimonio']) ? "<td>" . $row_relatorio['patrimonio'] . "</td>" : "<td>---</td>";
+                        //modelo
+                        echo !empty($row_relatorio['modelo']) ? "<td>" . $row_relatorio['modelo'] . "</td>" : "<td>---</td>";
+                        //imei
+                        echo !empty($row_relatorio['imei_chip']) ? "<td>" . $row_relatorio['imei_chip'] . "</td>" : "<td>---</td>";
+                        //numero
+                        echo !empty($row_relatorio['numero']) ? "<td>" . $row_relatorio['numero'] . "</td>" : "<td>---</td>";
+                        //valor
+                        echo !empty($row_relatorio['valor']) ? "<td>" . $row_relatorio['valor'] . "</td>" : "<td>---</td>";
+                        //status
+                        echo !empty($row_relatorio['status']) ? "<td>" . $row_relatorio['status'] . "</td>" : "<td>---</td>";
+                  echo "
+                     </tr>
+               ";
+               } 
+            ?>
          </tbody>
       </table>
    </div>
