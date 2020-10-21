@@ -177,7 +177,7 @@ $html = "
 					  	$html .= "<td>".$row_equip['planos_voz'].", ".$row_equip['planos_dados']."</td>";
 			  			$query_acessorios ="SELECT MDA.nome AS acessorios
 							FROM manager_inventario_acessorios MIA
-							INNER JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
+							LEFT JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
 							WHERE MIA.id_equipamento = ".$row_equip['id_equipamento']."";
 						$html .= "<td>";
 						$resultado_acessorios = $conn->query($query_acessorios);	
