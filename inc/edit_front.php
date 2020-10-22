@@ -135,7 +135,7 @@ $row_profile = $resultado_profile -> fetch_assoc();
 				?>
 
 				</div> <!-- /login-fields -->
-				<div class="control-group">											
+				<div class="control-group" <?= $_SESSION["perfil"] == 0 ? "style='display: block;'" : "style='display: none;'" ?>>											
 					<p>Permissões</p>
 					<div class="controls">
 						<ul style="list-style-type:none;">
