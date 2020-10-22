@@ -22,6 +22,14 @@ a:focus {
 a:hover, a:active {
 	outline: 0;
 }
+
+a.botaoChecklist{
+    color:red;
+}
+
+a.botaoChecklist:hover{
+    color: #000;
+}
 sub, sup {
 	position: relative;
 	font-size: 75%;
@@ -969,11 +977,9 @@ legend+.control-group {
 	padding-top: 5px;
 	text-align: right;
 }
-.form-horizontal .controls {
-	margin-left: 160px;
-*display:inline-block;
-*margin-left:0;
-*padding-left:20px;
+.form-horizontal .controls {	
+    margin-left: 9px;
+    margin-top: 11px;
 }
 .form-horizontal .help-block {
 	margin-top: 9px;
