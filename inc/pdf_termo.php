@@ -68,34 +68,44 @@ $resultado_funcionarios = $conn->query($query_funcionario);
 $row_fun = mysqli_fetch_assoc($resultado_funcionarios);	
 
 /*PEGANDO DADOS DO EQUIPAMENTO*/
+
 $query_equipamento = "SELECT 
-MIE.id_equipamento,
-MIE.tipo_equipamento AS idTipo_equipamento,
-MDE.nome AS tipo_equipamento,
-MIE.modelo,
-MIE.patrimonio,
-MIE.imei_chip,
-MIE.valor,
-MIE.numero,
-MIE.planos_voz,
-MIE.planos_dados,
-MDST.nome AS situacao,
-MDO.nome AS operadora,
-MDET.nome AS estado
-FROM
-manager_inventario_equipamento MIE
-	LEFT JOIN
-manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
-	LEFT JOIN
-manager_dropsituacao MDST ON MIE.situacao = MDST.id_situacao
-	LEFT JOIN
-manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
-	LEFT JOIN
-manager_dropestado MDET ON MDET.id = MIE.estado
-WHERE
-MIE.id_funcionario =  ".$id_funcionario." AND 
-MIE.tipo_equipamento IN (1, 3, 4, 2) AND
-MIE.deletar = 0";
+						MIE.id_equipamento,
+						MIE.tipo_equipamento AS idTipo_equipamento,
+						MDE.nome AS tipo_equipamento,
+						MIE.modelo,
+						MIE.patrimonio,
+						MIE.imei_chip,
+						MIE.valor,
+						MIE.numero,
+						MIE.planos_voz,
+						MIE.planos_dados,
+						MDST.nome AS situacao,
+						MDO.nome AS operadora,
+						MDET.nome AS estado
+					FROM
+						manager_inventario_equipamento MIE
+					LEFT JOIN
+						manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
+					LEFT JOIN
+						manager_dropsituacao MDST ON MIE.situacao = MDST.id_situacao
+					LEFT JOIN
+						manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
+					LEFT JOIN
+						manager_dropestado MDET ON MDET.id = MIE.estado
+					WHERE
+						MIE.id_equipamento IN (";
+
+$key = 0;
+
+while (isset($_POST['termoEquipamento'][$key])){
+
+	$query_equipamento .= $_POST['termoEquipamento'][$key].",";
+
+	$key++;
+}
+
+$query_equipamento .= "'')";	
 
 $resulado_equipamento = $conn->query($query_equipamento);
 

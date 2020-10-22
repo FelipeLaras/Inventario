@@ -304,7 +304,7 @@ switch ($_GET['msn']) {
                     </h3>
                   </div>
                   <div class='modal-body'>
-                    <form id='edit-profile' class='form-horizontal' action='pdf_termo.php' enctype='multipart/form-data' method='post'>
+                    <form id='edit-profile' class='form-horizontal' action='pdf_termo.php' enctype='multipart/form-data' method='post' name="formTermo">
                       <div id='button_pai'>
                         <h4>
                           <i class="fas fa-angle-double-right"></i>
@@ -325,14 +325,14 @@ switch ($_GET['msn']) {
                                                   LEFT JOIN
                                                     manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
                                                   WHERE
-                                                    MIE.id_funcionario = ".$_GET['id']." AND MIE.tipo_equipamento NOT IN (8, 9, 5, 10)";
+                                                    MIE.id_funcionario = ".$_GET['id']." AND MIE.deletar = 0 AND MIE.tipo_equipamento NOT IN (8, 9, 5, 10)";
 
                               $resut = $conn->query($termoQueryEquip);
 
                               while($termoEquip = $resut->fetch_assoc()){
                                 
                                 echo '<label class="checkbox line">
-                                        <input type="checkbox" name="termoEquipamento" value="'.$termoEquip['id_equipamento'].'">';
+                                        <input type="checkbox" name="termoEquipamento[]" id="equipCheck'.$termoEquip['id_equipamento'].'" onclick="liberarTermo'.$termoEquip['id_equipamento'].'()" value="'.$termoEquip['id_equipamento'].'">';
 
                                         if(empty($termoEquip['imei_chip'])){
                                           echo $termoEquip['tipo_equipamento']. " [ ".$termoEquip['numero']." ]";
@@ -341,7 +341,16 @@ switch ($_GET['msn']) {
                                         }
 
 
-                                echo '</label>';
+                                echo '</label>
+                                
+                                <script type="text/javascript">
+                                  function liberarTermo'.$termoEquip['id_equipamento'].'(){
+
+                                    if(document.getElementById("equipCheck'.$termoEquip['id_equipamento'].'").checked == true){
+                                      document.getElementById("buttonTermo").disabled = false;
+                                    }
+                                  }
+                                </script>';
                               }
                           ?>
                         </div>		<!-- /controls -->		
@@ -363,7 +372,7 @@ switch ($_GET['msn']) {
                       <!--gambiarra-->
                       <div class='modal-footer'>
                         <button class='btn' data-dismiss='modal' aria-hidden='true'>Cancelar</button>
-                        <button class='btn btn-primary' formtarget="_blank"><i class="fas fa-plus"></i> Termo</button>
+                        <button class='btn btn-primary' formtarget="_blank" id='buttonTermo' disabled><i class="fas fa-plus"></i> Termo</button>
                       </div>
                     </form>
                   </div>
@@ -1189,6 +1198,7 @@ switch ($_GET['msn']) {
 
 </html>
 <!--MOSTRAR CAMPO ICONE-->
+
 <script language="javascript">
   function abrir() {
     window.open("add_funcionario.php", "mywindow", "width=500,height=600");
@@ -1209,4 +1219,4 @@ switch ($_GET['msn']) {
   }
 </script>
 
-<?php mysqli_close($conn); ?>
+<?= $conn->close() ?>
