@@ -111,6 +111,7 @@ require_once('header.php');
                                     MIE.modelo, 
                                     MIE.numero, 
                                     MIE.tipo_equipamento,
+                                    MIE.imei_chip,
                                     MDE.nome
                                     FROM 
                                     manager_inventario_equipamento MIE
@@ -129,7 +130,7 @@ require_once('header.php');
                                         }else{
                                             echo "
                                             <li class='li_equip'>
-                                                <input type='checkbox' name='id_equip[]' value='".$linha_check['id_equipamento']."'> ".$linha_check['nome']." | ".$linha_check['modelo']."
+                                                <input type='checkbox' name='id_equip[]' value='".$linha_check['id_equipamento']."'> ".$linha_check['nome']." | ".$linha_check['modelo']." | ".$linha_check['imei_chip']."
                                             </li>";
                                         }
                                     }
