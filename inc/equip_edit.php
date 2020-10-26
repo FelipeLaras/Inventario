@@ -13,15 +13,6 @@ if ($_SESSION["perfil"] == NULL) {
 require_once('header.php');
 
 ?>
-<style>
-   #myInput2autocomplete-list {
-      margin-left: -72%;
-   }
-
-   #myInput1autocomplete-list {
-      margin-left: -134%;
-   }
-</style>
 <div class="subnavbar">
    <div class="subnavbar-inner">
       <div class="container">
@@ -419,8 +410,10 @@ require_once('header.php');
                      </div>
                      <div class='control-group'>
                         <label class='control-label'>Fornecedor:</label>
-                        <div class='controls autocomplete'>
-                           <input class='span5' id='myInput2' name='fornecedor_so_cpu' type='text' value='" . $windows['fornecedor'] . "' style='margin-left: -155px;'>                            
+                        <div class='controls'>
+                           <div class='autocomplete'>
+                              <input class='span5' id='myInput2' name='fornecedor_so_cpu' type='text' value='" . $windows['fornecedor'] . "'>
+                           </div>                            
                         </div>
                      </div>
                    ";
@@ -443,8 +436,10 @@ require_once('header.php');
                            </div>
                            <div class='control-group'>
                               <label class='control-label'>Fornecedor:</label>
-                              <div class='controls autocomplete'>
-                                 <input class='span5' id='myInput1' name='fornecedor_office_cpu' type='text' value='" . $office['fornecedor'] . "' style='margin-left: -155px'>                            
+                              <div class='controls'>
+                                 <div class='autocomplete'>
+                                    <input class='span5' id='myInput1' name='fornecedor_office_cpu' type='text' value='" . $office['fornecedor'] . "'>
+                                 </div>                            
                               </div>
                            </div>
                            <div class='control-group'>
@@ -1302,8 +1297,10 @@ require_once('header.php');
             </div>
             <div class='control-group '>
                <label class='control-label'>Fornecedor:</label>                  
-               <div class='controls autocomplete' style='margin-left: 5px;'>
-                  <input class='span3' id='myInput1'  type='text' name='fornecedor_office'/>
+               <div class='controls'>
+                  <div class='autocomplete'>
+                     <input class='span3' id='myInput1'  type='text' name='fornecedor_office'/>
+                  </div>
                </div>
             </div>
             <div class='control-group'>
@@ -1378,100 +1375,93 @@ require_once('header.php');
       </h3>
    </div>
    <div class="modal-body">
-      <?php
-      echo "
-        <form id='edit-profile' class='form-horizontal' enctype='multipart/form-data' action='equip_trans.php'
-            method='post'>
-            <input type='text' name='id_fun' style='display:none' value='" . $_GET['id_fun'] . "'>
-            <input type='text' name='id_equip' style='display:none' value='" . $_GET['id_equip'] . "'>
-            <input type='text' name='tipo_equipamento' style='display:none' value='" . $equipamento['tipo_equipamento'] . "'>
-           <div class='control-group'>
-               <label class='control-label'>Office:</label>                  
-               <div class='controls'>
-                  <input class='span3' type='text' name='office' value='" . $office['versao'] . "'/>
-               </div>
+      <form id='edit-profile' class='form-horizontal' enctype='multipart/form-data' action='equip_trans.php' method='post'>
+         <input type='text' name='id_fun' style='display:none' value='<?= $_GET['id_fun'] ?>'>
+         <input type='text' name='id_equip' style='display:none' value='<?= $_GET['id_equip'] ?>'>
+         <input type='text' name='tipo_equipamento' style='display:none' value='<?= $equipamento['tipo_equipamento'] ?>'>
+
+         <div class='control-group'>
+            <label class='control-label'>Office:</label>                  
+            <div class='controls'>
+               <input class='span3' type='text' name='office' value='<?= $office['versao'] ?>"'/>
             </div>
-            <div class='control-group'>
-               <label class='control-label'>Fornecedor:</label>                  
-               <div class='controls'>
-                  <input class='span4' type='text' name='fornecedor_office' value='" . $office['fornecedor'] . "'/>
-               </div>
+
+            <label class='control-label'>Fornecedor:</label>                  
+            <div class='controls'>
+               <input class='span4' type='text' name='fornecedor_office' value='<?= $office['fornecedor'] ?>"'/>
             </div>
-            <div class='control-group'>
-               <label class='control-label'>Locacao:</label>
-               <div class='controls'>
-                  <select id='t_cob' name='local_office' class='span3'>
-                     <option value='" . $office['id_locacao'] . "'>" . $office['locacao'] . "</option>
-                     <option>---</option>";
-      $officeE = "SELECT * from manager_droplocacao  where deletar = 0 ORDER BY nome";
-      $resultado_officeE = mysqli_query($conn, $officeE);
-      while ($row_officeE = mysqli_fetch_assoc($resultado_officeE)) {
-         echo "<option value='" . $row_officeE['id_empresa'] . "'>" . $row_officeE['nome'] . "</option>";
-      }
-      echo "   
-                  </select>   
-               </div>
+
+            <label class='control-label'>Locacao:</label>
+            <div class='controls'>
+               <select id='t_cob' name='local_office' class='span3'>
+                  <option value='<?= $office['id_locacao'] ?>'><?= $office['locacao'] ?>"</option>
+                  <option>---</option>
+                  <?php
+                  $officeE = "SELECT * FROM manager_droplocacao  WHERE deletar = 0 ORDER BY nome";
+                  $resultado_officeE = mysqli_query($conn, $officeE);
+                  while ($row_officeE = mysqli_fetch_assoc($resultado_officeE)) {
+                  echo "<option value='" . $row_officeE['id_empresa'] . "'>" . $row_officeE['nome'] . "</option>";
+                  }
+                  ?>  
+               </select>   
             </div>
-            <div class='control-group'>
-               <label class='control-label'>Empresa:</label>
-               <div class='controls'>
-                  <select id='t_cob' name='empresa_office' class='span3'>
-                     <option value='" . $office['id_empresa'] . "'>" . $office['empresa'] . "</option>
-                     <option>---</option>";
-      $officeEM = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
-      $resultado_officeEM = mysqli_query($conn, $officeEM);
-      while ($row_officeEM = mysqli_fetch_assoc($resultado_officeEM)) {
-         echo "<option value='" . $row_officeEM['id_empresa'] . "'>" . $row_officeEM['nome'] . "</option>";
-      }
-      echo "   
-                  </select>   
-               </div>
+
+            <label class='control-label'>Empresa:</label>
+            <div class='controls'>
+               <select id='t_cob' name='empresa_office' class='span3'>
+                  <option value='<?= $office['id_empresa'] ?>'><?= $office['empresa'] ?></option>
+                  <option>---</option>
+                  <?php
+                  $officeEM = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
+                  $resultado_officeEM = mysqli_query($conn, $officeEM);
+                  while ($row_officeEM = mysqli_fetch_assoc($resultado_officeEM)) {
+                  echo "<option value='" . $row_officeEM['id_empresa'] . "'>" . $row_officeEM['nome'] . "</option>";
+                  }
+                  ?> 
+               </select>   
             </div>
-            <div class='control-group'>
-               <label class='control-label'>Chave Key:</label>
-               <div class='controls'>
-                  <input class='cpfcnpj span4' type='text' name='serial_office' value='" . $office['serial'] . "'/>
-               </div>
+            <label class='control-label'>Chave Key:</label>
+            <div class='controls'>
+               <input class='cpfcnpj span4' type='text' name='serial_office' value='<?= $office['serial'] ?>'/>
             </div>
-                      
-            <div class='control-group'>
+
             <label class='control-label'>Equipamento:</label>
             <div class='controls'>
                <select id='t_cob' name='new_office' class='span2'>
-                  <option value=''>---</option>";
-      $buscando_usuario = "SELECT 
-            MO.id AS id_office,
-            MIE.id_equipamento,
-            MIE.patrimonio
-            FROM
-            manager_inventario_equipamento MIE
-               LEFT JOIN
-            manager_office MO ON MIE.id_equipamento = MO.id_equipamento
-            WHERE
-            MIE.tipo_equipamento IN (8,9)";
+                  <option value=''>---</option>
+                  <?php
+                  $buscando_usuario = "SELECT 
+                  MO.id AS id_office,
+                  MIE.id_equipamento,
+                  MIE.patrimonio
+                  FROM
+                  manager_inventario_equipamento MIE
+                  LEFT JOIN
+                  manager_office MO ON MIE.id_equipamento = MO.id_equipamento
+                  WHERE
+                  MIE.tipo_equipamento IN (8,9)";
 
-      $result_search_user = mysqli_query($conn, $buscando_usuario);
+                  $result_search_user = mysqli_query($conn, $buscando_usuario);
 
-      while ($row_search = mysqli_fetch_assoc($result_search_user)) {
+                  while ($row_search = mysqli_fetch_assoc($result_search_user)) {
 
-         if ($row_search['id_office'] == NULL) {
-            echo "<option value='" . $row_search['id_equipamento'] . "'>" . $row_search['patrimonio'] . "</option>";
-         } //end IF equipamento sem office
-      } //end While equipamento que recebera o OFFICE   
-
-      echo "</select>                     
+                     if ($row_search['id_office'] == NULL) {
+                        echo "<option value='" . $row_search['id_equipamento'] . "'>" . $row_search['patrimonio'] . "</option>";
+                     } //end IF equipamento sem office
+                  } //end While equipamento que recebera o OFFICE  
+                  ?>
+               </select>                     
                <i class='icon-lithe icon-question-sign' title='Equipamento que irá receber o Office!'></i>
             </div>
-         </div>";
-      ?>
-      <div class="modal-footer">
-         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-         <button class="btn btn-primary">Salvar</button>
-      </div>
+         </div>
+         <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+            <button class="btn btn-primary">Salvar</button>
+         </div>
+         </div>
       </form>
    </div>
 </div>
-
 </html>
 
 <!--------------JAVA SCRIPTS------------>

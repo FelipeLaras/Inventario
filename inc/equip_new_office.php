@@ -5,9 +5,13 @@
     require_once('../conexao/conexao_ocs.php');
     /*---------------------------------------------------------------------*/
 
+
+
+    
+
     //1º vamos salvar no OCS
     //pegando o patrimonio
-    $buscar_patrimonio = "SELECT patrimonio FROM manager_inventario_equipamento WHERE id_equipamento = ".$_POST['id_equip'].";";
+    $buscar_patrimonio = "SELECT patrimonio FROM manager_inventario_equipamento WHERE id_equipamento = ".$_POST['id_equip']."";
     $result_patrimonio = $conn->query($buscar_patrimonio);
     $patrimonio = $result_patrimonio->fetch_assoc();
 
