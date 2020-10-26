@@ -51,56 +51,35 @@ require_once('../query/query_dropdowns.php');
             <a href="equip.php">Inventário</a>
             /
             <i class="icon-lithe icon-plus"></i>&nbsp;
-            <a href="javascript:">Novo equipamento</a>
+            <a href="add_new.php">Novo equipamento</a>
+            /
         </h3>
     </div>
     <!--ALERTAS-->
     <?php
-        if($_GET['error'] == 1){//encontrado porém o usuário está desativado
-            echo "
-                <div class='alert alert-block'>
-                    <button type='button' class='close' data-dismiss='alert'>×</button>
-                    <h4>ATENÇÃO!</h4>
-                    Funcionário <b style='color:red'>DESATIVADO</b>,";                    
+        switch ($_GET['error']) {
+            case '1':
+                echo "<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO!</h4>Funcionário <b style='color:red'>DESATIVADO</b>,";                    
                 echo ($_SESSION["ativar_cpf"] == 0) ? " porém você não possui permissão para ativar este cadastro. Entre em contato com o <b>administrador</b>" : " para ativar clique <a href='msn_inativo.php?id=".$_GET['id']."&tela=1'>AQUI</a>";
-            echo "</div>";
-        }//end alerta erro 1
+                echo "</div>";
+                break;
 
-        if($_GET['error'] == 2){//encontrado porém o usuário está desativado
-            echo "
-                <div class='alert alert-block'>
-                    <button type='button' class='close' data-dismiss='alert'>×</button>
-                    <h4>ATENÇÃO</h4>
-                    Equipamento <b style='color:red'>NÃO ENCONTRADO</b>, verifique no <b>OCS / AGENTE</b> antes de continuar. 
-                </div>";
-        }//end alerta erro 2
+            case '2':
+                echo "<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento <b style='color:red'>NÃO ENCONTRADO</b>, verifique no <b>OCS / AGENTE</b> antes de continuar.</div>";
+                break;
 
-        if($_GET['error'] == 3){//Preencher pelomenos um equipamento
-            echo "
-                <div class='alert alert-block'>
-                    <button type='button' class='close' data-dismiss='alert'>×</button>
-                    <h4>ATENÇÃO</h4>
-                    Preencha pelo menos um equipamento para prosseguir com o cadastro. 
-                </div>";
-        }//end alerta erro 3
-        
-        if($_GET['error'] == 4){//Equipamento já cadastrado
-            echo "
-                <div class='alert alert-block'>
-                    <button type='button' class='close' data-dismiss='alert'>×</button>
-                    <h4>ATENÇÃO</h4>
-                    Equipamento <b style='color:red'>CONDENADO</b>. 
-                </div>";
-        }//end alerta erro 4
+            case '3':
+                echo "<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Preencha pelo menos um equipamento para prosseguir com o cadastro. </div>";
+                break;
 
-        if($_GET['error'] == 5){//Equipamento já cadastrado
-            echo "
-                <div class='alert alert-block'>
-                    <button type='button' class='close' data-dismiss='alert'>×</button>
-                    <h4>ATENÇÃO</h4>
-                    Equipamento <b style='color:red'>JÁ CADASTRADO</b>. 
-                </div>";
-        }//end alerta erro 4
+            case '4':
+                echo "<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento <b style='color:red'>CONDENADO</b>.</div>";
+                break;
+
+            case '5':
+                echo "<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento <b style='color:red'>JÁ CADASTRADO</b>.</div>";
+                break;
+        }
     ?>
     <!--FIM ALERTAS-->
     <!-- /widget-header -->
@@ -115,7 +94,7 @@ require_once('../query/query_dropdowns.php');
                     <input type="text" id="cpu_validacao" value="" name="gols2" />
                     <!--PATRIMONIO NOTEBOOK-->
                     <input type="text" id="notebook_validacao" value="" name="gols3" />
-                </form>
+               </form>
                 <!--Buscando inforação pelo apollo-->
                 <form id='form1' class='form-horizontal' action='equip_add_insert.php' method='POST' enctype='multipart/form-data' autocomplete='off'>
                     <div class="control-group">
@@ -602,7 +581,11 @@ require_once('../query/query_dropdowns.php');
                                                         <?php 
                                                             if($_SESSION['office'] != NULL){
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                                                $query_office_cpu = "SELECT * from manager_dropoffice where deletar = 0  AND nome like '%".$_SESSION['office']."%';";
+                                                                $query_office_cpu = "SELECT * from manager_dropoffice where deletar = 0  AND nome like '%".$_SESSION['office']."%'";
+                                                                echo "<option>";
+                                                                var_dump($query_office_cpu);
+                                                                echo "</optio>";
+
                                                                 $resultado_so_cpu = $conn -> query($query_office_cpu);
                                                                 $row_so_cpu = $resultado_so_cpu -> fetch_assoc();
                                                                 echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
@@ -623,15 +606,17 @@ require_once('../query/query_dropdowns.php');
 
                                             <div class="control-group">
                                                 <label class="control-label">Fornecedor:</label>
-                                                <div class="controls autocomplete" style="margin-left: 8px;">
-                                                    <?php
-                                                        if($_SESSION['fornecedor_cpuOffice'] != NULL){
-                                                            echo "<input class='span4' name='fornecedor_cpuOffice' id='myInput1' type='text' value='".$_SESSION['fornecedor_cpuOffice']."'/>";
-                                                            unset($_SESSION['fornecedor_cpuOffice']);
-                                                        }else{
-                                                            echo "<input class='span4' id='myInput1' name='fornecedor_cpuOffice' type='text'/>";
-                                                        }
-                                                    ?>
+                                                <div class="controls">
+                                                    <div class="autocomplete">
+                                                        <?php
+                                                            if($_SESSION['fornecedor_cpuOffice'] != NULL){
+                                                                echo "<input class='span4' name='fornecedor_cpuOffice' id='myInput1' type='text' value='".$_SESSION['fornecedor_cpuOffice']."'/>";
+                                                                unset($_SESSION['fornecedor_cpuOffice']);
+                                                            }else{
+                                                                echo "<input class='span4' id='myInput1' name='fornecedor_cpuOffice' type='text'/>";
+                                                            }
+                                                        ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!--LOCAÇÃO-->
@@ -754,15 +739,17 @@ require_once('../query/query_dropdowns.php');
 
                                             <div class="control-group">
                                                 <label class="control-label">Fornecedor:</label>
-                                                <div class="controls autocomplete" style="margin-left: 8px">
-                                                    <?php
-                                                        if($_SESSION['fornecedor_cpu'] != NULL){
-                                                            echo "<input class='span4' name='fornecedor_cpu' id='myInput1' type='text' value='".$_SESSION['fornecedor_cpu']."'/>";
-                                                            unset($_SESSION['fornecedor_cpu']);
-                                                        }else{
-                                                            echo "<input class='span4' id='myInput2' name='fornecedor_cpu' type='text'/>";
-                                                        }
-                                                    ?>
+                                                <div class="controls">
+                                                    <div class="autocomplete">
+                                                        <?php
+                                                            if($_SESSION['fornecedor_cpu'] != NULL){
+                                                                echo "<input class='span4' name='fornecedor_cpu' id='myInput1' type='text' value='".$_SESSION['fornecedor_cpu']."'/>";
+                                                                unset($_SESSION['fornecedor_cpu']);
+                                                            }else{
+                                                                echo "<input class='span4' id='myInput2' name='fornecedor_cpu' type='text'/>";
+                                                            }
+                                                        ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!--SERIAL SO CPU-->
@@ -1084,15 +1071,17 @@ require_once('../query/query_dropdowns.php');
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Fornecedor:</label>
-                                    <div class="controls autocomplete" style="margin-left: 8px">
-                                        <?php
-                                            if($_SESSION['fornecedor_noteOffice'] != NULL){
-                                                echo "<input class='span4' name='fornecedor_noteOffice' id='myInput3' type='text' value='".$_SESSION['fornecedor_noteOffice']."'/>";
-                                                unset($_SESSION['fornecedor_noteOffice']);
-                                            }else{
-                                                echo "<input class='span4' id='myInput3' name='fornecedor_noteOffice' type='text'/>";
-                                            }
-                                        ?>
+                                    <div class="controls">
+                                        <div class="autocomplete">
+                                            <?php
+                                                if($_SESSION['fornecedor_noteOffice'] != NULL){
+                                                    echo "<input class='span4' name='fornecedor_noteOffice' id='myInput3' type='text' value='".$_SESSION['fornecedor_noteOffice']."'/>";
+                                                    unset($_SESSION['fornecedor_noteOffice']);
+                                                }else{
+                                                    echo "<input class='span4' id='myInput3' name='fornecedor_noteOffice' type='text'/>";
+                                                }
+                                            ?>
+                                        </div>
                                     </div>
                                 </div>
                                 <!--LOCAÇÃO OFFICE-->
@@ -1206,15 +1195,17 @@ require_once('../query/query_dropdowns.php');
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Fornecedor:</label>
-                                    <div class="controls autocomplete" style="margin-left: 8px">
-                                        <?php
-                                            if($_SESSION['fornecedor_note'] != NULL){
-                                                echo "<input class='span4' name='fornecedor_note' id='myInput4' type='text' value='".$_SESSION['fornecedor_note']."'/>";
-                                                unset($_SESSION['fornecedor_note']);
-                                            }else{
-                                                echo "<input class='span4' id='myInput4' name='fornecedor_note' type='text'/>";
-                                            }
-                                        ?>
+                                    <div class="controls">
+                                        <div class="autocomplete">
+                                            <?php
+                                                if($_SESSION['fornecedor_note'] != NULL){
+                                                    echo "<input class='span4' name='fornecedor_note' id='myInput4' type='text' value='".$_SESSION['fornecedor_note']."'/>";
+                                                    unset($_SESSION['fornecedor_note']);
+                                                }else{
+                                                    echo "<input class='span4' id='myInput4' name='fornecedor_note' type='text'/>";
+                                                }
+                                            ?>
+                                        </div>
                                     </div>
                                 </div>
                                 <!--SERIAL S.O NOTEBOOK-->
@@ -1306,10 +1297,12 @@ require_once('../query/query_dropdowns.php');
                                 <tr id='addrR0'>
                                     <!--MODELO DO RAMAL-->
                                     <td>
-                                        <div class="controls autocomplete" style="margin-left: 8px">
-                                            <input type="text" id="myInput5" name="modelo_ramal0"
-                                                class='form-control span2' />
-                                        </div>
+                                        <div class="controls">
+                                            <div class="autocomplete">
+                                                <input type="text" id="myInput5" name="modelo_ramal0"
+                                                    class='form-control span2' />
+                                                    </div>
+                                            </div>
                                     </td>
                                     <!--NUMERO DO RAMAL-->
                                     <td>
