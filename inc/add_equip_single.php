@@ -380,11 +380,22 @@ if ($_SESSION["perfil"] == NULL) {
                                                         <?php
                                                         if ($_SESSION['office'] != NULL) {
                                                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                                            $query_office_cpu = "SELECT * FROM manager_dropoffice WHERE deletar = 0  AND nome like '%" . $_SESSION['office'] . "%';";
-                                                            $resultado_so_cpu = mysqli_query($conn, $query_office_cpu);
-                                                            $row_so_cpu = mysqli_fetch_assoc($resultado_so_cpu);
-                                                            echo "<option value='" . $row_so_cpu['id'] . "'>" . $row_so_cpu['nome'] . "</option>";
+                                                            $query_office = "SELECT * FROM manager_dropoffice WHERE deletar = 0  AND nome like '%".$_SESSION['office']."%'";
+
+                                                            echo $query_office;
+
+                                                            $resultado_query_office = mysqli_query($conn, $query_office);
+                                                            $row_so_office = mysqli_fetch_assoc($resultado_query_office);
+                                                            echo "<option value='" . $row_so_office['id'] . "'>" . $row_so_office['nome'] . "</option>";
                                                             unset($_SESSION['office']);
+
+                                                            echo "<option value=''>---</option>";
+                                                            //BUSCANDO OS DEPARTAMENTOS NO BANCO
+                                                            $query_office_cpu = "SELECT * FROM manager_dropoffice WHERE deletar = 0 ORDER BY nome ASC;";
+                                                            $resultado_so_cpu = mysqli_query($conn, $query_office_cpu);
+                                                            while ($row_so_cpu = mysqli_fetch_assoc($resultado_so_cpu)) {
+                                                                echo "<option value='" . $row_so_cpu['id'] . "'>" . $row_so_cpu['nome'] . "</option>";
+                                                            }
                                                         } else {
                                                             echo "<option value=''>---</option>";
                                                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
