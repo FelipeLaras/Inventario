@@ -381,9 +381,6 @@ if ($_SESSION["perfil"] == NULL) {
                                                         if ($_SESSION['office'] != NULL) {
                                                             //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                             $query_office = "SELECT * FROM manager_dropoffice WHERE deletar = 0  AND nome like '%".$_SESSION['office']."%'";
-
-                                                            echo $query_office;
-
                                                             $resultado_query_office = mysqli_query($conn, $query_office);
                                                             $row_so_office = mysqli_fetch_assoc($resultado_query_office);
                                                             echo "<option value='" . $row_so_office['id'] . "'>" . $row_so_office['nome'] . "</option>";

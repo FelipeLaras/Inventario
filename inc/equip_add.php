@@ -582,14 +582,18 @@ require_once('../query/query_dropdowns.php');
                                                             if($_SESSION['office'] != NULL){
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
                                                                 $query_office_cpu = "SELECT * from manager_dropoffice where deletar = 0  AND nome like '%".$_SESSION['office']."%'";
-                                                                echo "<option>";
-                                                                var_dump($query_office_cpu);
-                                                                echo "</optio>";
-
                                                                 $resultado_so_cpu = $conn -> query($query_office_cpu);
                                                                 $row_so_cpu = $resultado_so_cpu -> fetch_assoc();
                                                                 echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
                                                                 unset($_SESSION['office']);
+                                                                
+                                                                echo "<option value=''>---</option>";
+                                                                //BUSCANDO OS DEPARTAMENTOS NO BANCO
+                                                                $query_office_cpu = "SELECT * from manager_dropoffice where deletar = 0 order by nome ASC;";
+                                                                $resultado_so_cpu = $conn -> query($query_office_cpu);
+                                                                while ($row_so_cpu = $resultado_so_cpu -> fetch_assoc()) {
+                                                                    echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
+                                                                }
                                                             }else{
                                                                 echo "<option value=''>---</option>";
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
