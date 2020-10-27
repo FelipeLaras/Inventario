@@ -518,21 +518,21 @@ switch ($_GET['msn']) {
 
                       if ($row_files['liberado_rh'] == 0) { //0 = não liberado
                         echo "<!--vigencia-->
-          <a href='javascript:;' class='botaoChecklist' role='button' data-toggle='modal' title='Não foi emitido o Check-List, por esse motivo não é permitido desvincular o equipamento!'>
-            <i class='fas fa-user-minus'></i>
-          </a>";
+                          <a href='javascript:;' class='botaoChecklist' role='button' data-toggle='modal' title='Não foi emitido o Check-List, por esse motivo não é permitido desvincular o equipamento!'>
+                            <i class='fas fa-user-alt-slash' style='font-size: 15px; color: red; margin-right: 6px;'></i>
+                          </a>";
                       } else { // 1 = liberado
                         echo "<!--vigencia-->
-          <a href='#myModalVi" . $row_files['id_equipamento'] . "' role='button' data-toggle='modal' title='Desvincular equipamento do funcionário'>
-            <i class='fas fa-user-minus'></i>
-          </a>";
+                        <a href='#myModalVi" . $row_files['id_equipamento'] . "' role='button' data-toggle='modal' title='Desvincular equipamento do funcionário'>
+                          <i class='fas fa-user-minus' style='font-size: 15px; color: green;     margin-right: 6px;'></i>
+                        </a>";
                       }
                       echo " <!--Termo Asssinado-->
                           <a href='#myModalanexos' role='button' data-toggle='modal' title='Anexar Termo Assinado'>
-                            <i class='btn-icon-only icon-folder-open'></i>
+                            <i class='btn-icon-only icon-folder-open' style='font-size: 15px;     margin-right: 6px;'></i>
                           </a>
                           <a href='inventario_equip_edit.php?id_equip=" . $row_files['id_equipamento'] . "&tipo=" . $row_files['tipo_equipamento'] . "' role='button' title='Editar'>
-                            <i class='icon-pencil'></i>
+                            <i class='icon-pencil' style='font-size: 15px;     margin-right: 6px;'></i>
                           </a>";
                     } else {
                       echo "Equipamento Gerenciado pelos Técnicos";

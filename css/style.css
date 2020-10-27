@@ -104,6 +104,10 @@ div#botao {
     margin-bottom: 2%;
 }
 
+i.fas.fa-user-minus {
+    font-size: 15px !important;
+}
+
 #nova_info {
     margin-top: -39px;
 }
