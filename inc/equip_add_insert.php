@@ -120,7 +120,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
 
 
     /*---------------ANTES DE MAIS NDA IREMOS VERIFICAR SE JÁ NÃO ESTÁ CADASTRADO O EQUIPAMENTO---------------*/
-    $verificar_cadastro = "SELECT * FROM manager_inventario_equipamento WHERE patrimonio like '".$_POST['num_patrimonio_cpu']."';";
+    $verificar_cadastro = "SELECT * FROM manager_inventario_equipamento WHERE patrimonio like '".$_POST['num_patrimonio_cpu']."'";
     $resultado_verificar_cadastro = $conn -> query($verificar_cadastro);
     $row_verificar = $resultado_verificar_cadastro -> fetch_assoc();
 
@@ -189,8 +189,13 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                             '".$_POST['serie_cpu']."',
                             '0',
                             '".$data_hoje."',
-                            '1');";
-        $result_new_equipamento = $conn -> query($new_equipamento);
+                            '1')";
+
+        if(!$conn->query($new_equipamento)){
+            printf("Ops deu um pequeno erro, print essa tela e fale com o Felipe: %s\n", $conn->error);
+
+            exit;
+        }
         
 
         //salvando a nota do windows
@@ -253,7 +258,12 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                             '".$nome_db."',
                             '".$data_nota."')";
 
-        $result_new_windows = $conn -> query($new_windows);
+        if(!$conn -> query($new_windows)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
+
 
         //montando uma query para pegar o id do windows e enviar para criar um termo
         $pegando_windows = "SELECT max(id) AS id FROM manager_sistema_operacional";
@@ -323,7 +333,12 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                                 '".$caminho_db."',
                                 '".$nome_db."',
                                 '".$data_nota."')";
-            $result_new_office = $conn -> query($new_office);
+
+            if(!$conn -> query($new_office)){
+                printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+                
+                exit;
+            }
 
             //montando uma query para pegar o id do windows e enviar para criar um termo
             $pegando_office = "SELECT max(id) AS id FROM manager_office";
@@ -351,7 +366,13 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                                         '".$data_hoje."',
                                         '".$_SESSION['id']."',
                                         '4')";
-        $resultado_new_funcionario = $conn -> query($insert_funcionario_new);
+
+        if(!$conn -> query($insert_funcionario_new)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
+        
 
         //pegando o ultimo id do funcionario para usar nos SQLs abaixos
         $ultimo_id_funcionario = "SELECT max(id_funcionario) AS id_funcionario FROM manager_inventario_funcionario";
@@ -394,8 +415,14 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                                 '".$_POST['ip_cpu']."',
                                 '".$_POST['serie_cpu']."',
                                 '".$data_hoje."',
-                                '1');";
-        $result_new_equipamento = $conn -> query($new_equipamento);
+                                '1')";
+
+        if(!$conn->query($new_equipamento)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
+
         
 
         //salvando a nota do windows
@@ -455,8 +482,12 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                             '".$caminho_db."',
                             '".$nome_db."',
                             '".$data_nota."')";
-        $result_new_windows = $conn -> query($new_windows);
 
+        if(!$conn -> query($new_windows)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
 
         //montando uma query para pegar o id do windows e enviar para criar um termo
         $pegando_windows = "SELECT max(id) AS id FROM manager_sistema_operacional";
@@ -524,7 +555,12 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
                                 '".$caminho_db."',
                                 '".$nome_db."',
                                 '".$data_nota."')";
-            $result_new_office = $conn -> query($new_office);
+
+            if(!$conn -> query($new_office)){
+                printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+                
+                exit;
+            }
 
             //montando uma query para pegar o id do windows e enviar para criar um termo
             $pegando_office = "SELECT max(id) AS id FROM manager_office";
@@ -543,6 +579,7 @@ if ($_POST['num_patrimonio_cpu'] != NULL) {
 //3º Vamos salvar um NOTEBOOK
 
 if ($_POST['num_patrimonio_notebook'] != NULL) {
+
     if($_POST['nome_notebook'] == NULL){
             
         $existe_patrimonio_cadastrado = "SELECT * FROM manager_ocs_equip WHERE patrimonio LIKE '%".$_POST['num_patrimonio_notebook']."%'";
@@ -659,8 +696,9 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
     /*---------------AGORA SIM IREMOS SALVAR O EQUIPAMENTO---------------*/
 
     //1º iremos salvar o funcionario
-    $existe_funcionario = "SELECT * FROM manager_inventario_funcionario  WHERE cpf = '".$_POST['gols1']."';";
+    $existe_funcionario = "SELECT * FROM manager_inventario_funcionario  WHERE cpf = '".$_POST['gols1']."'";
     $result_funcionario = $conn -> query($existe_funcionario);
+
     if($row_funcionario = $result_funcionario -> fetch_assoc()){
         //se caso já exista um funcionario
         $update = "UPDATE manager_inventario_funcionario 
@@ -715,8 +753,12 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                 '".$observacao_note."',
                                 '".$data_hoje."',
                                 '1')";
-        $result_new_equipamento = $conn -> query($new_equipamento);
-        
+
+        if(!$conn->query($new_equipamento)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
 
         //salvando a nota do windows
         $tipo_file = $_FILES['file_so_note']['type'];//Pegando qual é a extensão do arquivo
@@ -774,8 +816,13 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
         $new_windows .=     "',
                             '".$caminho_db."',
                             '".$nome_db."',
-                            '".$data_nota."')";              
-        $result_new_windows = $conn -> query($new_windows);
+                            '".$data_nota."')";           
+
+        if(!$conn -> query($new_windows)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
 
         //montando uma query para pegar o id do windows e enviar para criar um termo
         $pegando_windows = "SELECT max(id) AS id FROM manager_sistema_operacional";
@@ -846,7 +893,12 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                 '".$caminho_db."',
                                 '".$nome_db."',
                                 '".$data_nota."')";
-            $result_new_office = $conn -> query($new_office);
+
+            if(!$conn -> query($new_office)){
+                printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+                
+                exit;
+            }
 
              //montando uma query para pegar o id do windows e enviar para criar um termo
              $pegando_office = "SELECT max(id) AS id FROM manager_office";
@@ -882,7 +934,12 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                         '".$data_hoje."',
                                         '".$_SESSION['id']."',
                                         '3')";
-        $resultado_new_funcionario = $conn -> query($insert_funcionario_new);
+
+        if(!$conn -> query($insert_funcionario_new)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
 
         /*------------*/
 
@@ -938,7 +995,12 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                 '".$observacao_note."',
                                 '".$data_hoje."',
                                 '1')";
-        $result_new_equipamento = $conn -> query($new_equipamento);
+
+        if(!$conn -> query($new_equipamento)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
         
 
         //salvando a nota do windows
@@ -999,8 +1061,13 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
         $new_windows .=     "',
                             '".$caminho_db."',
                             '".$nome_db."',
-                            '".$data_nota."')";              
-        $result_new_windows = $conn -> query($new_windows);
+                            '".$data_nota."')";
+
+        if(!$conn -> query($new_windows)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
 
 
 
@@ -1073,7 +1140,12 @@ if ($_POST['num_patrimonio_notebook'] != NULL) {
                                 '".$caminho_db."',
                                 '".$nome_db."',
                                 '".$data_nota."')";
-            $result_new_office = $conn -> query($new_office);
+
+            if(!$conn -> query($new_office)){
+                printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+                
+                exit;
+            }
 
              //montando uma query para pegar o id do windows e enviar para criar um termo
              $pegando_office = "SELECT max(id) AS id FROM manager_office";
@@ -1156,7 +1228,11 @@ if($_POST['numero_ramal0'] != NULL){
                                     '".$data_hoje."',
                                     '".$_SESSION['id']."',
                                     '1')";
-            $result_new_equipamento = $conn -> query($new_equipamento);
+            if(!$conn -> query($new_equipamento)){
+                printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+                
+                exit;
+            }
 
             //ENVIANDO PARA O TERMO EM PDF
            $_SESSION['numero_ramal'.$contador_ramal.''] = $_POST['numero_ramal'.$contador_ramal.''];
@@ -1190,7 +1266,13 @@ if($_POST['numero_ramal0'] != NULL){
                                         '".$data_hoje."',
                                         '".$_SESSION['id']."',
                                         '3')";
-        $resultado_new_funcionario = $conn -> query($insert_funcionario_new);
+
+        if(!$conn -> query($insert_funcionario_new)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
+        
 
         //pegando o ultimo id do funcionario para usar nos SQLs abaixos
         $ultimo_id_funcionario = "SELECT max(id_funcionario) AS id_funcionario  FROM manager_inventario_funcionario";
@@ -1236,7 +1318,12 @@ if($_POST['numero_ramal0'] != NULL){
                                     '".$data_hoje."',
                                     '".$_SESSION['id']."',
                                     '1')";
-            $result_new_equipamento = $conn -> query($new_equipamento);
+
+            if(!$conn -> query($new_equipamento)){
+                printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+                
+                exit;
+            }
             //ENVIANDO PARA O TERMO EM PDF
             $_SESSION['numero_ramal'.$contador_ramal.''] = $_POST['numero_ramal'.$contador_ramal.''];
 
@@ -1322,10 +1409,13 @@ $new_equipamento .= "'5','".$_POST['num_nota_scan']."',";
 $new_equipamento .= "
 
         '".$data_hoje."',
-        '1');";
+        '1')";
 
-        $result_new_equipamento = $conn -> query($new_equipamento);
-
+        if(!$conn -> query($new_equipamento)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
         //salvando nota fical caso tenha
 
         if($_FILES['file_nota_scan']['type']){
@@ -1360,7 +1450,12 @@ $new_equipamento .= "
             $nota_scan = "INSERT INTO manager_inventario_anexo (id_equipamento, usuario, tipo_anexo, caminho, nome, data_criacao)
                            VALUE 
                         ((SELECT MAX(id_equipamento) FROM manager_inventario_equipamento), '".$_SESSION['id']."', '".$tipo_file."', '".$caminho_db."', '".$nome_db."', '".$data_hoje."')";
-            $result_scan = $conn -> query($nota_scan);
+            
+            if(!$conn -> query($nota_scan)){
+                printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+                
+                exit;
+            }
         }//end IF arquivo nota
 
         //finalizando manda msn falando que salvou com sucesso!
@@ -1386,7 +1481,12 @@ $new_equipamento .= "
                                         '".$data_hoje."',
                                         '".$_SESSION['id']."',
                                         '4')";
-        $resultado_new_funcionario = $conn -> query($insert_funcionario_new);
+
+        if(!$conn -> query($insert_funcionario_new)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
 
         //pegando o ultimo id do funcionario para usar nos SQLs abaixos
         $ultimo_id_funcionario = "SELECT max(id_funcionario) AS id_funcionario  FROM manager_inventario_funcionario";
@@ -1440,8 +1540,13 @@ $new_equipamento .= "'5','".$_POST['num_nota_scan']."',";
 $new_equipamento .= "
 
         '".$data_hoje."',
-        '1');";
-       $result_new_equipamento = $conn -> query($new_equipamento);
+        '1')";
+
+       if(!$conn -> query($new_equipamento)){
+            printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+            
+            exit;
+        }
 
        //salvando nota fical caso tenha
 
@@ -1477,7 +1582,12 @@ $new_equipamento .= "
        $nota_scan = "INSERT INTO manager_inventario_anexo (id_equipamento, tipo_anexo, caminho, nome, data_criacao)
                       VALUE 
                    ((SELECT MAX(id_equipamento) FROM manager_inventario_equipamento), '".$tipo_file."', '".$caminho_db."', '".$nome_db."', '".$data_hoje."')";
-       $result_scan = $conn -> query($nota_scan);
+       
+       if(!$conn -> query($nota_scan)){
+        printf("Ops deu um pequeno erro. Print essa tela e fale com o Felipe Lara.<br /> Mensagem do erro: %s\n", $conn->error);
+        
+        exit;
+    }
    }//end IF arquivo nota
 
        //finalizando manda msn falando que salvou com sucesso!
