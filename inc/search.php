@@ -1,9 +1,6 @@
 <?php
    //aplicando para usar varialve em outro arquivo
    session_start();
-   //chamando conexão com o banco
-   require_once('../conexao/conexao.php');
-   require_once('../conexao/pesquisa_condb.php');
 
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
@@ -13,7 +10,10 @@
    
        header('location: ../front/error.php');
    }
-
+   
+   //chamando conexão com o banco
+   require_once('../conexao/conexao.php');
+   require_once('../conexao/pesquisa_condb.php');
    require_once('header.php');
 
 ?>

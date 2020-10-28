@@ -40,6 +40,16 @@ $query_edit_func = "UPDATE
 
 $resultado = $conn->query($query_edit_func);
 
+//pegando a ultima ID_EQUIPAMENTO para preencher o proximo equipamento
+$query_max_equip = "SELECT max(id_equipamento) AS id FROM manager_inventario_equipamento";
+$resultado_max_equip = $conn->query($query_max_equip);
+
+$row_max_equip = mysqli_fetch_assoc($resultado_max_equip);
+$id_equip = $row_max_equip['id'];
+
+//incrementando
+$id_equip++;
+
 //adicionando os equipamentos
 
 //celular
@@ -83,18 +93,11 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 	}else{
 
 		while ($_POST['modelo_celular'.$cont_equip.''] != NULL) {
-
-			//pegando a ultima ID_EQUIPAMENTO para preencher o proximo equipamento
-			$query_max_equip = "SELECT max(id_equipamento) AS id FROM manager_inventario_equipamento";
-			$resultado_max_equip = $conn->query($query_max_equip);
-			$row_max_equip = mysqli_fetch_assoc($resultado_max_equip);
-			$id_equip = $row_max_equip['id'];
-			$id_equip++;
+			
 			
 			//SALVANDO O EQUIPAMENTO NO BANCO DE DADOS
-			$insert_equipamento = "INSERT INTO manager_inventario_equipamento 
-										(id_equipamento, 
-										id_funcionario,
+			$insert_equipamento = "INSERT INTO manager_inventario_equipamento
+										(id_funcionario,
 										usuario, 
 										tipo_equipamento, 
 										filial, 
@@ -107,8 +110,7 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 										data_nota, 
 										valor) 
 									VALUES 
-										('".$id_equip."',
-										'".$_POST['id_funcionario']."',
+										('".$_POST['id_funcionario']."',
 										'".$_SESSION['id']."', 
 										'1', 
 										'".$_POST['filial_celular'.$cont_equip.'']."',
@@ -122,6 +124,12 @@ if ($_POST['modelo_celular0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA
 										'".$_POST['valor'.$cont_equip.'']."')";
 
 			$resultado_equipamento = $conn->query($insert_equipamento);
+
+			if(!$conn->query($insert_equipamento)){
+
+				printf("Ops! DEU ERRO (01) - PRINTA ESSE ERRO E MANDE PARA O E-MAIL DO felipe.lara@servopa.com.br<br /> Mensagem do erro: %s\n", $conn->error);
+				exit;
+			}
 
 			if (isset($_POST['acessorio_celular'.$cont_equip.''])) {
 
@@ -171,16 +179,9 @@ $cont_tablet = 0;
 if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALVA-LOS
 
 	while ($_POST['modelo_tablet'.$cont_equip_tablet.''] != NULL) {
-		//pegando a ultima ID_EQUIPAMENTO para preencher o proximo equipamento
-		$query_max_equip = "SELECT max(id_equipamento) AS id_tablet FROM manager_inventario_equipamento";
-		$result = $conn->query($query_max_equip);
-		$row_max_tablet = mysqli_fetch_assoc($result);
-		$id_tablet = $row_max_tablet['id_tablet'];
-		$id_tablet++;
 
 		//SALVANDO O EQUIPAMENTO NO BANCO DE DADOS
-		$insert_equipamento_tablet = "INSERT INTO manager_inventario_equipamento 
-											(id_equipamento, 
+		$insert_equipamento_tablet = "INSERT INTO manager_inventario_equipamento (
 											id_funcionario,
 											usuario, 
 											tipo_equipamento, 
@@ -195,8 +196,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 											data_nota, 
 											valor) 
 										VALUES 
-											(".$id_tablet.",
-											".$_POST['id_funcionario'].",
+											(".$_POST['id_funcionario'].",
 											'".$_SESSION['id']."', 
 											'2',
 											'".$_POST['patrimonio_tablet'.$cont_equip_tablet.'']."',
@@ -212,6 +212,12 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 
 		$resultado_equipamento_tablet = $conn->query($insert_equipamento_tablet);
 
+		if(!$conn->query($insert_equipamento_tablet)){
+
+			printf("Ops! DEU ERRO (02) PRINTA ESSE ERRO E MANDE PARA O E-MAIL DO felipe.lara@servopa.com.br<br /> Mensagem do erro: %s\n", $conn->error);
+			exit;
+		}
+
 		if (isset($_POST['acessorio_tablet'.$cont_equip_tablet.''])) {
 
 			$idAcessorioTablet = $_POST['acessorio_tablet'.$cont_equip_tablet.''];
@@ -220,6 +226,12 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 				//montando a query
 				$query_tablet = "INSERT INTO manager_inventario_acessorios (id_equipamento, tipo_acessorio) VALUES ('".$id_tablet."','".$IdTablet."')";
 				$resultado_tablet = $conn->query($query_tablet);
+
+				if(!$conn->query($query_tablet)){
+
+					printf("Ops! DEU ERRO (03) - PRINTA ESSE ERRO E MANDE PARA O E-MAIL DO felipe.lara@servopa.com.br<br /> Mensagem do erro: %s\n", $conn->error);
+					exit;
+				}
 			}
 
 		}
@@ -234,7 +246,7 @@ if ($_POST['modelo_tablet0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA 
 
 			$log_query = "INSERT manager_log (id_funcionario, id_equipamento, data_alteracao, usuario, tipo_alteracao)
 						VALUES ('".$_POST['id_funcionario']."',
-								'".$id_tablet."',
+								'".$id_equip."',
 								'".$data."',
 								'".$_SESSION["id"]."',
 								'5')";
@@ -291,16 +303,9 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 	}else{
 
 		while ($_POST['operadora_chip'.$cont_equip_chip.''] != NULL) {
-			//pegando a ultima ID_EQUIPAMENTO para preencher o proximo equipamento
-			$query_max_equip_chip = "SELECT max(id_equipamento) AS id_max_chip FROM manager_inventario_equipamento";
-			$resultado_max_equip_chip = $conn->query($query_max_equip_chip);
-			$row_max_equip_chip = mysqli_fetch_assoc($resultado_max_equip_chip);
-			$id_equip_chip = $row_max_equip_chip['id_max_chip'];
-			$id_equip_chip++;
-			
 			//SALVANDO O EQUIPAMENTO NO BANCO DE DADOS
 			$query_equipamento_chip = "INSERT INTO manager_inventario_equipamento
-											(id_equipamento, 
+											( 
 											id_funcionario,
 											usuario, 
 											tipo_equipamento,
@@ -314,8 +319,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 											data_criacao, 
 											valor) 
 										VALUES 
-											(".$id_equip_chip.",
-											".$_POST['id_funcionario'].",
+											(".$_POST['id_funcionario'].",
 											'".$_SESSION['id']."', 
 											'3',
 											'".$_POST['empresa_funcionario']."', 
@@ -330,6 +334,12 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 
 			$resultado_equipamento_chip = $conn->query($query_equipamento_chip);
 
+			if(!$conn->query($query_equipamento_chip)){
+
+				printf("Ops! DEU ERRO (04) - PRINTA ESSE ERRO E MANDE PARA O E-MAIL DO felipe.lara@servopa.com.br<br /> Mensagem do erro: %s\n", $conn->error);
+				exit;
+			}
+
 			/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
 
 			//data de hoje
@@ -340,7 +350,7 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 
 			$log_query = "INSERT manager_log (id_funcionario, id_equipamento, data_alteracao, usuario, tipo_alteracao)
 						VALUES ('".$_POST['id_funcionario']."',
-								'".$id_equip_chip."',
+								'".$id_equip."',
 								'".$data."',
 								'".$_SESSION["id"]."',
 								'5')";
@@ -358,19 +368,12 @@ if ($_POST['numero_chip0'] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SA
 }
 
 /*SALVANDO O MODEM*/
-if ($_POST['modelo_modem'] != NULL) {		
-		//pegando o ultimo ID
-		$query_modem = "SELECT max(id_equipamento) AS id_max_moden FROM manager_inventario_equipamento";
-		$resultado_max_modem = $conn->query($query_modem);
-		$row_max_modem = mysqli_fetch_assoc($resultado_max_modem);
-		$id_modem = $row_max_modem['id_max_moden'];
-		$id_modem++;
+if ($_POST['modelo_modem'] != NULL) {
 
 
 		//SALVANDO O EQUIPAMENTO NO BANCO DE DADOS
 		$query_modem = "INSERT INTO manager_inventario_equipamento 
-							(id_equipamento, 
-							id_funcionario, 
+							(id_funcionario, 
 							usuario,
 							tipo_equipamento, 
 							modelo, 
@@ -382,8 +385,7 @@ if ($_POST['modelo_modem'] != NULL) {
 							data_criacao, 
 							valor) 
 						VALUES 
-							(".$id_modem.",
-							".$_POST['id_funcionario'].",
+							(".$_POST['id_funcionario'].",
 							'".$_SESSION['id']."', 
 							'4', 
 							'".$_POST['modelo_modem']."', 
@@ -397,6 +399,12 @@ if ($_POST['modelo_modem'] != NULL) {
 
 		$resultado_modem = $conn->query($query_modem);
 
+		if(!$conn->query($query_modem)){
+
+			printf("Ops! DEU ERRO (05) - PRINTA ESSE ERRO E MANDE PARA O E-MAIL DO felipe.lara@servopa.com.br<br /> Mensagem do erro: %s\n", $conn->error);
+			exit;
+		}
+
 		/*_________________________________ SALVANDO LOG DE ALTERAÇÃO ______________________________________*/
 
 			//data de hoje
@@ -407,7 +415,7 @@ if ($_POST['modelo_modem'] != NULL) {
 
 			$log_query = "INSERT manager_log (id_funcionario, id_equipamento, data_alteracao, usuario, tipo_alteracao)
 						VALUES ('".$_POST['id_funcionario']."',
-								'".$id_modem."',
+								'".$id_equip."',
 								'".$data."',
 								'".$_SESSION["id"]."',
 								'5')";

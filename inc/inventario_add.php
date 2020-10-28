@@ -433,8 +433,7 @@ if ($_GET['error'] == 2) {
                                             echo "
                                             <label class='checkbox inline'>
                                                 <input type='checkbox' name='acessorio_celular0[]' value='".$row_acessorio_cel['id_acessorio']."' checked='checked'> ".$row_acessorio_cel['acessorios']."
-                                            </label>
-                                            </br>";
+                                            </label>";
                                             }
 
                                             $res_query = "SELECT
@@ -469,8 +468,7 @@ if ($_GET['error'] == 2) {
                                             echo "
                                                 <label class='checkbox inline'>
                                                     <input type='checkbox' name='acessorio_celular0[]' value='".$row_acess['id_acessorio']."' > ".$row_acess['nome']."
-                                                </label>
-                                                </br>";
+                                                </label>";
                                             }
                                         }else{
                                             $query_acessorio_cel = "SELECT * FROM manager_dropacessorios where deletar = 0 ORDER BY nome";
@@ -478,7 +476,7 @@ if ($_GET['error'] == 2) {
                                             while ($row_acessorio_cel = mysqli_fetch_assoc($resultado_acessorio_cel)) {
                                             echo "<label class='checkbox inline'>
                                             <input type='checkbox' name='acessorio_celular0[]' value='".$row_acessorio_cel['id_acessorio']."'> ".$row_acessorio_cel['nome']."
-                                            </label></br>";
+                                            </label>";
                                             }
                                             }
                                         ?>
@@ -752,8 +750,7 @@ if ($_GET['error'] == 2) {
                                             echo "
                                             <label class='checkbox inline'>
                                                 <input type='checkbox' name='acessorio_tablet0[]' value='".$row_acessorio_tab['id_acessorio']."' checked='checked'> ".$row_acessorio_tab['acessorios']."
-                                            </label>
-                                            </br>";
+                                            </label>";
                                             }
 
                                             $res_query = "SELECT
@@ -788,8 +785,7 @@ if ($_GET['error'] == 2) {
                                             echo "
                                                 <label class='checkbox inline'>
                                                     <input type='checkbox' name='acessorio_tablet0[]' value='".$row_acess['id_acessorio']."' > ".$row_acess['nome']."
-                                                </label>
-                                                </br>";
+                                                </label>";
                                             }
                                         }else{
                                             $query_acessorio_tab = "SELECT * FROM manager_dropacessorios where deletar = 0 ORDER BY nome";
@@ -797,7 +793,7 @@ if ($_GET['error'] == 2) {
                                             while ($row_acessorio_tab = mysqli_fetch_assoc($resultado_acessorio_tab)) {
                                             echo "<label class='checkbox inline'>
                                             <input type='checkbox' name='acessorio_tablet0[]' value='".$row_acessorio_tab['id_acessorio']."'> ".$row_acessorio_tab['nome']."
-                                            </label></br>";
+                                            </label>";
                                             }
                                             }
                                     ?>

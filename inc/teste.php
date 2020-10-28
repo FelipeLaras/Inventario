@@ -1,4 +1,7 @@
 <?php
+
+
+
 //incluindo o banco
 require_once('../conexao/conexao.php');
 
