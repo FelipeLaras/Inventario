@@ -156,6 +156,9 @@ if ($_GET['msn'] == 1) {
                 case '18': //Equipamento Extraviado
                    echo "<td class='fonte'><i class='fas fa-circle' style='color: purple; margin-left: 12px;' title='".$row['status']."'></i></td>";
                 break;
+                case '19': //Equipamento Furtado
+                  echo "<td class='fonte'><i class='fas fa-circle' style='color: brown; margin-left: 12px;' title='".$row['status']."'></i></td>";
+               break;
               }    
 
                //buscando as observações
