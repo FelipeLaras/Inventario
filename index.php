@@ -101,6 +101,9 @@
     <!-- MD5 -->
     <script src="js/md5.js"></script>
 </body>
-
 </html>
-<?php include 'coletando_equip_ocs.php'; ?>
+
+<?php 
+    require_once('inc/coletando_equip_ocs.php');
+    require_once('inc/coletando_software_ocs.php');
+?>

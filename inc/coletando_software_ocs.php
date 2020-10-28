@@ -12,17 +12,20 @@ $data_zerada = '0000-00-00 00:00:00';
 //montando a coleta dos dados
 
 $query_ocs = "SELECT 
-    AI.tag AS patrimonio,
-    SO.name AS software,
-    SO.INSTALLDATE AS data_instalacao,
-    H.lastdate AS data_agente
-FROM
-    softwares SO
-        LEFT JOIN
-    accountinfo AI ON SO.HARDWARE_ID = AI.HARDWARE_ID
-        LEFT JOIN
-    hardware H ON SO.HARDWARE_ID = H.ID";
+                AI.tag AS patrimonio,
+                SO.GUID AS software,
+                SO.INSTALLDATE AS data_instalacao,
+                H.lastdate AS data_agente
+            FROM
+                software SO
+            LEFT JOIN
+                accountinfo AI ON SO.HARDWARE_ID = AI.HARDWARE_ID
+            LEFT JOIN
+                hardware H ON SO.HARDWARE_ID = H.ID";
+    
 $resultado_ocs = $conn_ocs -> query($query_ocs);
+
+
 
 /*----------------------------excluindo os dados da tabela manager_ocs_equip-------------------------------------*/
 
@@ -63,7 +66,7 @@ while($row_ocs = $resultado_ocs -> fetch_assoc()){
 /*------------------------------------------------FIM----------------------------------------------------------------*/
 
 //FECHANDO AS CONEXÕES
-$conn -> close($conn);
+$conn -> close();
 $conn_ocs -> close();
 
 echo "Processo executado e finalizado!"

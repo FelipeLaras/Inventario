@@ -10,8 +10,8 @@ $dominio = 'servopa.local';
 
 //montando a coleta dos dados
 
-$query_ocs = "SELECT
-                H.ID AS hardware_id,                
+$query_ocs = "SELECT 
+                DISTINCT H.ID AS hardware_id,
                 H.WORKGROUP AS dominio,
                 AI.TAG AS patrimonio,
                 H.NAME AS hostname,
@@ -19,25 +19,25 @@ $query_ocs = "SELECT
                 B.SSN AS serial_number,
                 B.SMODEL AS modelo,
                 C.TYPE AS processador,
-                (select sum(DISKSIZE) from storages S where H.id = S.HARDWARE_ID ) AS hd,
-                (select sum(capacity) from memories M where H.id = M.HARDWARE_ID ) AS memoria,
+                (SELECT SUM(DISKSIZE) FROM storages S WHERE H.id = S.HARDWARE_ID) AS hd,
+                (SELECT SUM(capacity) FROM memories M WHERE H.id = M.HARDWARE_ID) AS memoria,
                 H.OSNAME AS sistema_operacional,
                 H.WINPRODKEY AS chave_windows,
-                OF.PRODUCT AS office,
-                OF.OFFICEKEY AS chave_office
-            FROM 
+                Ofi.PRODUCT AS office,
+                Ofi.OFFICEKEY AS chave_office
+            FROM
                 hardware H
-            LEFT JOIN 
+            LEFT JOIN
                 accountinfo AI ON H.id = AI.HARDWARE_ID
-            LEFT JOIN 
+            LEFT JOIN
                 cpus C ON H.ID = C.HARDWARE_ID
-            LEFT JOIN 
+            LEFT JOIN
                 bios B ON H.ID = B.HARDWARE_ID
-            LEFT JOIN 
-                officepack OF ON H.ID = OF.HARDWARE_ID
-            LEFT JOIN 
-                storages S ON H.ID = S.HARDWARE_ID
-                ";
+            LEFT JOIN
+                officepack Ofi ON H.ID = Ofi.HARDWARE_ID
+            LEFT JOIN
+                storages S ON H.ID = S.HARDWARE_ID";
+
 $resultado_ocs = $conn_ocs -> query($query_ocs);
 
 //funcão de conversão de dados HD

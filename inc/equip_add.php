@@ -565,7 +565,7 @@ require_once('../query/query_dropdowns.php');
                                             title="Fechar">
                                             <i class="far fa-window-close" style="float: right;"></i>
                                         </span>
-                                        <font style="vertical-align: inherit;"> Office</font>
+                                        <font style="vertical-align: inherit;"> OFFICE</font>
                                     </font>
                                 </h3>
                             </div>
@@ -573,11 +573,11 @@ require_once('../query/query_dropdowns.php');
                                 <div class="container">
                                     <div class="row clearfix" style="width: 97%;margin-left: 0%;">
                                         <div class="col-md-12 column">
+                                            <!--OFFICE-->
                                             <div class="control-group">
-                                                <label class="control-label">Office:
-                                                </label>
+                                                <label class="control-label">Office:</label>
                                                 <div class="controls">
-                                                    <select id='t_cob' name='tipo_office' class='span3'>
+                                                    <select id='t_cob' name='tipo_office' class='span4'>
                                                         <?php 
                                                             if($_SESSION['office'] != NULL){
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
@@ -606,8 +606,23 @@ require_once('../query/query_dropdowns.php');
                                                         ?>
                                                     </select>
                                                 </div>
+                                            </div>                                            
+                                            <!--SERIAL-->
+                                            <div class="control-group">
+                                                <label class="control-label">Serial:
+                                                </label>
+                                                <div class="controls">
+                                                    <?php
+                                                        if($_SESSION['serial_office'] != NULL){
+                                                            echo "<input type='text' name='serial_nota_office_cpu' class='form-control span3' value='".$_SESSION['serial_office'] ."'>";
+                                                            unset($_SESSION['serial_office']);
+                                                        }else{
+                                                            echo "<input type='text' name='serial_nota_office_cpu' class='form-control span3'>";
+                                                        }
+                                                    ?>
+                                                </div>
                                             </div>
-
+                                            <!--FORNECEDOR-->
                                             <div class="control-group">
                                                 <label class="control-label">Fornecedor:</label>
                                                 <div class="controls">
@@ -653,21 +668,6 @@ require_once('../query/query_dropdowns.php');
                                                     </select>
                                                 </div>
                                             </div>
-                                            <!--SERIAL-->
-                                            <div class="control-group">
-                                                <label class="control-label">Serial:
-                                                </label>
-                                                <div class="controls">
-                                                    <?php
-                                                        if($_SESSION['serial_office'] != NULL){
-                                                            echo "<input type='text' name='serial_nota_office_cpu' class='form-control span4' value='".$_SESSION['serial_office'] ."'>";
-                                                            unset($_SESSION['serial_office']);
-                                                        }else{
-                                                            echo "<input type='text' name='serial_nota_office_cpu' class='form-control span4'>";
-                                                        }
-                                                    ?>
-                                                </div>
-                                            </div>
                                             <div class="control-group">
                                                 <label class="control-label">Número da Nota:
                                                 </label>
@@ -702,7 +702,7 @@ require_once('../query/query_dropdowns.php');
                             <hr>
                             <div class="control-group">
                                 <h3 style="color: #0029ff;">
-                                    <font style="vertical-align: inherit;"> Windows</font>
+                                    <font style="vertical-align: inherit;"> WINDOWS</font>
                                 </h3>
                             </div>
                             <label id="campos">
@@ -715,16 +715,24 @@ require_once('../query/query_dropdowns.php');
                                                 <label class="control-label">Sistema Operacional:
                                                 </label>
                                                 <div class="controls">
-                                                    <select id='t_cob' name='so_cpu' class='span3'>
+                                                    <select id='t_cob' name='so_cpu' class='span4'>
                                                         <?php
                                                             if($_SESSION['so'] != NULL){
                                                                 //BUSCANDO OS DEPARTAMENTOS NO BANCO
-                                                                $query_so_cpu = "SELECT * from manager_dropsistemaoperacional where deletar = 0 AND nome like '%".$_SESSION['so']."%' ;";
+                                                                $query_so = "SELECT * from manager_dropsistemaoperacional where deletar = 0 AND nome like '%".$_SESSION['so']."%' ;";
 
-                                                                $resultado_so_cpu = $conn -> query($query_so_cpu);
-                                                                $row_so_cpu = $resultado_so_cpu -> fetch_assoc();
-                                                                echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
+                                                                $resultado_so = $conn -> query($query_so);
+                                                                $row_so = $resultado_so -> fetch_assoc();
+                                                                echo "<option value='".$row_so['id']."'>".$row_so['nome']."</option>";
                                                                 unset($_SESSION['so']);
+
+                                                                echo "<option value=''>---</option>";
+                                                                //BUSCANDO OS DEPARTAMENTOS NO BANCO
+                                                                $query_so_cpu = "SELECT * from manager_dropsistemaoperacional where deletar = 0 order by nome ASC;";
+                                                                $resultado_so_cpu = $conn -> query($query_so_cpu);
+                                                                while ($row_so_cpu = $resultado_so_cpu -> fetch_assoc()) {
+                                                                    echo "<option value='".$row_so_cpu['id']."'>".$row_so_cpu['nome']."</option>";
+                                                                }
                                                                 
                                                             }else{
                                                                 echo "<option value=''>---</option>";
@@ -738,6 +746,22 @@ require_once('../query/query_dropdowns.php');
 
                                                         ?>
                                                     </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <!--SERIAL SO CPU-->
+                                            <div class="control-group">
+                                                <label class="control-label">Serial:
+                                                </label>
+                                                <div class="controls">
+                                                    <?php
+                                                        if($_SESSION['serial_so'] != NULL){
+                                                            echo "<input type='text' name='serial_so_cpu' class='form-control span3' value='".$_SESSION['serial_so'] ."'>";
+                                                            unset($_SESSION['serial_so']);
+                                                        }else{
+                                                            echo "<input type='text' name='serial_so_cpu' class='form-control span3'>";
+                                                        }
+                                                    ?>
                                                 </div>
                                             </div>
 
@@ -754,21 +778,6 @@ require_once('../query/query_dropdowns.php');
                                                             }
                                                         ?>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <!--SERIAL SO CPU-->
-                                            <div class="control-group">
-                                                <label class="control-label">Serial:
-                                                </label>
-                                                <div class="controls">
-                                                    <?php
-                                                        if($_SESSION['serial_so'] != NULL){
-                                                            echo "<input type='text' name='serial_so_cpu' class='form-control span4' value='".$_SESSION['serial_so'] ."'>";
-                                                            unset($_SESSION['serial_so']);
-                                                        }else{
-                                                            echo "<input type='text' name='serial_so_cpu' class='form-control span4'>";
-                                                        }
-                                                    ?>
                                                 </div>
                                             </div>
                                             <div class="control-group">
@@ -1038,7 +1047,7 @@ require_once('../query/query_dropdowns.php');
                             <span onclick="fechar('officeN')" style="cursor:pointer; color:red;" title="Fechar">
                                 <i class="far fa-window-close" style="float: right;"></i>
                             </span>
-                            <font style="vertical-align: inherit;"> Office</font>
+                            <font style="vertical-align: inherit;"> OFFICE</font>
                         </font>
                     </h3>
                 </div>
@@ -1052,7 +1061,7 @@ require_once('../query/query_dropdowns.php');
                                     <label class="control-label">Office:
                                     </label>
                                     <div class="controls">
-                                        <select id='t_cob' name='office_note' class='span3'>
+                                        <select id='t_cob' name='office_note' class='span4'>
                                             <?php
                                                 if ($_SESSION['office_note'] != NULL) {
                                                     //BUSCANDO OS DEPARTAMENTOS NO BANCO
@@ -1062,6 +1071,11 @@ require_once('../query/query_dropdowns.php');
                                                     $row_office_note = $resultado_office_note -> fetch_assoc();
                                                     echo "<option value='".$row_office_note['id']."'>".$row_office_note['nome']."</option>";
                                                     unset($_SESSION['office_note']);
+
+                                                    echo "<option value=''>---</option>";
+                                                    while ($row_office_note = $resultado_office -> fetch_assoc()) {
+                                                        echo "<option value='".$row_office_note['id']."'>".$row_office_note['nome']."</option>";
+                                                    }
                                                 } else {                                                
                                                     echo "<option value=''>---</option>";
                                                     while ($row_office_note = $resultado_office -> fetch_assoc()) {
@@ -1071,6 +1085,20 @@ require_once('../query/query_dropdowns.php');
 
                                             ?>
                                         </select>
+                                    </div>
+                                </div>
+                                <!--SERIAL OFFICE NOTE-->
+                                <div class="control-group">
+                                    <label class="control-label">Serial:
+                                    </label>
+                                    <div class="controls">
+                                        <?php
+                                            if ($_SESSION['serial_office_note'] != NULL) {
+                                            echo "<input type='text' name='serial_office_note' class='form-control span3' value='".$_SESSION['serial_office_note']."'>";
+                                            } else {
+                                            echo "<input type='text' name='serial_office_note' class='form-control span3'>";
+                                            }
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -1118,20 +1146,7 @@ require_once('../query/query_dropdowns.php');
                                         </select>
                                     </div>
                                 </div>
-                                <!--SERIAL OFFICE NOTE-->
-                                <div class="control-group">
-                                    <label class="control-label">Serial:
-                                    </label>
-                                    <div class="controls">
-                                        <?php
-                                            if ($_SESSION['serial_office_note'] != NULL) {
-                                            echo "<input type='text' name='serial_office_note' class='form-control span4' value='".$_SESSION['serial_office_note']."'>";
-                                            } else {
-                                            echo "<input type='text' name='serial_office_note' class='form-control span4'>";
-                                            }
-                                        ?>
-                                    </div>
-                                </div>
+                                
                                 <!--NUMERO NOTA OFFICE NOTE-->
                                 <div class="control-group">
                                     <label class="control-label">Número da Nota:
@@ -1166,7 +1181,7 @@ require_once('../query/query_dropdowns.php');
                 <hr>
                 <div class="control-group">
                     <h3 style="color: #0029ff;">
-                        <font style="vertical-align: inherit;"> Windows</font>
+                        <font style="vertical-align: inherit;"> WINDOWS</font>
                     </h3>
                 </div>
                 <label id="campos">
@@ -1178,7 +1193,7 @@ require_once('../query/query_dropdowns.php');
                                     <label class="control-label">Sistema Operacional:
                                     </label>
                                     <div class="controls">
-                                        <select id='t_cob' name='so_notebook' class='span3'>
+                                        <select id='t_cob' name='so_notebook' class='span4'>
                                             <?php   
                                                 if ($_SESSION['so_note'] != NULL) {
                                                     //BUSCANDO OS DEPARTAMENTOS NO BANCO
@@ -1187,6 +1202,11 @@ require_once('../query/query_dropdowns.php');
                                                     $row_so_note = $resultado_so_note -> fetch_assoc();
                                                     echo "<option value='".$row_so_note['id']."'>".$row_so_note['nome']."</option>";
                                                     unset($_SESSION['so_note']);
+
+                                                    echo "<option value=''>---</option>";
+                                                    while ($row_so_note = $resultado_so -> fetch_assoc()) {
+                                                        echo "<option value='".$row_so_note['id']."'>".$row_so_note['nome']."</option>";
+                                                    }
                                                 } else {
                                                     echo "<option value=''>---</option>";
                                                     while ($row_so_note = $resultado_so -> fetch_assoc()) {
@@ -1195,6 +1215,21 @@ require_once('../query/query_dropdowns.php');
                                                 }
                                             ?>
                                         </select>
+                                    </div>
+                                </div>
+                                <!--SERIAL S.O NOTEBOOK-->
+                                <div class="control-group">
+                                    <label class="control-label">Serial:
+                                    </label>
+                                    <div class="controls">
+                                        <?php
+                                            if ($_SESSION['serial_so_note'] != NULL) {
+                                            echo "<input type='text' name='serial_so_note' class='form-control span3' value='".$_SESSION['serial_so_note']."'>";
+                                            unset($_SESSION['serial_so_note']);
+                                            } else {
+                                            echo "<input type='text' name='serial_so_note' class='form-control span3'>";
+                                            }
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -1212,21 +1247,7 @@ require_once('../query/query_dropdowns.php');
                                         </div>
                                     </div>
                                 </div>
-                                <!--SERIAL S.O NOTEBOOK-->
-                                <div class="control-group">
-                                    <label class="control-label">Serial:
-                                    </label>
-                                    <div class="controls">
-                                        <?php
-                                            if ($_SESSION['serial_so_note'] != NULL) {
-                                            echo "<input type='text' name='serial_so_note' class='form-control span4' value='".$_SESSION['serial_so_note']."'>";
-                                            unset($_SESSION['serial_so_note']);
-                                            } else {
-                                            echo "<input type='text' name='serial_so_note' class='form-control span4'>";
-                                            }
-                                        ?>
-                                    </div>
-                                </div>
+                                
                                 <!--NUMERO NOTA S.O NOTEBOOK-->
                                 <div class="control-group">
                                     <label class="control-label">Número da Nota:
