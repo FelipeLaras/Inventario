@@ -169,6 +169,33 @@ $equipamentosDisponiveis = "SELECT
 
 $resultadoEquipDisponivel = $conn->query($equipamentosDisponiveis);
 
+
+$queryOffiDisponivel = "SELECT 
+                            OF.id,
+                            OF.status,
+                            MDL.nome AS locacao,
+                            MDE.nome AS empresa,
+                            MDOF.nome AS versao,
+                            OF.serial,
+                            OF.fornecedor,
+                            OF.numero_nota,
+                            OF.file_nota,
+                            OF.file_nota_nome AS nomeNota,
+                            OF.data_nota
+                        FROM 
+                            manager_office OF
+                        LEFT JOIN 
+                            manager_droplocacao MDL ON OF.locacao = MDL.id_empresa
+                        LEFT JOIN 
+                            manager_dropempresa MDE ON OF.empresa = MDE.id_empresa
+                        LEFT JOIN 
+                            manager_dropoffice MDOF ON OF.versao = MDOF.id
+                        WHERE 
+                            OF.status = 6 AND OF.deletar = 0;";
+
+$resultOfficeDispo = $conn->query($queryOffiDisponivel);
+
+
 //status funcionario
 $status = "SELECT 
                 id_funcionario, 
@@ -426,6 +453,19 @@ $query_scanner = "SELECT
             MIE.tipo_equipamento = 10 AND (MIE.deletar = 0 AND MIE.status != 11)";
 $resultado_scanner = $conn->query($query_scanner);
 $row_scanner = mysqli_fetch_assoc($resultado_scanner);
+
+/*---------------------------------OFFICE--------------------------------------------*/
+
+$query_office = "SELECT 
+                    COUNT(OFF.id) AS office
+                FROM
+                    manager_office OFF
+                WHERE
+                    OFF.status = 6 AND OFF.deletar = 0";
+
+$resultado_office = $conn->query($query_office);
+
+$row_office = $resultado_office->fetch_assoc();
 
 /*---------------------------------DISPONIVEIS--------------------------------------------*/
 

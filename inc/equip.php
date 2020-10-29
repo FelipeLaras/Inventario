@@ -193,16 +193,20 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
             </i>
          </a>
          <!--CONDENADOS-->
-         <a class="btn btn-default btn-xs botao" style="background-color: #ff000029;" href="equip_condenados.php" title="Equipamentos condenados">
+         <a class="btn btn-default btn-xs botao" href="equip_condenados.php" title="Equipamentos condenados">
             <i class="far fa-trash-alt"></i> = <?= $row_condenados['condenados'] ?>
          </a>
          <!--DISPONIVEIS-->
-         <a class="btn btn-default btn-xs botao" style="background-color: #00ff4e29;" href="equip_disponivel.php" title="Equipamentos disponíveis">
+         <a class="btn btn-default btn-xs botao" href="equip_disponivel.php" title="Equipamentos disponíveis">
             <i class="fas fa-laptop"></i> = <?= $row_disponivel['disponivel'] ?>
          </a>
          <!--SCANNERS-->
          <a class="btn btn-default btn-xs botao" href="scan_disponivel.php" title="Lista de Scanners">
             <i class="fas fa-print"></i> = <?= $row_scanner['scanner'] ?>
+         </a>
+         <!--OFFICE-->
+         <a class="btn btn-default btn-xs botao" href="office_disponivel.php" title="Office Disponivéis">
+            <i class="fab fa-windows"></i> = <?= $row_office['office'] ?>
          </a>
       </div>
    </div>
