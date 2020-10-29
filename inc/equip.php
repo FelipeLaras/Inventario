@@ -220,18 +220,18 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
       <table id="example" class="table table-striped table-bordered" style="font-size: 10px;">
          <thead>
             <tr>
-               <th class="titulo">T. Equip.</th>
-               <th class="titulo">Número</th>
+               <th class="titulo">ID</th>
+               <th class="titulo">Equipamento</th>
+               <th class="titulo">Nº</th>
                <th class="titulo">Patrimônio</th>
                <th class="titulo">I.P</th>
                <th class="titulo">Respónsavel</th>
                <th class="titulo">C.P.F</th>
-               <th class="titulo">Departamento</th>
-               <th class="titulo">Empresa / Filial</th>
+               <th class="titulo">Filial</th>
                <th class="titulo">S.O</th>
                <th class="titulo">Office</th>
                <th class="titulo">A.D</th>
-               <th class="titulo" style="width: 100px;">Status</th>
+               <th class="titulo">Status</th>
                <th class="titulo acao">Ação</th>
             </tr>
          </thead>
@@ -240,49 +240,16 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
             //aplicando a query
             while ($row_equip = $resultado_equip->fetch_assoc()) {
 
-               echo "<tr>";
-               if ($row_equip['id_tipo_equipamento'] == 5) { #RAMAL
-                  echo "<td class='fonte'>" . $row_equip['modelo'] . "</td>";
-               } else {
-                  echo "<td class='fonte'>" . $row_equip['tipo_equipamento'] . "</td>";
-               }
-               echo "
-            <td class='fonte'>" . $row_equip['ramal'] . "</td>
-            <td class='fonte'>" . $row_equip['patrimonio'] . "</td>
-            <td class='fonte'>" . $row_equip['ip'] . "</td>
-            <td class='fonte'>" . $row_equip['responsavel'] . "</td>
-            <td class='fonte'>" . $row_equip['cpf'] . "</td>
-            <td class='fonte'>" . $row_equip['departamento'] . "</td>
-            <td class='fonte'>" . $row_equip['empresa'] . "</td>";
-
-               if ($row_equip['id_so'] != NULL) { //windows
-                  echo "<td class='fonte'>
-                     <a href='#so" . $row_equip['id_so'] . "' title='Mais Informações' class='icon_acao' data-toggle='modal'>
-                     " . $row_equip['versao_so'] . "
-                     </a>
-                  </td>";
-               } else {
-                  echo "<td class='fonte'><!--WINDOWS-->
-                        <a href='javascript:' title='Não possui Informações' class='icon_acao' data-toggle='modal'>
-                        ---
-                        </a>
-                     </td>";
-               }
-
-               if ($row_equip['id_office'] != NULL) { //office
-                  echo "<td class='fonte'>
-                     <a href='#office" . $row_equip['id_office'] . "' title='Mais Informações' class='icon_acao' data-toggle='modal'>
-                     " . $row_equip['versao_office'] . "
-                     </a>
-                  </td>";
-               } else {
-                  echo "<td class='fonte'><!--office-->
-                        <a href='javascript:' title='Não possui Informações' class='icon_acao' data-toggle='modal'>
-                        ---
-                        </a>
-                     </td>";
-               }
-               //DOMINIO
+               echo "<tr><td class='fonte'>" . $row_equip['id_equipamento'] . "</td>";
+               echo ($row_equip['id_tipo_equipamento'] == 5) ? "<td class='fonte'>" . $row_equip['modelo'] . "</td>" : "<td class='fonte'>" . $row_equip['tipo_equipamento'] . "</td>";
+               echo ($row_equip['ramal'] != NULL) ? "<td class='fonte'>" . $row_equip['ramal'] . "</td>" : "<td class='fonte'>---</td>";
+               echo ($row_equip['patrimonio'] != NULL) ? "<td class='fonte'>" . $row_equip['patrimonio'] . "</td>" : "<td class='fonte'>---</td>";
+               echo ($row_equip['ip'] != NULL) ? "<td class='fonte'>" . $row_equip['ip'] . "</td>" : "<td class='fonte'>---</td>";
+               echo "<td class='fonte'>" . $row_equip['responsavel'] . "</td>
+                     <td class='fonte'>" . $row_equip['cpf'] . "</td>
+                     <td class='fonte'>" . $row_equip['empresa'] . "</td>";
+               echo ($row_equip['id_so'] != NULL) ? "<td class='fonte'><a href='#so" . $row_equip['id_so'] . "' title='Mais Informações' class='icon_acao' data-toggle='modal'>" . $row_equip['versao_so'] . "</a></td>" : "<td class='fonte'>---</td>";
+               echo ($row_equip['id_office'] != NULL) ? "<td class='fonte'><a href='#office" . $row_equip['id_office'] . "' title='Mais Informações' class='icon_acao' data-toggle='modal'>" . $row_equip['versao_office'] . "</a></td>" : "<td class='fonte'>---</td>";
                echo ($row_equip['dominio'] == 1) ? "<td><i class='fas fa-times-circle fa-2x' style='color: red' title='Não está no domínio'></i></td>" : "<td><i class='fas fa-check-circle fa-2x' style='color: green' title='Está no domínio'></i></td>";
 
 

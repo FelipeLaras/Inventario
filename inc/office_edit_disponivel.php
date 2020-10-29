@@ -1,8 +1,6 @@
 <?php
    //aplicando para usar varialve em outro arquivo
    session_start();
-   //chamando conexão com o banco
-   require_once('../conexao/conexao.php');
    //Aplicando a regra de login
    if($_SESSION["perfil"] == NULL){  
      header('location: ../front/index.html');
@@ -10,9 +8,11 @@
    }elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
        header('location: ../front/error.php');
    }   
-   
+    
+   //chamando conexão com o banco
+   require_once('../conexao/conexao.php');   
+   require_once('../query/query_dropdowns.php');  
    require_once('header.php');
-   require_once('../query/query_dropdowns.php');
 
 ?>
 <div class="subnavbar">
@@ -44,56 +44,31 @@
 
    //recebendo a informação e distribuindo nos campos do formulario
    $query_contrato = "SELECT 
-   MIE.id_equipamento,
-   MIE.id_funcionario,
-   MIE.serialnumber,
-   MIE.modelo,
-   MIE.patrimonio,
-   MDE.nome AS empresa,
-   MIE.filial AS id_empresa,
-   MDL.nome AS locacao,
-   MIE.locacao AS id_locacao,
-   MIE.fornecedor_scan,
-   MIE.data_fim_contrato,
-   MIE.numero_nota,
-   MIA.nome AS nome_nota,
-   MIA.caminho AS caminho_nota,
-   MIF.nome AS responsavel,
-   MIF.empresa AS id_empresaFUN,
-   MDEF.nome AS empresaFUN,
-   MIF.funcao AS id_funcao,
-   MDF.nome AS funcao,
-   MIF.cpf,
-   MDD.nome AS departamento,
-   MIF.departamento AS id_depart,
-   MDS.nome AS situacao,
-   MIE.situacao AS id_situacao
-FROM
-   manager_inventario_equipamento MIE
-       LEFT JOIN
-   manager_dropempresa MDE ON MIE.filial = MDE.id_empresa
-       LEFT JOIN
-   manager_droplocacao MDL ON MIE.locacao = MDL.id_empresa
-       LEFT JOIN
-   manager_inventario_anexo MIA ON MIE.id_equipamento = MIA.id_equipamento
-       LEFT JOIN
-   manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
-       LEFT JOIN
-   manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-       LEFT JOIN
-   manager_dropsituacao MDS ON MIE.situacao = MDS.id_situacao
-       LEFT JOIN
-   manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-     LEFT JOIN
-  manager_dropempresa MDEF ON MIF.empresa = MDEF.id_empresa
-WHERE
-   MIE.id_equipamento = ".$_GET['id_equip']."";
+                        OF.id,
+                        OF.status,
+                        OF.locacao AS id_locacao,
+                        MDL.nome AS locacao,
+                        OF.empresa AS id_empresa,
+                        MDE.nome AS empresa,
+                        MDOF.nome AS versao,
+                        OF.serial,
+                        OF.fornecedor,
+                        OF.numero_nota,
+                        OF.file_nota,
+                        OF.file_nota_nome AS nomeNota,
+                        OF.data_nota
+                    FROM 
+                        manager_office OF
+                    LEFT JOIN 
+                        manager_droplocacao MDL ON OF.locacao = MDL.id_empresa
+                    LEFT JOIN 
+                        manager_dropempresa MDE ON OF.empresa = MDE.id_empresa
+                    LEFT JOIN 
+                        manager_dropoffice MDOF ON OF.versao = MDOF.id
+                    WHERE OF.id = ".$_GET['id']."";
 
    $resultado = $conn->query($query_contrato);
-   $row = mysqli_fetch_assoc($resultado); 
-
-   //trocando formato da dara fim do contrato
-  $data_fim = date('d/m/Y',  strtotime($row['data_fim_contrato']));
+   $row = $resultado->fetch_assoc(); 
 
    ?>
     <div class="widget-header">
@@ -104,17 +79,11 @@ WHERE
             <i class="icon-lithe icon-table"></i>&nbsp;
             <a href="equip.php">Inventário</a>
             /
-            <i class="icon-lithe icon-print"></i>&nbsp;
-            <a href="scan_disponivel.php">Scanners</a>
+            <i class="fab fa-windows"></i>&nbsp;
+            <a href="scan_disponivel.php">Offices Disponiveis</a>
             /
-            <i class="icon-lithe fas fa-print"></i>&nbsp;
-            <?php
-            if($row['id_situacao'] == 4){
-                echo "<a href='javascript:'>".$row['modelo']."</a>";
-            }else{
-                echo "<a href='javascript:'>".$row['patrimonio']."</a>";
-            }
-            ?>
+            <i class="fab fa-windows"></i>&nbsp;
+            <?=  "<a href='javascript:'>".$row['versao']."</a>" ?>
         </h3>
     </div>
     <!-- /widget-header -->
@@ -122,7 +91,7 @@ WHERE
         <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#contratos" data-toggle="tab">Funcionário / Equipamento</a>
+                    <a href="#contratos" data-toggle="tab">Software</a>
                 </li>
                 <li>
                     <a href="#anexos" data-toggle="tab">Notas Fiscais</a>
@@ -144,49 +113,46 @@ WHERE
             <div class="tab-content">
                 <!--Equipamento-->
                 <div class="tab-pane active" id="contratos">
-                    <form id="edit-profile" class="form-horizontal" action="scan_add_alter.php" method="post">
+                    <form id="edit-profile" class="form-horizontal" action="office_add_alter.php" method="post">
                         <!--Uma gambiarra para levar o id do contrato para a tela de update-->
-                        <input type="text" name="id_funcionario" style="display: none;"
-                            value="<?= $row['id_funcionario'] ?>">
                         <!--fim da gambiarra-->
                         <div class="control-group">
                             <h3 style="color: red;">
-                                <font style="vertical-align: inherit;">Funcionário Responsável:</font>
+                                <font style="vertical-align: inherit;">Software:</font>
                             </h3>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Nome completo:</label>
+                            <label class="control-label">Versao:</label>
                             <div class="controls">
-                                <input class="span6" name="nome" type="text" onkeyup='maiuscula(this)' required
-                                    value="<?= $row['responsavel'] ?>" />
+                                <input class="span4" name="versao" type="text" onkeyup='maiuscula(this)' value="<?= $row['versao'] ?>" />
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">CPF:</label>
+                            <label class="control-label">Serial:</label>
                             <div class="controls">
-                                <input class="cpfcnpj span2" type="text" name="cnpj_forne" value="<?= $row['cpf']  ?>"
-                                    required />
+                                <input class="cpfcnpj span3" type="text" name="serial" value="<?= $row['serial']  ?>"/>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Função:</label>
+                            <label class="control-label">Locacão:</label>
                             <div class="controls">
                                 <select id="t_cont" name="funcao" class="span2">
-                                    <option value="<?= $row['id_funcao'] ?>"><?= $row['funcao']  ?>
-                                    </option>
+                                    <option value="<?= $row['id_locacao'] ?>"><?= $row['locacao']  ?></option>
+                                    <option value="">---</option>
                                     <?php 
-                                        while ($row_funcao = $resultado_funcao->fetch_assoc()) {
-                                        echo "<option value='".$row_funcao['id_funcao']."'>".$row_funcao['nome']."</option>";
+                                        while ($row_funcao = $resultado_locacao->fetch_assoc()) {
+                                        echo "<option value='".$row_funcao['id_empresa']."'>".$row_funcao['nome']."</option>";
                                         }
                                     ?>
                                 </select>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Empresa / Filial:</label>
+                            <label class="control-label">Empresa:</label>
                             <div class="controls">
                                 <select id="t_cob" name="empresa" class="span2" required>
-                                    <option value="<?= $row['id_empresaFUN'] ?>"> <?= $row['empresaFUN']?> </option>
+                                    <option value="<?= $row['id_empresa'] ?>"> <?= $row['empresa']?> </option>
+                                    <option value="">---</option>
                                     <?php 
                                         while ($row_empresa = $resultado_empresa->fetch_assoc()) {
                                             echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
@@ -196,202 +162,13 @@ WHERE
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Departamento:</label>
+                            <label class="control-label">Fornecedor:</label>
                             <div class="controls">
-                                <select id="setor_1" name="setor" class="span2">
-                                    <option value="<?= $row['id_depart'] ?>"><?= $row['departamento']  ?>
-                                    </option>
-                                    <?php
-                                        while ($row_depart = $resultado_depart->fetch_assoc()) {
-                                            echo "<option value='".$row_depart['id_depart']."'>".$row_depart['nome']."</option>";
-                                        } 
-                                    ?>
-                                </select>
+                                <input class="cpfcnpj span4" type="text" name="serial" value="<?= $row['fornecedor']  ?>"/>
                             </div>
                         </div>
-
-                        <?php
-
-                    if($row['id_situacao'] == 4){//alugado
-
-                      echo "
-                    <div class='control-group'>
-                        <h3 style='color: red;'>
-                            <font style='vertical-align: inherit;'>Scanner - <u>ALUGADO</u>:</font>
-                        </h3>
-                    </div>
-                    <input value='".$_GET['tipo']."' style='display:none;' name='id_situacao'/>
-                    <input value='".$_GET['id_equip']."' style='display:none;' name='id_equipamento'/>
-                    <div class='control-group'>
-                        <label class='control-label'>Patrimônio:</label>
-                        <div class='controls'>
-                          <input class='cpfcnpj span2' id='gols2' name='num_patrimonio_scan' type='text' value='".$row['patrimonio']."'>
-                        </div>
-                     </div>
-                     <div class='control-group'>
-                        <label class='control-label'>Empresa:
-                           <i class='icon-lithe icon-question-sign' title='Quem ta pagando o equipamento?'></i>
-                        </label>
-                        <div class='controls'>
-                           <select id='t_cob' name='empresa_scan' class='span2'>
-                              <option value='".$row['id_empresa']."'>".$row['empresa']."</option>
-                              <option>---</option>";
-                              $query_empresa_cpu = "SELECT * from manager_dropempresa  where deletar = 0 ORDER BY nome";
-                               $resultado_empresa_cpu = $conn->query($query_empresa_cpu);
-                              while ($row_empresa= mysqli_fetch_assoc($resultado_empresa_cpu)) {
-                                echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
-                              }
-                        echo "
-                           </select>
-                        </div>
-                     </div>
-                     <div class='control-group'>
-                        <label class='control-label'>Locação:
-                           <i class='icon-lithe icon-question-sign' title='Onde se encontra o equipamento!'></i>
-                        </label>
-                        <div class='controls'>
-                           <select id='t_cob' name='locacao_scan' class='span2'>
-                              <option value='".$row['id_locacao']."'>".$row['locacao']."</option> 
-                              <option>---</option>"; 
-                              $query_locacao_cpu = "SELECT * from manager_droplocacao  where deletar = 0 ORDER BY nome";
-                               $resultado_locacao_cpu = $conn->query($query_locacao_cpu);
-                              while ($row_locacao= mysqli_fetch_assoc($resultado_locacao_cpu)) {
-                                echo "<option value='".$row_locacao['id_empresa']."'>".$row_locacao['nome']."</option>";
-                              }
-                        echo "
-                           </select>
-                        </div>
-                     </div>  
-                     <div class='control-group'>
-                        <label class='control-label'>Fornecedor</label>
-                        <div class='controls'>
-                           <input class='span4' name='fornecedor_scan' type='text' value='".$row['fornecedor_scan']."'>                            
-                        </div>
-                     </div> 
-                     <div class='control-group'>
-                        <label class='control-label'>Data fim contrato:</label>
-                        <div class='controls'>
-                           <input class='span2' name='data_fim_scan' type='text' value='".$data_fim."'>                            
-                        </div>
-                     </div>
-                      <div class='control-group'>
-                        <label class='control-label'>Situacao:</label>
-                        <div class='controls'>
-                           <select id='setor_1' name='situacao_scan' class='span2'>
-                              <option value='".$row['id_situacao']."'>".$row['situacao']."</option>
-                              <option>---</option>";
-                              $query_situacao = "SELECT * from manager_dropsituacao  where id_situacao in (4,5) ORDER BY nome";
-                                 $resultado_situacao = $conn->query($query_situacao);
-                                 while ($row_situacao= mysqli_fetch_assoc($resultado_situacao)) {
-                                 echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['nome']."</option>";
-                                 }
-                           echo "
-                           </select>
-                        </div>
-                     </div>
-                     <div class='control-group'>
-                        <label class='control-label'>Número de série:</label>
-                        <div class='controls'>
-                           <input class='span3' name='serie_scan' type='text' value='".$row['serialnumber']."'>                            
-                        </div>
-                     </div>";                   
-               }//end IF Scanner ALUGADO
-
-               if($row['id_situacao'] == 5){//COMPRADO
-
-                  echo "
-                    <div class='control-group'>
-                        <h3 style='color: red;'>
-                            <font style='vertical-align: inherit;'>Scanner - <u>COMPRADO</u>:</font>
-                        </h3>
-                    </div>
-                    <input value='".$_GET['tipo']."'style='display:none;' name='id_situacao'/>
-                    <input value='".$_GET['id_equip']."' style='display:none;' name='id_equipamento'/>
-                    <div class='control-group'>
-                        <label class='control-label'>Patrimônio:</label>
-                        <div class='controls'>
-                          <input class='cpfcnpj span2' id='gols2' name='num_patrimonio_scan' type='text' value='".$row['patrimonio']."'>
-                        </div>
-                     </div>
-                     <div class='control-group'>
-                        <label class='control-label'>Empresa:
-                           <i class='icon-lithe icon-question-sign' title='Quem ta pagando o equipamento?'></i>
-                        </label>
-                        <div class='controls'>
-                           <select id='t_cob' name='empresa_scan' class='span2'>
-                              <option value='".$row['id_empresa']."'>".$row['empresa']."</option>
-                              <option>---</option>";
-                              while ($row_empresa= $resultado_empresa->fetch_assoc()) {
-                                echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
-                              }
-                        echo "
-                           </select>
-                        </div>
-                     </div>
-                     <div class='control-group'>
-                        <label class='control-label'>Locação:
-                           <i class='icon-lithe icon-question-sign' title='Onde se encontra o equipamento!'></i>
-                        </label>
-                        <div class='controls'>
-                           <select id='t_cob' name='locacao_scan' class='span2'>
-                              <option value='".$row['id_locacao']."'>".$row['locacao']."</option> 
-                              <option>---</option>"; 
-                              while ($row_locacao= $resultado_empresa->fetch_assoc()) {
-                                echo "<option value='".$row_locacao['id_empresa']."'>".$row_locacao['nome']."</option>";
-                              }
-                        echo "
-                           </select>
-                        </div>
-                     </div>  
-                     <div class='control-group'>
-                        <label class='control-label'>Número nota fiscal</label>
-                        <div class='controls'>
-                           <input class='span2' name='numero_nota_scan' type='text' value='".$row['numero_nota']."'>                            
-                        </div>
-                     </div>
-                      <div class='control-group'>
-                        <label class='control-label'>Situacao:</label>
-                        <div class='controls'>
-                           <select id='setor_1' name='situacao_scan' class='span2'>
-                              <option value='".$row['id_situacao']."'>".$row['situacao']."</option>
-                              <option>---</option>";
-                                 while ($row_situacao= $resultado_situacao->fetch_assoc()) {
-                                 echo "<option value='".$row_situacao['id_situacao']."'>".$row_situacao['nome']."</option>";
-                                 }
-                           echo "
-                           </select>
-                        </div>
-                     </div>
-                     <div class='control-group'>
-                        <label class='control-label'>Número de série:</label>
-                        <div class='controls'>
-                           <input class='span3' name='serie_scan' type='text' value='".$row['serialnumber']."'>                            
-                        </div>
-                     </div>";       
-           }//end IF COMPRADO
-?>
-                        <div class="form-actions">
-                            <?php
-if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
-
-   $query_tem_office = "SELECT id FROM manager_office WHERE id_equipamento = ".$_GET['id_equip'] .";";
-   $result_tem_office = $conn->query($query_tem_office);
-   $row_tem_office = $result_tem_office->fetch_assoc();
-
-   if($row_tem_office['id'] == NULL){
-      echo "<a href='#myModalOffice' class='btn btn-warning' data-toggle='modal' style='margin-left: -142px;'>
-                  Adicionar Office
-            </a>";
-   }else{
-      echo "<a href='#myModalOfficeDrop' class='btn btn-danger' data-toggle='modal' style='margin-left: -142px;'>
-               Transferir Office
-            </a>";
-   }//não tem office
-
-}//end IF adicionar office
-?>
+                        <div class="form-actions">                            
                             <button type="submit" class="btn btn-primary pull-right">Salvar</button>
-
                         </div>
                     </form>
                 </div>
@@ -421,38 +198,38 @@ if(($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)){//se for notebook ou desktop
                                     </thead>
                                     <tbody>
                                         <?php
-                                    /*--------------------NOTA-------------------------*/
-                                    //pesquisando os arquivos criados.
-                                    $query_doc_termo = "SELECT 
-                                    MIA.id_anexo, MIA.caminho, MIA.nome, MIE.numero_nota
-                                FROM
-                                    manager_inventario_anexo MIA
-                                        LEFT JOIN
-                                    manager_inventario_equipamento MIE ON MIA.id_equipamento = MIE.id_equipamento
-                                WHERE
-                                    MIA.id_equipamento = ".$_GET['id_equip']."";
+                                                /*--------------------NOTA-------------------------*/
+                                                //pesquisando os arquivos criados.
+                                                $query_doc_termo = "SELECT 
+                                                MIA.id_anexo, MIA.caminho, MIA.nome, MIE.numero_nota
+                                            FROM
+                                                manager_inventario_anexo MIA
+                                                    LEFT JOIN
+                                                manager_inventario_equipamento MIE ON MIA.id_equipamento = MIE.id_equipamento
+                                            WHERE
+                                                MIA.id_equipamento = ".$_GET['id_equip']."";
 
-                                    $result_cod_termo = $conn->query($query_doc_termo);
+                                                $result_cod_termo = $conn->query($query_doc_termo);
 
-                                 while ($row_termo = mysqli_fetch_assoc($result_cod_termo)) {
+                                            while ($row_termo = mysqli_fetch_assoc($result_cod_termo)) {
 
-                                    echo "<tr>
-                                             <td>
-                                                <a href='".$row_termo['caminho']."' target='_blank'>".$row_termo['nome']."</a>
-                                             </td>
-                                             <td>
-                                                ";
-                                                if(empty($row_termo['numero_nota'])){
-                                                    echo "Alugado";
-                                                }else{
-                                                    echo $row_termo['numero_nota'];
-                                                }
-                                                echo "
-                                             </td>
-                                          </tr>
-                                          ";
-                                    }//end WHILE NOTA
-                                    ?>
+                                                echo "<tr>
+                                                        <td>
+                                                            <a href='".$row_termo['caminho']."' target='_blank'>".$row_termo['nome']."</a>
+                                                        </td>
+                                                        <td>
+                                                            ";
+                                                            if(empty($row_termo['numero_nota'])){
+                                                                echo "Alugado";
+                                                            }else{
+                                                                echo $row_termo['numero_nota'];
+                                                            }
+                                                            echo "
+                                                        </td>
+                                                    </tr>
+                                                    ";
+                                                }//end WHILE NOTA
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>

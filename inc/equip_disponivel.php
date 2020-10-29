@@ -63,7 +63,7 @@ require_once('../query/query.php');
             <i class="icon-lithe icon-table"></i>&nbsp;
             <a href="equip.php">Inventário</a>
             /
-            <i class="icon-lithe far fa-check-circle"></i>&nbsp;
+            <i class="fas fa-laptop"></i>&nbsp;
             <a href="equip_disponivel.php">Disponíveis</a>
         </h3>
         <div id="novo_usuario">

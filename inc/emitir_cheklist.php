@@ -80,7 +80,7 @@ require_once('header.php');
 <div class="widget-content">
     <div class="tabbable">
         <div id="formulario">
-            <form id='edit-profile' class='form-horizontal' action='form_checklist.php' method='post' style="margin-left: -12%" autocomplete="off" target="_blank">
+            <form id='edit-profile' class='form-horizontal' action='form_checklist.php' method='post' autocomplete="off" target="_blank">
                 <input name='id_fun' value='<?= $_GET['id_fun'] ?>' style='display: none' />
                 <div class="control-group">
                     <div class="controls">
@@ -149,7 +149,6 @@ require_once('header.php');
                                 </select>
                             </div>
                         </div>
-                ?>
                 <div class="form-actions">
                     <button type="submit" tar class="btn btn-primary pull-right" id="salvarTermo">Emitir</button>
                 </div>
