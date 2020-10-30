@@ -169,22 +169,6 @@ $equipamentosDisponiveis = "SELECT
 
 $resultadoEquipDisponivel = $conn->query($equipamentosDisponiveis);
 
-
-
-//equipamentos que não possuiem OFFICE
-$queryEquipDisponivel = "SELECT 
-                            MIE.id_equipamento,
-                            MIE.patrimonio
-                        FROM
-                            manager_inventario_equipamento MIE
-                        LEFT JOIN 
-                            manager_office MO ON MIE.id_equipamento = MO.id_equipamento
-                        WHERE 
-                            MIE.deletar = 0 AND MIE.tipo_equipamento IN (8, 9) AND  MO.id IS NULL";
-
-$resultEquipDisponivel = $conn->query($queryEquipDisponivel);
-
-
 $queryOffiDisponivel = "SELECT 
                             OF.id,
                             OF.status,

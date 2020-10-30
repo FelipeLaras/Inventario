@@ -43,12 +43,7 @@ require_once('header.php');
 </div>
 <?php
 if ($_GET['msn'] == 2) { //encontrado porém o usuário está desativado
-    echo "
-                <div class='alert alert-success'>
-                    <button type='button' class='close' data-dismiss='alert'>×</button>
-                    <h4>ATENÇÃO</h4>
-                     Equipamento<b style='color:red'>  vinculado ao usuário</b> com sucesso! 
-                </div>";
+    echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento<b style='color:red'>  vinculado ao usuário</b> com sucesso! </div>";
 } //end alerta erro 1
 ?>
 <div class="widget ">
@@ -149,7 +144,19 @@ if ($_GET['msn'] == 2) { //encontrado porém o usuário está desativado
                                                 <div class='controls'>
                                                     <select class='span2' name='id_equipamento'>
                                                         <option value=''>---</option>" ; 
-                                                        while ($equipDisponivel=$resultEquipDisponivel->fetch_assoc()) {
+                                                        //equipamentos que não possuiem OFFICE
+                                                        $queryEquipDisponivel = "SELECT 
+                                                                                    MIE.id_equipamento,
+                                                                                    MIE.patrimonio
+                                                                                FROM
+                                                                                    manager_inventario_equipamento MIE
+                                                                                LEFT JOIN 
+                                                                                    manager_office MO ON MIE.id_equipamento = MO.id_equipamento
+                                                                                WHERE 
+                                                                                    MIE.deletar = 0 AND MIE.tipo_equipamento IN (8, 9) AND  MO.id IS NULL";
+                                                                                    
+                                                        $resultEquipDisponivel = $conn->query($queryEquipDisponivel);
+                                                        while ($equipDisponivel = $resultEquipDisponivel->fetch_assoc()) {
                                                         echo "<option value='" . $equipDisponivel['id_equipamento'] . "'>" . $equipDisponivel['patrimonio'] . "</option>" ; 
                                                     } 
                                                     echo "
