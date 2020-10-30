@@ -51,6 +51,7 @@
                         OF.empresa AS id_empresa,
                         MDE.nome AS empresa,
                         MDOF.nome AS versao,
+                        OF.versao AS id_versao,
                         OF.serial,
                         OF.fornecedor,
                         OF.numero_nota,
@@ -80,7 +81,7 @@
             <a href="equip.php">Inventário</a>
             /
             <i class="fab fa-windows"></i>&nbsp;
-            <a href="scan_disponivel.php">Offices Disponiveis</a>
+            <a href="office_disponivel.php">Offices Disponiveis</a>
             /
             <i class="fab fa-windows"></i>&nbsp;
             <?=  "<a href='javascript:'>".$row['versao']."</a>" ?>
@@ -124,7 +125,16 @@
                         <div class="control-group">
                             <label class="control-label">Versao:</label>
                             <div class="controls">
-                                <input class="span4" name="versao" type="text" onkeyup='maiuscula(this)' value="<?= $row['versao'] ?>" />
+                                <input class="span4" name="id" type="text" onkeyup='maiuscula(this)' value="<?= $row['id'] ?>"  style="display: none;"/>
+                                <select id="t_cont" name="versao" class="span4">
+                                    <option value="<?= $row['id_versao'] ?>"><?= $row['versao']  ?></option>
+                                    <option value="">---</option>
+                                    <?php 
+                                        while ($row_office = $resultado_office->fetch_assoc()) {
+                                        echo "<option value='".$row_office['id']."'>".$row_office['nome']."</option>";
+                                        }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <div class="control-group">
@@ -136,7 +146,7 @@
                         <div class="control-group">
                             <label class="control-label">Locacão:</label>
                             <div class="controls">
-                                <select id="t_cont" name="funcao" class="span2">
+                                <select id="t_cont" name="locacao" class="span2">
                                     <option value="<?= $row['id_locacao'] ?>"><?= $row['locacao']  ?></option>
                                     <option value="">---</option>
                                     <?php 
@@ -164,7 +174,7 @@
                         <div class="control-group">
                             <label class="control-label">Fornecedor:</label>
                             <div class="controls">
-                                <input class="cpfcnpj span4" type="text" name="serial" value="<?= $row['fornecedor']  ?>"/>
+                                <input class="cpfcnpj span4" type="text" name="fornecedor" value="<?= $row['fornecedor']  ?>"/>
                             </div>
                         </div>
                         <div class="form-actions">                            
@@ -176,60 +186,22 @@
                 <div class="tab-pane" id="anexos">
                     <div class="span3" style="width: 802px;">
                         <div class="widget stacked widget-table action-table">
-                            <div class="widget-header">
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <!-- Button to trigger modal -->
-                                        <a href="#myModalanexos" role="button" class="btn btn-info pull-left filho"
-                                            data-toggle="modal" title="Adicionar"> + Nota Fiscal</a>
-                                    </div>
-                                    <!-- /controls -->
-                                </div>
-                                <!-- /control-group -->
-                            </div>
                             <!-- /widget-header -->
                             <div class="widget-content">
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Nome / Documento</th>
+                                            <th>Nota Fiscal</th>
                                             <th>Número Nota</th>
+                                            <th>Data Nota</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                                /*--------------------NOTA-------------------------*/
-                                                //pesquisando os arquivos criados.
-                                                $query_doc_termo = "SELECT 
-                                                MIA.id_anexo, MIA.caminho, MIA.nome, MIE.numero_nota
-                                            FROM
-                                                manager_inventario_anexo MIA
-                                                    LEFT JOIN
-                                                manager_inventario_equipamento MIE ON MIA.id_equipamento = MIE.id_equipamento
-                                            WHERE
-                                                MIA.id_equipamento = ".$_GET['id_equip']."";
-
-                                                $result_cod_termo = $conn->query($query_doc_termo);
-
-                                            while ($row_termo = mysqli_fetch_assoc($result_cod_termo)) {
-
-                                                echo "<tr>
-                                                        <td>
-                                                            <a href='".$row_termo['caminho']."' target='_blank'>".$row_termo['nome']."</a>
-                                                        </td>
-                                                        <td>
-                                                            ";
-                                                            if(empty($row_termo['numero_nota'])){
-                                                                echo "Alugado";
-                                                            }else{
-                                                                echo $row_termo['numero_nota'];
-                                                            }
-                                                            echo "
-                                                        </td>
-                                                    </tr>
-                                                    ";
-                                                }//end WHILE NOTA
-                                        ?>
+                                        <tr>
+                                            <td><a href="<?= $row['file_nota']  ?>" target='_blank'><?= $row['nomeNota']  ?></a></td>
+                                            <td><?= $row['numero_nota']  ?></td>
+                                            <td><?= $row['data_nota']  ?></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

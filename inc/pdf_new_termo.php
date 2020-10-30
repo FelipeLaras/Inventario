@@ -28,7 +28,7 @@ $query_funcionario =  "SELECT
 
 $resultado_funcionarios = $conn->query($query_funcionario);
 
-$row_fun = mysqli_fetch_assoc($resultado_funcionarios);
+$row_fun = $resultado_funcionarios->fetch_assoc();
 
 /*CORPO DO PDF*/
 $html = "
@@ -119,11 +119,12 @@ $html = "
 													manager_dropestado MDSE ON MIE.estado = MDSE.id					
 												WHERE 
 													MIE.id_equipamento = ".$_SESSION['celular_id'.$cont_equip.'']."";
+					echo 
 
 					$resulado_equipamento_celular = $conn->query($query_equipamento_celular);
 					$cont_equip++;
 
-				  while ($row_equip_celular = mysqli_fetch_assoc($resulado_equipamento_celular)) {
+				  while ($row_equip_celular = $resulado_equipamento_celular->fetch_assoc()) {
 				  	$html .= "<tr>";
 					$html .= "<td>".$row_equip_celular['tipo_equipamento']."</td>";					
 					$html .= "<td>".$row_equip_celular['modelo']."</td>";
@@ -138,7 +139,7 @@ $html = "
 						WHERE MIA.id_equipamento = ".$row_equip_celular['id_equipamento']."";
 					$html .= "<td>";
 					$resultado_acessorios_celular = $conn->query($query_acessorios_celular);	
-					while ($row_acessorio_celular = mysqli_fetch_assoc($resultado_acessorios_celular)) {
+					while ($row_acessorio_celular = $resultado_acessorios_celular->fetch_assoc()) {
 
 				  		$html .= $row_acessorio_celular['acessorios']." | ";	
 
@@ -187,7 +188,7 @@ $html = "
 					$resulado_equipamento_tablet = $conn->query($query_equipamento_tablet);
 					$cont_equip_tablet++;
 
-				  while ($row_equip_tablet = mysqli_fetch_assoc($resulado_equipamento_tablet)) {
+				  while ($row_equip_tablet = $resulado_equipamento_tablet->fetch_assoc()) {
 				  	$html .= "<tr>";
 				  	$html .= "<td>".$row_equip_tablet['tipo_equipamento']."</td>";
 					$html .= "<td>".$row_equip_tablet['modelo']."</td>";
@@ -202,7 +203,7 @@ $html = "
 						WHERE MIA.id_equipamento = ".$row_equip_tablet['id_equipamento']."";
 					$html .= "<td>";
 					$resultado_acessorios_tablet = $conn->query($query_acessorios_tablet);	
-					while ($row_acessorio_tablet = mysqli_fetch_assoc($resultado_acessorios_tablet)) {
+					while ($row_acessorio_tablet = $resultado_acessorios_tablet->fetch_assoc()) {
 
 				  		$html .= $row_acessorio_tablet['acessorios']." | ";	
 

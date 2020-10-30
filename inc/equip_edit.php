@@ -68,6 +68,7 @@ require_once('header.php');
    /*---------------------------  EQUIPAMENTO  ---------------------------*/
 
    $query_equipamento = "SELECT 
+                           MIE.id_equipamento,
                            MIE.numero,
                            MIE.tipo_equipamento,
                            MIE.patrimonio,
@@ -733,12 +734,18 @@ require_once('header.php');
                   if (($_GET['tipo'] == 9) || ($_GET['tipo'] == 8)) { //se for notebook ou desktop
 
                      if ($office['id'] == NULL) {
-                        echo "<a href='#myModalOffice' class='btn btn-warning' data-toggle='modal' style='margin-left: -142px;'>
+                        echo "<a href='#myModalOffice' class='btn btn-warning' data-toggle='modal' style='margin-left: -142px;' title='Office que ainda não foi cadastrado no sistema'>
                                     Adicionar Office
+                              </a>
+                              <a href='office_disponivel.php' class='btn btn-info' title='Office que já foi cadastrado no sistema'>
+                                    Adicionar Office Disponível
                               </a>";
                      } else {
                         echo "<a href='#myModalOfficeDrop' class='btn btn-danger' data-toggle='modal' style='margin-left: -142px;'>
                                  Transferir Office
+                              </a>
+                              <a href='#myModalOfficeRemover' class='btn btn-warning' data-toggle='modal'>
+                                 Remover Office
                               </a>";
                      } //não tem office
 
@@ -1365,7 +1372,7 @@ require_once('header.php');
    </div>
 </div>
 
-<!-- Modal REMOVE OFFICE -->
+<!-- Modal TRANSFERIR OFFICE -->
 <div id="myModalOfficeDrop" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
    <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -1457,6 +1464,35 @@ require_once('header.php');
          <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
             <button class="btn btn-primary">Salvar</button>
+         </div>
+         </div>
+      </form>
+   </div>
+   <!-- Modal REMOVE OFFICE -->
+<div id="myModalOfficeRemover" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">
+         <img src="../img/alerta.png" style="width: 10%">
+         Remover Office - <?= $office['versao']  ?>
+      </h3>
+   </div>
+   <div class="modal-body">
+      <form id='edit-profile' class='form-horizontal' enctype='multipart/form-data' action='office_trans.php' method='post'>
+         <input type='text' name='id_office' style='display:none' value='<?= $office['id'] ?>'>
+         <input type='text' name='id_equip' style='display:none' value='<?= $equipamento['id_equipamento'] ?>'>
+         <input type='text' name='id_fun' style='display:none' value='<?= $funcionario['id_funcionario'] ?>'>
+         <input type='text' name='tipo' style='display:none' value='<?= $equipamento['tipo_equipamento'] ?>'>
+
+         <div class='control-group' style="text-align: center;">
+            <h4> Tem certeza que deseja remover do equipamento:</h4>  
+            <br />          
+            <h5>Patrimonio: <?= $equipamento['patrimonio'] ?></h5>
+            <br />
+         </div>
+         <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Não</button>
+            <button class="btn btn-primary">Sim</button>
          </div>
          </div>
       </form>

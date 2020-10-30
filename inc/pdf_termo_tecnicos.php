@@ -26,9 +26,9 @@ LEFT JOIN manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
 LEFT JOIN manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
 WHERE MIF.id_funcionario = ".$_GET['id_funcionario']."";
 
-$resultado_funcionarios = mysqli_query($conn, $query_funcionario);
+$resultado_funcionarios = $conn->query($query_funcionario);
 
-$row_fun = mysqli_fetch_assoc($resultado_funcionarios);
+$row_fun = $resultado_funcionarios->fetch_assoc();
 
 /*PEGANDO DADOS DO EQUIPAMENTO*/
 $query_equipamento = "SELECT 
@@ -67,8 +67,8 @@ MIE.patrimonio = '".$patrimonio."' AND
 MIE.deletar = 0 AND 
 MIE.tipo_equipamento IN (9 , 5)";
 
-$resulado_equipamento = mysqli_query($conn, $query_equipamento);
-$row_equip = mysqli_fetch_assoc($resulado_equipamento);
+$resulado_equipamento = $conn->query($query_equipamento);
+$row_equip = $resulado_equipamento->fetch_assoc();
 
 
 if(empty($row_fun['funcao'])){
@@ -223,7 +223,6 @@ $html .="
 		</div>
 	</body>
 </html>";
-
 
 //limpando a sessão
 unset($_SESSION['patrimonio_termo']);
