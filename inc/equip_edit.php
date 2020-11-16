@@ -449,7 +449,9 @@ require_once('header.php');
                               <select id='t_cob' name='locacao_office_cpu' class='span3'>
                                     <option value='" . $office['id_locacao'] . "'>" . $office['locacao'] . "</option>
                                     <option>---</option>";
-                        while ($office_locacao = $resultado_locacao->fetch_assoc()) {
+                                    $query_locacaoCPU = "SELECT * FROM manager_droplocacao WHERE deletar = 0 ORDER BY nome ASC";
+                                    $resultado_locacaoCPU = $conn -> query($query_locacaoCPU);
+                        while ($office_locacao = $resultado_locacaoCPU->fetch_assoc()) {
                            echo "<option value='" . $office_locacao['id_empresa'] . "'>" . $office_locacao['nome'] . "</option>";
                         }
                         echo "
@@ -462,7 +464,9 @@ require_once('header.php');
                               <select id='t_cob' name='empresa_office_cpu' class='span3'>
                                     <option value='" . $office['id_empresa'] . "'>" . $office['empresa'] . "</option>
                                     <option>---</option>";
-                        while ($row_cpu_officeE = mysqli_fetch_assoc($resultado_empresa)) {
+                                    $query_empresaCPU = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
+                                    $resultado_empresaCPU = $conn -> query($query_empresaCPU);
+                        while ($row_cpu_officeE = mysqli_fetch_assoc($resultado_empresaCPU)) {
                            echo "<option value='" . $row_cpu_officeE['id_empresa'] . "'>" . $row_cpu_officeE['nome'] . "</option>";
                         }
                         echo "
@@ -503,7 +507,13 @@ require_once('header.php');
                        <select id='t_cob' name='empresa_notebook' class='span2' style='width: 25%'>
                           <option value='" . $equipamento['id_empresa'] . "'>" . $equipamento['empresa'] . "</option>
                           <option>---</option>";
-                     while ($row_empresa = $resultado_empresa->fetch_assoc()) {
+
+                        $query_empresaNOTE = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
+                        $resultado_empresaNOTE = $conn -> query($query_empresaNOTE);
+
+                     while ($row_empresa = $resultado_empresaNOTE->fetch_assoc()) {
+
+
                         echo "<option value='" . $row_empresa['id_empresa'] . "'>" . $row_empresa['nome'] . "</option>";
                      }
                      echo "
@@ -518,7 +528,9 @@ require_once('header.php');
                        <select id='t_cob' name='locacao_notebook' class='span2' style='width: 25%'>
                           <option value='" . $equipamento['id_locacao'] . "'>" . $equipamento['locacao'] . "</option> 
                           <option>---</option>";
-                     while ($row_locacao = $resultado_locacao->fetch_assoc()) {
+                        $query_locacaoNOTE = "SELECT * FROM manager_droplocacao WHERE deletar = 0 ORDER BY nome ASC";
+                        $resultado_locacaoNOTE = $conn -> query($query_locacaoNOTE);
+                     while ($row_locacao = $resultado_locacaoNOTE->fetch_assoc()) {
                         echo "<option value='" . $row_locacao['id_empresa'] . "'>" . $row_locacao['nome'] . "</option>";
                      }
                      echo "
@@ -531,7 +543,9 @@ require_once('header.php');
                        <select id='t_cob' name='depart_notebook' class='span2' style='width: 23%'>
                           <option value='" . $equipamento['id_departamento'] . "'>" . $equipamento['departamento'] . "</option>
                           <option>---</option>";
-                     while ($row_departamento = $resultado_depart->fetch_assoc()){
+                        $query_departNote = "SELECT * FROM manager_dropdepartamento WHERE deletar = 0 ORDER BY nome ASC";
+                        $resultado_departNote = $conn -> query($query_departNote);
+                     while ($row_departamento = $resultado_departNote->fetch_assoc()){
                         echo "<option value='" . $row_departamento['id_depart'] . "'>" . $row_departamento['nome'] . "</option>";
                      }
                      echo "</select>
@@ -660,7 +674,9 @@ require_once('header.php');
                           <select id='t_cob' name='empresa_note_office' class='span3'>
                                 <option value='" . $office['id_empresa'] . "'>" . $office['empresa'] . "</option>
                                 <option>---</option>";
-                        while ($row_cpu_officeE = $resultado_empresa->fetch_assoc()) {
+                           $query_empresaNoteOff = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
+                           $resultado_empresaNoteOff = $conn -> query($query_empresaNoteOff);
+                        while ($row_cpu_officeE = $resultado_empresaNoteOff->fetch_assoc()) {
                            echo "<option value='" . $row_cpu_officeE['id_empresa'] . "'>" . $row_cpu_officeE['nome'] . "</option>";
                         }
                         echo "

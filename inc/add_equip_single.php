@@ -423,7 +423,11 @@ require_once('../query/query_dropdowns.php');
                                                     <select id='t_cob' name='locacao_office_cpu' class='span2'>
                                                         <option value=''>---</option>
                                                         <?php
-                                                            while ($empresa_localCPU = $resultado_locacao -> fetch_assoc()) {
+
+                                                            $query_locacaoCPU = "SELECT * FROM manager_droplocacao WHERE deletar = 0 ORDER BY nome ASC";
+                                                            $resultado_locacaoCPU = $conn -> query($query_locacaoCPU);
+
+                                                            while ($empresa_localCPU = $resultado_locacaoCPU  -> fetch_assoc()) {
                                                             echo "<option value='".$empresa_localCPU['id_empresa']."'>".$empresa_localCPU['nome']."</option>";
                                                             }
                                                         ?>
@@ -900,8 +904,11 @@ require_once('../query/query_dropdowns.php');
                                     <div class="controls">
                                         <select id='t_cob' name='local_note_office' class='span2'>
                                             <option value=''>---</option>
-                                            <?php                   
-                                                while ($row_local_noteOFFICE = $resultado_locacao -> fetch_assoc()) {
+                                            <?php          
+                                            $query_locacaoNote = "SELECT * FROM manager_droplocacao WHERE deletar = 0 ORDER BY nome ASC";
+                                            $resultado_locacaoNote = $conn -> query($query_locacaoNote);       
+
+                                                while ($row_local_noteOFFICE = $resultado_locacaoNote -> fetch_assoc()) {
                                                 echo "<option value='".$row_local_noteOFFICE['id_empresa']."'>".$row_local_noteOFFICE['nome']."</option>";
                                                 }
                                             ?>
@@ -916,7 +923,11 @@ require_once('../query/query_dropdowns.php');
                                         <select id='t_cob' name='empresa_note_office' class='span2'>
                                             <option value=''>---</option>
                                             <?php
-                                                while ($row_empresa = $resultado_empresa -> fetch_assoc()) {
+
+                                            $query_empresaNote = "SELECT * FROM manager_dropempresa WHERE deletar = 0 ORDER BY nome ASC";
+                                            $resultado_empresaNote = $conn -> query($query_empresaNote);
+
+                                                while ($row_empresa = $resultado_empresaNote -> fetch_assoc()) {
                                                 echo "<option value='".$row_empresa['id_empresa']."'>".$row_empresa['nome']."</option>";
                                                 }
                                             ?>
