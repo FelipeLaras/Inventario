@@ -57,8 +57,15 @@
 
 	<div class="account-container register">
 
-		<div class="content clearfix">
+		<?php
 
+		switch ($_GET['msn']) {
+			case '1':
+				echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><ul><li>Solicitação Enviada!</li><li>Agora basta aguardar o e-mail de confirmação.</li></ul></div>';
+				break;
+		}
+		?>
+		<div class="content clearfix">
 			<form action="../inc/email.php" method="post" oninput="outputHash.value = md5(password.value)">
 
 				<h1>Solicite uma conta!</h1>
@@ -69,14 +76,12 @@
 
 					<div class="field">
 						<label for="firstname">Nome:</label>
-						<input type="text" id="firstname" name="firstname" value="" placeholder="Nome" class="login"
-							required />
+						<input type="text" id="firstname" name="firstname" value="" placeholder="Nome" class="login" required />
 					</div> <!-- /field -->
 
 					<div class="field">
 						<label for="email">Endereço e-mail:</label>
-						<input type="email" id="email" name="email" value="" placeholder="E-mail" class="login"
-							required />
+						<input type="email" id="email" name="email" value="" placeholder="E-mail" class="login" required />
 					</div> <!-- /field -->
 
 					<div class="field">
@@ -90,22 +95,17 @@
 
 					<div class="field">
 						<label for="password">Senha:</label>
-						<input type="password" id="password" name="password" value="" placeholder="Senha" class="login"
-							required />
-						<!--MD5-->
-						<input type="text" for="password" name="outputHash" id="outputHash" style="display: none;">
+						<input type="password" id="password" name="senha" placeholder="Senha" class="login" required />
 					</div> <!-- /field -->
 
 					<div class="field">
 						<label for="confirm_password">Confirma Senha:</label>
-						<input type="password" id="confirm_password" name="confirm_password" value=""
-							placeholder="Confirme Senha" class="login" required />
+						<input type="password" id="confirm_password" name="confirm_password" value="" placeholder="Confirme Senha" class="login" required />
 					</div> <!-- /field -->
 
 					<div class="field">
 						<label for="descricao">Motivo do qual você precisa do acesso:</label>
-						<textarea rows="4" name="mensagem" placeholder="Motivo do qual você precisa do acesso"
-							style="width: 96%;" required></textarea>
+						<textarea rows="4" name="mensagem" placeholder="Motivo do qual você precisa do acesso" style="width: 96%;" required></textarea>
 					</div> <!-- /field -->
 
 				</div> <!-- /login-fields -->

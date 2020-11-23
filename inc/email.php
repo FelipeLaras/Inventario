@@ -4,7 +4,7 @@
 	//Recebendo as Variais
 	$nome = $_POST['firstname'];
 	$mail = $_POST['email'];
-	$senha = $_POST['outputHash'];
+	$senha = $_POST['senha'];
 	$motivo = $_POST['mensagem'];
 	$perfil = $_POST['perfil'];
 
@@ -43,7 +43,7 @@
 				</style>
 			</head>';
 	$corpo .= '<div id="tabela">
-				<h1>Solicitação de Cadastro</h1>';
+				<h1>Solicitação de Cadastro - Inventario TI</h1>';
 	$corpo .='<table border="1">
 				<tr>
 					<th>Nome</th>
@@ -110,7 +110,7 @@
 	$Mailer->AddAddress($destinatario);
 	
 	if($Mailer->Send()){
-		header('location: ../front/alert_envio.html');
+		header('location: ../front/sing-get.php?msn=1');
 	}else{
 		echo "Erro no envio do e-mail: " . $Mailer->ErrorInfo;
 	}

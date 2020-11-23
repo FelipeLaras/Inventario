@@ -58,29 +58,26 @@
                     <p>Por favor, forneça suas credenciais</p>
                     <div class="field">
                         <label for="username">Usuario:</label>
-                        <input type="text" id="username" name="username" value="" placeholder="Usuário"
-                            class="login username-field" autofocus />
+                        <input type="text" id="username" name="username" value="" placeholder="Usuário" class="login username-field" autofocus />
                     </div>
                     <!-- /field -->
                     <div class="field">
                         <label for="password">senha:</label>
-                        <input type="password" id="inputString" name="password" value="" placeholder="Senha"
-                            class="login password-field" />
+                        <input type="password" id="inputString" name="password" value="" placeholder="Senha" class="login password-field" />
                         <!--MD5-->
                         <input type="text" for="inputString" name="outputHash" id="outputHash" style="display: none;">
                     </div>
                     <!-- /password -->
-                    <?= ($_GET['erro'] == 1) ? "<div class='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Usuário não localizado</div>" : ""?>
-                    <?= ($_GET['erro'] == 2) ? "<div class='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Usuário <b style='color: red'>desativado!</b><br /><span style='font-size: 9px;'>Entre em contato com o T.I</span></div>" : ""?>
+                    <?= ($_GET['erro'] == 1) ? "<div class='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Usuário não localizado</div>" : "" ?>
+                    <?= ($_GET['erro'] == 2) ? "<div class='alert'><button type='button' class='close' data-dismiss='alert'>×</button><strong>Atenção!</strong> Usuário <b style='color: red'>desativado!</b><br /><span style='font-size: 9px;'>Entre em contato com o T.I</span></div>" : "" ?>
                     <!-- /alerta -->
                 </div>
                 <!-- /login-fields -->
                 <div class="login-actions">
                     <span class="login-checkbox">
-                        <input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice"
-                            tabindex="4" />
+                        <input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
                         <label class="choice" for="Field">
-                            <a href="front/forget.html">Esqueci minha senha!</a>
+                            <a href="front/sing-get.php">+ Novo Login</a>
                         </label>
                     </span>
                     <button class="button btn btn-success btn-large">Logar</button>
@@ -92,7 +89,7 @@
     </div>
     <!-- /account-container -->
     <div class="login-extra">
-
+        <a href="front/forget.html">Resetar Senha</a>
     </div>
     <!-- /login-extra -->
     <script src="js/jquery-1.7.2.min.js"></script>
@@ -101,9 +98,10 @@
     <!-- MD5 -->
     <script src="js/md5.js"></script>
 </body>
+
 </html>
 
-<?php 
-    require_once('inc/coletando_equip_ocs.php');
-    require_once('inc/coletando_software_ocs.php');
+<?php
+require_once('inc/coletando_equip_ocs.php');
+require_once('inc/coletando_software_ocs.php');
 ?>

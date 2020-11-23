@@ -25,7 +25,7 @@
 				</style>
 			</head>';
 	$corpo .= '<div id="tabela">
-				<h1>Esqueci a Senha</h1>';
+				<h1>Esqueci a Senha - SISTEMA INVENTARIO TI</h1>';
 	$corpo .='<table border="1">
 				<tr>
 					<th>E-mail</th>
