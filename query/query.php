@@ -248,7 +248,8 @@ $query_funcionario = "SELECT
                         MDLF.nome AS locacaoOffice,
                         MIE.numero,
                         MIE.ipdi,
-                        S.nome AS status
+                        S.nome AS status,
+                        MIOBS.obs
                     FROM
                         manager_inventario_funcionario F
                     LEFT JOIN
@@ -281,13 +282,16 @@ $query_funcionario = "SELECT
                         manager_dropempresa MDEF ON OF.empresa = MDEF.id_empresa
                      LEFT JOIN
                         manager_droplocacao MDLF ON OF.locacao = MDLF.id_empresa
+                    LEFT JOIN
+                        manager_inventario_obs MIOBS ON F.id_funcionario = MIOBS.id_funcionario                        
                     WHERE ";
 
 //Equipamento
 
 $query_equipamento = "SELECT 
                         MIE.numero,
-                        MIE.tipo_equipamento,
+                        MIE.tipo_equipamento AS id_tipoEquipamento,
+                        MDTE.nome AS tipo_equipamento,
                         MIE.patrimonio,
                         MIE.filial AS id_empresa,
                         MDE.nome AS empresa,
@@ -295,20 +299,27 @@ $query_equipamento = "SELECT
                         MDL.nome AS locacao,
                         MIE.departamento AS id_departamento,
                         MDD.nome AS departamento,
+                        MIE.imei_chip,
                         MIE.hostname,
                         MIE.ip,
+                        MIE.valor,
                         MIE.modelo,
+                        MIE.planos_dados,
                         MIE.processador,
                         MIE.hd,
                         MIE.memoria,
                         MIE.situacao AS id_situacao,
                         MDS.nome AS situacao,
                         MIE.serialnumber,
-                        MIF.nome AS nome_funcionario
+                        MIF.nome AS nome_funcionario,
+                        MDET.nome as estado,
+                        MIE.estado AS id_estado
                     FROM
                         manager_inventario_equipamento MIE
                     LEFT JOIN
-                        manager_dropempresa MDE ON MIE.filial = MDE.id_empresa
+                        manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
+                    LEFT JOIN
+                        manager_dropempresa MDTE ON MIE.filial = MDTE.id_empresa
                     LEFT JOIN
                         manager_droplocacao MDL ON MIE.locacao = MDL.id_empresa
                     LEFT JOIN
@@ -319,6 +330,8 @@ $query_equipamento = "SELECT
                         manager_inventario_funcionario MIF ON MIE.id_funcionario = MIF.id_funcionario
                     LEFT JOIN
                         manager_sistema_operacional MSO ON MIE.id_equipamento = MSO.id_equipamento
+                    LEFT JOIN
+	                    manager_dropestado MDET ON MIE.estado = MDET.id
                     WHERE ";
 //windows                    
 $query_windows = "SELECT 

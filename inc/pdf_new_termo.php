@@ -1,4 +1,7 @@
 <?php
+/* ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL); */
 //sessão da merda toda
 session_start(); 
 
@@ -29,6 +32,33 @@ $query_funcionario =  "SELECT
 $resultado_funcionarios = $conn->query($query_funcionario);
 
 $row_fun = $resultado_funcionarios->fetch_assoc();
+
+/*PEGANDO DADOS DO EQUIPAMENTO*/
+
+$queryEquipamento = "SELECT 
+						MIE.id_equipamento,
+						MDE.nome AS tipo_equipamento,
+						MIE.modelo,
+						MIE.patrimonio,
+						MIE.imei_chip,
+						MIE.valor,
+						MIE.numero,
+						MIE.planos_dados,
+						MDST.nome AS situacao,
+						MDET.nome as estado
+					FROM
+						manager_inventario_equipamento MIE
+					LEFT JOIN
+						manager_dropequipamentos MDE ON (MIE.tipo_equipamento = MDE.id_equip)
+					LEFT JOIN
+						manager_dropsituacao MDST ON (MIE.situacao = MDST.id_situacao)
+					LEFT JOIN
+						manager_dropestado MDET ON (MIE.estado = MDET.id)
+					WHERE
+						MIE.id_funcionario = ".$_GET['id_fun']." AND MIE.deletar = 0";
+
+$resultEquipamento = $conn->query($queryEquipamento);
+
 
 /*CORPO DO PDF*/
 $html = "
@@ -90,201 +120,54 @@ $html = "
 					    <th>ACESSÓRIOS</th>
 						<th>SITUAÇÃO</th>						
 					    <th>ESTADO</th>	    
-					  </tr>
-					  ";
-/*PEGANDO DADOS DO EQUIPAMENTO*/
-				
-				//CELULAR	
-				$cont_equip = 0;
+					  </tr>";
 
-				while ($_SESSION['celular_id'.$cont_equip.''] != NULL) {//quando for celular
-					$query_equipamento_celular = "SELECT 
-													MIE.id_equipamento, 
-													MDE.nome AS tipo_equipamento, 
-													MIE.modelo, 
-													MIE.imei_chip, 
-													MIE.valor, 
-													MIE.numero, 
-													MIE.planos_voz, 
-													MIE.planos_dados, 
-													MDST.nome AS situacao,
-													MDSE.nome AS status
-												FROM 
-													manager_inventario_equipamento MIE
-												LEFT JOIN 
-													manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
-												LEFT JOIN 
-													manager_dropsituacao MDST ON MIE.situacao = MDST.id_situacao
+						while ($equip = $resultEquipamento->fetch_assoc()) {
+							$html .=  "<tr> <td>".$equip['tipo_equipamento']."</td> <td>".$equip['modelo']."</td>";
+
+							$html .= (empty($equip['patrimonio'])) ? "<td>---</td>" : "<td>".$equip['patrimonio']."</td>";
+							
+							$html .= (empty($equip['imei_chip'])) ? "<td>---</td>" : "<td>".$equip['imei_chip']."</td>";
+
+							$html .= (empty($equip['valor'])) ? "<td>---</td>" : "<td>".$equip['valor']."</td>";
+
+							$html .= (empty($equip['numero'])) ? "<td>---</td>" : "<td>".$equip['numero']."</td>";
+
+							$html .= (empty($equip['planos_dados'])) ? "<td>---</td>" : "<td>".$equip['planos_dados']."</td>";
+
+							/*PEGANDO DADOS DOS ACESSORIOS*/
+							$queryAcessorios = "SELECT 
+													MDA.nome
+												FROM
+													manager_inventario_acessorios MIA
 												LEFT JOIN
-													manager_dropestado MDSE ON MIE.estado = MDSE.id					
-												WHERE 
-													MIE.id_equipamento = ".$_SESSION['celular_id'.$cont_equip.'']."";
-					echo 
+													manager_dropacessorios MDA ON (MIA.tipo_acessorio = MDA.id_acessorio)
+												WHERE
+													id_equipamento = ".$equip['id_equipamento']."";
 
-					$resulado_equipamento_celular = $conn->query($query_equipamento_celular);
-					$cont_equip++;
+							$resultAcessorios = $conn->query($queryAcessorios);
 
-				  while ($row_equip_celular = $resulado_equipamento_celular->fetch_assoc()) {
-				  	$html .= "<tr>";
-					$html .= "<td>".$row_equip_celular['tipo_equipamento']."</td>";					
-					$html .= "<td>".$row_equip_celular['modelo']."</td>";
-					$html .= "<td>---</td>";
-				  	$html .= "<td>".$row_equip_celular['imei_chip']."</td>";
-				  	$html .= "<td>".$row_equip_celular['valor']."</td>";
-				  	$html .= "<td>---</td>";
-				  	$html .= "<td>---</td>";					  		
-		  			$query_acessorios_celular ="SELECT MDA.nome AS acessorios
-						FROM manager_inventario_acessorios MIA
-						LEFT JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
-						WHERE MIA.id_equipamento = ".$row_equip_celular['id_equipamento']."";
-					$html .= "<td>";
-					$resultado_acessorios_celular = $conn->query($query_acessorios_celular);	
-					while ($row_acessorio_celular = $resultado_acessorios_celular->fetch_assoc()) {
+							$html .= "<td>";
 
-				  		$html .= $row_acessorio_celular['acessorios']." | ";	
+							while($acessorios = $resultAcessorios->fetch_assoc()){
 
-				  		}
-				  	$html .= "</td>";
-					$html .= "<td>".$row_equip_celular['situacao']."</td>";
-					$html .= "<td>".$row_equip_celular['status']."</td>";
-				  	$html .= "</tr>";
-							  }
-				}
-				$cont_equip = 0;
+								if(!empty($acessorios['nome'])){
+									$html .= $acessorios['nome'].",";
+								}else{
+									$html .= "<td>---</td>";
+								}
+							}
 
-				while ($_SESSION['celular_id'.$cont_equip.''] != NULL) {
-					unset($_SESSION['celular_id'.$cont_equip.'']);
-				}
+							$html .= "</td>";
 
+							$html .= (empty($equip['situacao'])) ? "<td>---</td>" : "<td>".$equip['situacao']."</td>";
 
-				//TABLET
-				$cont_equip_tablet = 0;
+							$html .= (empty($equip['estado'])) ? "<td>---</td>" : "<td>".$equip['estado']."</td>";
+							
+							$html .= "</tr>";
+						}
 
-				while ($_SESSION['tablet_id'.$cont_equip_tablet.''] != NULL) {//quando for tablet
-					$query_equipamento_tablet = "SELECT 
-													MIE.id_equipamento, 
-													MDE.nome AS tipo_equipamento, 
-													MIE.modelo, 
-													MIE.imei_chip, 
-													MIE.valor, 
-													MIE.numero, 
-													MIE.planos_voz, 
-													MIE.planos_dados, 
-													MDST.nome AS situacao,
-													MDSE.nome AS estado,
-													MIE.patrimonio
-												FROM 
-													manager_inventario_equipamento MIE
-												LEFT JOIN 
-													manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
-												LEFT JOIN 
-													manager_dropsituacao MDST ON MIE.situacao = MDST.id_situacao
-												LEFT JOIN
-													manager_dropestado MDSE ON MIE.estado = MDSE.id	
-
-												WHERE 
-													MIE.id_equipamento = ".$_SESSION['tablet_id'.$cont_equip_tablet.'']."";
-
-					$resulado_equipamento_tablet = $conn->query($query_equipamento_tablet);
-					$cont_equip_tablet++;
-
-				  while ($row_equip_tablet = $resulado_equipamento_tablet->fetch_assoc()) {
-				  	$html .= "<tr>";
-				  	$html .= "<td>".$row_equip_tablet['tipo_equipamento']."</td>";
-					$html .= "<td>".$row_equip_tablet['modelo']."</td>";
-					$html .= "<td>".$row_equip_tablet['patrimonio']."</td>";
-				  	$html .= "<td>".$row_equip_tablet['imei_chip']."</td>";
-				  	$html .= "<td>".$row_equip_tablet['valor']."</td>";
-				  	$html .= "<td>---</td>";
-				  	$html .= "<td>---</td>";	
-		  			$query_acessorios_tablet ="SELECT MDA.nome AS acessorios
-						FROM manager_inventario_acessorios MIA
-						LEFT JOIN manager_dropacessorios MDA ON MIA.tipo_acessorio = MDA.id_acessorio
-						WHERE MIA.id_equipamento = ".$row_equip_tablet['id_equipamento']."";
-					$html .= "<td>";
-					$resultado_acessorios_tablet = $conn->query($query_acessorios_tablet);	
-					while ($row_acessorio_tablet = $resultado_acessorios_tablet->fetch_assoc()) {
-
-				  		$html .= $row_acessorio_tablet['acessorios']." | ";	
-
-				  		}
-				  	$html .= "</td>";
-					  $html .= "<td>".$row_equip_tablet['situacao']."</td>";
-					  $html .= "<td>".$row_equip_tablet['estado']."</td>";
-				  	$html .= "</tr>";
-							  }
-				}
-
-
-				$cont_equip_tablet = 0;
-
-				while ($_SESSION['tablet_id'.$cont_equip_tablet.''] != NULL) {
-					unset($_SESSION['tablet_id'.$cont_equip_tablet.'']);
-				}
-
-
-				//CHIP
-				$cont_equip_chip = 0;
-
-				while ($_SESSION['chip_id'.$cont_equip_chip.''] != NULL) {//quando for chip
-					$query_equipamento_chip = "SELECT MIE.id_equipamento, MDE.nome AS tipo_equipamento, MIE.modelo, MIE.imei_chip, MIE.valor, MIE.numero, MIE.planos_voz, MIE.planos_dados, MDO.nome AS operadora, MIE.operadora AS id_operadora
-					FROM manager_inventario_equipamento MIE
-					LEFT JOIN manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
-					LEFT JOIN manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
-					WHERE MIE.id_equipamento = ".$_SESSION['chip_id'.$cont_equip_chip.'']."";
-
-					$resulado_equipamento_chip = $conn->query($query_equipamento_chip);
-					$cont_equip_chip++;
-
-				  while ($row_equip_chip = mysqli_fetch_assoc($resulado_equipamento_chip)) {
-						$html .= "<tr>";
-						$html .= "<td>".$row_equip_chip['tipo_equipamento']."</td>";
-						$html .= "<td>".$row_equip_chip['operadora']."</td>";//modelo				  	
-						$html .= "<td>".$row_equip_chip['imei_chip']."</td>";
-						$html .= "<td>---</td>";
-						$html .= "<td>".$row_equip_chip['numero']."</td>";
-						$html .= "<td>".$row_equip_chip['planos_voz'].",".$row_equip_chip['planos_dados']."</td>";
-						$html .= "<td>---</td>";
-						$html .= "<td>---</td>";
-						$html .= "<td>---</td>";	
-				  	}
-				  	$html .= "</td>";
-				  	$html .= "</tr>";
-							  }
-
-					$cont_equip_chip = 0;
-
-					while ($_SESSION['chip_id'.$cont_equip_chip.''] != NULL) {
-						unset($_SESSION['chip_id'.$cont_equip_chip.'']);
-					}
-
-				//MODEM
-				if ($_SESSION['modem_id'] != NULL) {//quando for modem
-					$query_equipamento = "SELECT MIE.id_equipamento, MDE.nome AS tipo_equipamento, MIE.modelo, MIE.imei_chip, MIE.valor, MIE.numero, MIE.planos_voz, MIE.planos_dados
-					FROM manager_inventario_equipamento MIE
-					LEFT JOIN manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
-					WHERE MIE.id_equipamento = ".$_SESSION['modem_id']."";
-
-					$resulado_equipamento = $conn->query($query_equipamento);
-
-				  while ($row_equip = mysqli_fetch_assoc($resulado_equipamento)) {
-				  	$html .= "<tr>";
-				  	$html .= "<td>".$row_equip['tipo_equipamento']."</td>";
-				  	$html .= "<td>".$row_equip['modelo']."</td>";
-				  	$html .= "<td>".$row_equip['imei_chip']."</td>";
-				  	$html .= "<td>".$row_equip['valor']."</td>";
-				  	$html .= "<td>".$row_equip['numero']."</td>";
-				  	$html .= "<td>".$row_equip['planos_voz'].",".$row_equip['planos_dados']."</td>";
-				  	$html .= "<td>".$row_equip['acessorios']."</td>";	
-				  		}
-				  	$html .= "</td>";
-				  	$html .= "</tr>";
-				}
-				unset($_SESSION['modem_id']);
-				
-
-$html .=				  "</tr>
-					</table>
+		$html .=	"</table>
 				</div>
 			</div>
 			<br>
