@@ -219,9 +219,12 @@ switch ($_GET['error']) {
                                     <select id="t_cob" name="status_celular0" class="span2">
                                        <option value=''>---</option>
                                        <?php
-                                          while ($row_situacao = $resultado_status_equip->fetch_assoc()) {
-                                             echo "<option value='".$row_situacao['id_status']."'>".$row_situacao['nome']."</option>";
-                                          }
+                                        $query_status_equipC= "SELECT * FROM manager_dropstatusequipamento WHERE id_status in (6, 10, 15) AND deletar = 0 ORDER BY nome ASC";
+                                        $resultado_status_equipC = $conn->query($query_status_equipC);
+                                        
+                                           while ($row_situacaoC = $resultado_status_equipC->fetch_assoc()) {
+                                              echo "<option value='".$row_situacaoC['id_status']."'>".$row_situacaoC['nome']."</option>";
+                                           }
                                        ?>
                                     </select>
                                  </div>
@@ -370,7 +373,7 @@ switch ($_GET['error']) {
                                  <select id="t_cob" name="status_tablet0" class="span2">
                                     <option value=''>---</option>
                                     <?php
-                                    $query_status_equipT= "SELECT * FROM manager_dropstatusequipamento WHERE deletar = 0 ORDER BY nome ASC";
+                                    $query_status_equipT= "SELECT * FROM manager_dropstatusequipamento WHERE id_status IN (6,10,15) AND deletar = 0 ORDER BY nome ASC";
                                     $resultado_status_equipT = $conn->query($query_status_equipT);
                                        while ($row_situacaoT = $resultado_status_equipT->fetch_assoc()) {
                                           echo "<option value='".$row_situacaoT['id_status']."'>".$row_situacaoT['nome']."</option>";

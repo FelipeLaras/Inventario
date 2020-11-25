@@ -173,11 +173,12 @@ if ($_GET['msn'] == 1) {
                             WHERE 
                               MIO.id_equipamento = ".$row['id_equipamento']." AND 
                               MIO.deletar = 0 ORDER BY MIO.data_criacao DESC limit 1";
+            
 
               $resultado_obs = $conn -> query($query_obs);              
                
               if(!$row_obs = $resultado_obs -> fetch_assoc()){
-                echo "<td id=''>algo deu errado</td>";
+                echo "<td id=''>---</td>";
               }else{
                 echo "<td id=''>".$row_obs['obs']."</td>";
                //fim obs
