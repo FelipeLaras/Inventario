@@ -96,7 +96,7 @@ switch ($_GET['error']) {
               </div>
                <div class="control-group">                                 
                   <div class="controls">
-                    <label class="control-label required" for="gols1" style="width: 14%;margin-left: -13%;">Selecione o Equipamento:</label>
+                    <label class="control-label required" for="gols1">Selecione o Equipamento:</label>
                      <!--CELULAR-->
                      <label class="checkbox inline">
                      <a class="icone" href="javascript:;" onclick="mostrar('celular')" title="CELULAR">
@@ -141,7 +141,7 @@ switch ($_GET['error']) {
                   <!--Campos Escondidos-->
                   <label id="campos">
                      <div class="container">
-                        <div class="row clearfix" style="width: 111%; margin-left: -5%;">
+                        <div class="row clearfix">
                            <div class="col-md-12 column" id="tab_logic_c">                                
                               <div class="control-group">                                                                        
                                  <!--MODELO-->
@@ -200,7 +200,7 @@ switch ($_GET['error']) {
                                        while ($row_acessorio = $resultado_acessorio->fetch_assoc()) {
                                           echo "<label class='checkbox inline'>
                                                    <input type='checkbox' name='acessorio_celular0[]' value='".$row_acessorio['id_acessorio']."'> ".$row_acessorio['nome']."
-                                                </label></br>";
+                                                </label>";
                                        }
                                     ?>
                                  </div>
@@ -278,7 +278,7 @@ switch ($_GET['error']) {
                   <!--Campos Escondidos-->
                   <label id="campos">
                      <div class="container">
-                        <div class="row clearfix" style="width: 111%; margin-left: -5%;">
+                        <div class="row clearfix">
                         <div class="col-md-12 column" id="tab_logic_t">                                                                         
                            <!--MODELO-->                               
                            <div class="control-group">
