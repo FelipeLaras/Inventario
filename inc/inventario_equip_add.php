@@ -149,7 +149,14 @@ switch ($_GET['error']) {
                                  <div class="controls">
                                     <input type='text' name='modelo_celular0' class='form-control input-md span2'/>
                                  </div>
-                              </div>                                                                                                    
+                              </div>  
+                              <div class="control-group">                                                                        
+                                 <!--MODELO-->
+                                 <label class="control-label">Patrimônio:</label>
+                                 <div class="controls">
+                                    <input type='text' name='patrimonio0' class='form-control input-md span2'/>
+                                 </div>
+                              </div>                                                                                                   
                               <!--FILIAL-->
                               <div class="control-group">  
                                  <label class="control-label">Filial:</label>
