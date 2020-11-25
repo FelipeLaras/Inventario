@@ -529,7 +529,6 @@ switch ($_GET['msn']) {
                       }
                       echo " <!--Termo Asssinado-->
                           <a href='#myModalanexos' role='button' data-toggle='modal' title='Anexar Termo Assinado'>
-                            <i class='btn-icon-only icon-folder-open' style='font-size: 15px;     margin-right: 6px;'></i>
                           </a>
                           <a href='inventario_equip_edit.php?id_equip=" . $row_files['id_equipamento'] . "&tipo=" . $row_files['tipo_equipamento'] . "' role='button' title='Editar'>
                             <i class='icon-pencil' style='font-size: 15px;     margin-right: 6px;'></i>
