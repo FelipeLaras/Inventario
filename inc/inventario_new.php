@@ -101,7 +101,7 @@ require_once('../conexao/conexao.php');
 	$cont_equip = 0;
 	/*SALVANDO CELULAR*/
 
-if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALVA-LOS
+if ($_POST['modelo_celular'.$cont_equip.''] != NULL) { //CASO TENHA UM EQUIPAMENTO SEGUIRA PARA SALVA-LOS
 
 	if ($_POST['id_equip'] != NULL) {
 
@@ -110,6 +110,7 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 							manager_inventario_equipamento 
 						SET
 							modelo = '".$_POST['modelo_celular'.$cont_equip.'']."',
+							patrimonio = '".$_POST['patrimonio'.$cont_equip.'']."',
 							filial = '".$_POST['filial_celular'.$cont_equip.'']."',
 							situacao = '".$_POST['situacao_celular'.$cont_equip.'']."',
 							estado = '".$_POST['status_celular'.$cont_equip.'']."',
@@ -171,7 +172,8 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 										usuario, 
 										tipo_equipamento,
 										filial,
-										modelo, 
+										modelo,
+										patrimonio, 
 										operadora,
 										situacao,
 										estado, 
@@ -185,6 +187,7 @@ if ($_POST['modelo_celular'.$cont_equip.''] != NULL) {//CASO TENHA UM EQUIPAMENT
 										'1',
 										'".$_POST['filial_celular'.$cont_equip.'']."', 
 										'".$_POST['modelo_celular'.$cont_equip.'']."', 
+										'".$_POST['patrimonio'.$cont_equip.'']."',
 										'5',
 										'".$_POST['situacao_celular'.$cont_equip.'']."',
 										'".$_POST['status_celular'.$cont_equip.'']."',

@@ -204,6 +204,10 @@ echo "
         <input type='text' class='form-control' name='imei_chip' value='".$row_files['imei_chip']."' />
         </div>
         <div class='form-group col-md-6'>
+        <label for='inputPassword4'>Patrimônio:</label>
+        <input type='text' class='form-control' name='patrimonio' value='".$row_files['patrimonio']."' />
+        </div>
+        <div class='form-group col-md-6'>
         <label for='inputPassword4'>Situação:</label>
         <select id='inputState' class='form-control' name='situacao_equip'>
             <option value='".$row_files['id_situacao']."'>".$row_files['situacao']."</option>
@@ -363,6 +367,10 @@ echo "
             <div class='form-group col-md-6'>
                 <label for='inputPassword4'>Imei:</label>
                 <input type='text' class='form-control' name='imei_chip' value='".$row_files['imei_chip']."' />
+            </div>
+            <div class='form-group col-md-6'>
+                <label for='inputPassword4'>Patrimônio:</label>
+                <input type='text' class='form-control' name='patrimonio' value='".$row_files['patrimonio']."' />
             </div>
             <div class='form-group col-md-6'>
                 <label for='inputPassword4'>Situação:</label>
@@ -570,6 +578,10 @@ echo "
     <div class='form-group col-md-6'>
     <label for='inputPassword4'>Imei Chip:</label>
     <input type='text' class='form-control' name='imei_chip' value='".$row_files['imei_chip']."' />
+    </div>
+    <div class='form-group col-md-6'>
+    <label for='inputPassword4'>Patrimônio:</label>
+    <input type='text' class='form-control' name='patrimonio' value='".$row_files['patrimonio']."' />
     </div>
     <div class='form-group col-md-4'>
     <label for='inputState'>Status:</label>

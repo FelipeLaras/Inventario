@@ -18,7 +18,8 @@ if($_POST['tipo_equipamento'] == 1 ){
 	//alterando o status do equipamento no banco
 	$update = "UPDATE manager_inventario_equipamento SET
 	 
-    modelo='".$_POST['modelo']."', 
+    modelo ='".$_POST['modelo']."', 
+	patrimonio ='".$_POST['patrimonio']."', 
 	situacao = '".$_POST['situacao_equip']."',
 	estado = '".$_POST['estado_equip']."',
 	filial = '".$_POST['empresa_equip']."',

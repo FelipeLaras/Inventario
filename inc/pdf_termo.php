@@ -43,7 +43,8 @@ $result_log = $conn->query($log_query) or die(mysqli_error($conn));
 /*_________________________________ FECHANDO O BANCO ______________________________________*/
 
 /*PEGANDO DADOS DO FUNCIONARIO*/
-$query_funcionario =  "SELECT 
+$query_funcionario =  "SELECT
+							MIF.id_funcionario,
 							MIF.cpf,
 							MIF.nome,
 							MDF.nome AS funcao,
@@ -111,8 +112,10 @@ $query_equipamento = "SELECT
 
 							$query_equipamento .= "'')";
 
-						}else{
+						}elseif(!empty($_GET['id_equip'])){
 							$query_equipamento .= "MIE.id_equipamento = " . $_GET['id_equip'];
+						}else{
+							$query_equipamento .= "MIE.id_funcionario = " . $row_fun['id_funcionario'];
 						}
 
 $resulado_equipamento = $conn->query($query_equipamento);
