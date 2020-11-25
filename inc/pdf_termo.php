@@ -44,24 +44,24 @@ $result_log = $conn->query($log_query) or die(mysqli_error($conn));
 
 /*PEGANDO DADOS DO FUNCIONARIO*/
 $query_funcionario =  "SELECT 
-MIF.cpf,
-MIF.nome,
-MDF.nome AS funcao,
-MDD.nome AS departamento,
-MDE.nome AS empresa,
-MIO.obs
-FROM
-manager_inventario_funcionario MIF
-	LEFT JOIN
-manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
-	LEFT JOIN
-manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
-	LEFT JOIN
-manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
-	LEFT JOIN
-manager_inventario_obs MIO ON MIF.id_funcionario = MIO.id_funcionario
-WHERE
-MIF.id_funcionario = ".$id_funcionario."";
+							MIF.cpf,
+							MIF.nome,
+							MDF.nome AS funcao,
+							MDD.nome AS departamento,
+							MDE.nome AS empresa,
+							MIO.obs
+						FROM
+							manager_inventario_funcionario MIF
+								LEFT JOIN
+							manager_dropfuncao MDF ON MIF.funcao = MDF.id_funcao
+								LEFT JOIN
+							manager_dropdepartamento MDD ON MIF.departamento = MDD.id_depart
+								LEFT JOIN
+							manager_dropempresa MDE ON MIF.empresa = MDE.id_empresa
+								LEFT JOIN
+							manager_inventario_obs MIO ON MIF.id_funcionario = MIO.id_funcionario
+						WHERE
+							MIF.id_funcionario = ".$id_funcionario."";
 
 $resultado_funcionarios = $conn->query($query_funcionario);
 
@@ -93,19 +93,27 @@ $query_equipamento = "SELECT
 						manager_dropoperadora MDO ON MDO.id_operadora = MIE.operadora
 					LEFT JOIN
 						manager_dropestado MDET ON MDET.id = MIE.estado
-					WHERE
-						MIE.id_equipamento IN (";
+					WHERE ";
+						
 
-$key = 0;
+						if(!empty($_POST['termoEquipamento'])){
 
-while (isset($_POST['termoEquipamento'][$key])){
+							$query_equipamento .= "MIE.id_equipamento IN (";
 
-	$query_equipamento .= $_POST['termoEquipamento'][$key].",";
+							$key = 0;
 
-	$key++;
-}
+							while (isset($_POST['termoEquipamento'][$key])){
 
-$query_equipamento .= "'')";	
+								$query_equipamento .= $_POST['termoEquipamento'][$key].",";
+
+								$key++;
+							}
+
+							$query_equipamento .= "'')";
+
+						}else{
+							$query_equipamento .= "MIE.id_equipamento = " . $_GET['id_equip'];
+						}
 
 $resulado_equipamento = $conn->query($query_equipamento);
 

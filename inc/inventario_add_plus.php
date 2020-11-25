@@ -19,8 +19,6 @@ $queryInFunEquip = "UPDATE manager_inventario_equipamento SET id_funcionario = '
 
 $resultIncFunEquip = $conn->query($queryInFunEquip);
 
-
-
 //trazendo todos os equipamentos DISPONIVEIS
 $queryDisponiveis = "SELECT 
                         MIE.id_equipamento,
@@ -74,7 +72,7 @@ $linhaFuncionario = $resultadoFuncionario->fetch_assoc();
                             <?=                                            
                                 '<script>
                                     function finalizar(){
-                                        window.location.href = "pdf_termo.php?id_funcionario='.$_GET['id_funcio'].'&pagina=1";
+                                        window.location.href = "pdf_termo.php?id_funcionario='.$_GET['id_funcio'].'&pagina=1&id_equip='.$_GET['id_equip'].'";
                                     }
                                 </script>'
                             ?>
