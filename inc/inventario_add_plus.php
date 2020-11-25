@@ -17,7 +17,23 @@ require_once('header.php');
 
 $queryInFunEquip = "UPDATE manager_inventario_equipamento SET id_funcionario = '".$_GET['id_funcio']."', status = 1 WHERE id_equipamento = '".$_GET['id_equip']."'";
 
-$resultIncFunEquip = $conn->query($queryInFunEquip);
+if(!$resultIncFunEquip = $conn->query($queryInFunEquip)){
+
+    printf("Errormessage code[1]: %s\n", $conn->error);
+
+}
+
+//alterando status do funcionário para faltando termo
+
+$queryStatusFuncionario = "UPDATE manager_inventario_funcionario SET status = '3' WHERE (id_funcionario = '".$_GET['id_funcio']."')";
+
+if(!$resultStatusFuncionario = $conn->query($queryStatusFuncionario)){
+
+    printf("Errormessage code[2]: %s\n", $conn->error);
+    
+}
+
+
 
 //trazendo todos os equipamentos DISPONIVEIS
 $queryDisponiveis = "SELECT 
