@@ -42,9 +42,13 @@ require_once('header.php');
     <!-- /subnavbar-inner -->
 </div>
 <?php
-if ($_GET['msn'] == 2) { //encontrado porém o usuário está desativado
-    echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento<b style='color:red'>  vinculado ao usuário</b> com sucesso! </div>";
-} //end alerta erro 1
+
+switch ($_GET['msn']) {
+    case '2':
+        echo "<div class='alert alert-success'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento<b style='color:red'>  vinculado ao usuário</b> com sucesso! </div>";
+        break;
+}
+
 ?>
 <div class="widget ">
     <div class="widget-header">
@@ -105,18 +109,19 @@ if ($_GET['msn'] == 2) { //encontrado porém o usuário está desativado
             </thead>
             <tbody>
                 <?php
-                    //aplicando a query
-                    while ($offiDisponivel = $resultOfficeDispo->fetch_assoc()) {
-                        echo "<tr>
+                //aplicando a query
+
+                while ($offiDisponivel = $resultOfficeDispo->fetch_assoc()) {
+                    echo "<tr>
                         <td class='fonte'>" . $offiDisponivel['id'] . "</td>
                         <td class='fonte'>" . $offiDisponivel['versao'] . "</td>
                         <td class='fonte'>" . $offiDisponivel['serial'] . "</td>
                         <td class='fonte'>" . $offiDisponivel['locacao'] . "</td>
                         <td class='fonte'>" . $offiDisponivel['fornecedor'] . "</td>";
-                        echo (!empty($offiDisponivel['numero_nota'])) ? "<td class='fonte'>" . $offiDisponivel['numero_nota'] . "</td>" : "<td class='fonte'>---</td>" ;
-                        echo (!empty($offiDisponivel['data_nota'])) ? "<td class='fonte'>" . $offiDisponivel['data_nota'] . "</td>" : "<td class='fonte'>---</td>" ;
-                        echo (!empty($offiDisponivel['nomeNota'])) ? "<td class='fonte'><a href='" . $offiDisponivel['file_nota'] . "' target='_blank'>" . $offiDisponivel['nomeNota'] . "</a></td>" : "<td class='fonte'>---</td>" ;
-                        echo"
+                    echo (!empty($offiDisponivel['numero_nota'])) ? "<td class='fonte'>" . $offiDisponivel['numero_nota'] . "</td>" : "<td class='fonte'>---</td>";
+                    echo (!empty($offiDisponivel['data_nota'])) ? "<td class='fonte'>" . $offiDisponivel['data_nota'] . "</td>" : "<td class='fonte'>---</td>";
+                    echo (!empty($offiDisponivel['nomeNota'])) ? "<td class='fonte'><a href='" . $offiDisponivel['file_nota'] . "' target='_blank'>" . $offiDisponivel['nomeNota'] . "</a></td>" : "<td class='fonte'>---</td>";
+                    echo "
                         <td class='fonte  acao'>
                             <a href='office_edit_disponivel.php?id=" . $offiDisponivel['id'] . "' title='Editar' class='icon_acao'>
                                 <i class='icon-folder-open' style='font-size: 12px;'></i>
@@ -143,23 +148,23 @@ if ($_GET['msn'] == 2) { //encontrado porém o usuário está desativado
                                             <div class='control-group'>
                                                 <div class='controls'>
                                                     <select class='span2' name='id_equipamento'>
-                                                        <option value=''>---</option>" ; 
-                                                        //equipamentos que não possuiem OFFICE
-                                                        $queryEquipDisponivel = "SELECT 
-                                                                                    MIE.id_equipamento,
-                                                                                    MIE.patrimonio
-                                                                                FROM
-                                                                                    manager_inventario_equipamento MIE
-                                                                                LEFT JOIN 
-                                                                                    manager_office MO ON MIE.id_equipamento = MO.id_equipamento
-                                                                                WHERE 
-                                                                                    MIE.deletar = 0 AND MIE.tipo_equipamento IN (8, 9) AND  MO.id IS NULL";
-                                                                                    
-                                                        $resultEquipDisponivel = $conn->query($queryEquipDisponivel);
-                                                        while ($equipDisponivel = $resultEquipDisponivel->fetch_assoc()) {
-                                                        echo "<option value='" . $equipDisponivel['id_equipamento'] . "'>" . $equipDisponivel['patrimonio'] . "</option>" ; 
-                                                    } 
-                                                    echo "
+                                                        <option value=''>---</option>";
+                    //equipamentos que não possuiem OFFICE
+                    $queryEquipDisponivel = "SELECT 
+                                                MIE.id_equipamento,
+                                                MIE.patrimonio
+                                            FROM
+                                                manager_inventario_equipamento MIE
+                                            LEFT JOIN 
+                                                manager_office MO ON MIE.id_equipamento = MO.id_equipamento
+                                            WHERE 
+                                                MIE.deletar = 0 AND MIE.tipo_equipamento IN (8, 9) AND  MO.id IS NULL";
+
+                    $resultEquipDisponivel = $conn->query($queryEquipDisponivel);
+                    while ($equipDisponivel = $resultEquipDisponivel->fetch_assoc()) {
+                        echo "<option value='" . $equipDisponivel['id_equipamento'] . "'>" . $equipDisponivel['patrimonio'] . "</option>";
+                    }
+                    echo "
                                                     </select>
                                                 </div>
                                             </div>
@@ -171,7 +176,7 @@ if ($_GET['msn'] == 2) { //encontrado porém o usuário está desativado
                                 </div>
                             </div>
                         </div>"; //end tabela
-                    } //end while
+                } //end while
                 ?>
             </tbody>
         </table>

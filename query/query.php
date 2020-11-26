@@ -170,27 +170,27 @@ $equipamentosDisponiveis = "SELECT
 $resultadoEquipDisponivel = $conn->query($equipamentosDisponiveis);
 
 $queryOffiDisponivel = "SELECT 
-                            OF.id,
-                            OF.status,
+                            OFFI.id,
+                            OFFI.status,
                             MDL.nome AS locacao,
                             MDE.nome AS empresa,
                             MDOF.nome AS versao,
-                            OF.serial,
-                            OF.fornecedor,
-                            OF.numero_nota,
-                            OF.file_nota,
-                            OF.file_nota_nome AS nomeNota,
-                            OF.data_nota
-                        FROM 
-                            manager_office OF
-                        LEFT JOIN 
-                            manager_droplocacao MDL ON OF.locacao = MDL.id_empresa
-                        LEFT JOIN 
-                            manager_dropempresa MDE ON OF.empresa = MDE.id_empresa
-                        LEFT JOIN 
-                            manager_dropoffice MDOF ON OF.versao = MDOF.id
-                        WHERE 
-                            OF.status = 6 AND OF.deletar = 0;";
+                            OFFI.serial,
+                            OFFI.fornecedor,
+                            OFFI.numero_nota,
+                            OFFI.file_nota,
+                            OFFI.file_nota_nome AS nomeNota,
+                            OFFI.data_nota
+                        FROM
+                            manager_office OFFI
+                        LEFT JOIN
+                            manager_droplocacao MDL ON (OFFI.locacao = MDL.id_empresa)
+                        LEFT JOIN
+                            manager_dropempresa MDE ON (OFFI.empresa = MDE.id_empresa)
+                        LEFT JOIN
+                            manager_dropoffice MDOF ON (OFFI.versao = MDOF.id)
+                        WHERE
+                            OFFI.status = 6 AND OFFI.deletar = 0";
 
 $resultOfficeDispo = $conn->query($queryOffiDisponivel);
 
