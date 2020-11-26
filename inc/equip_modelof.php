@@ -4,7 +4,6 @@ session_start();
 
 //chamar o banco
 require_once('../conexao/conexao.php');
-require_once('../query/query.php');
 
 /*--------------------------------------------------------------------*/
 //VALIDANDO SE TEM NOTA FISCAL
@@ -14,15 +13,40 @@ $resultadoNota = $conn->query($queryNota);
 
 $rowNota = $resultadoNota->fetch_assoc();
 
-if($rowNota['numero_nota'] === "semNota"){
+if($rowNota['numero_nota'] == "semNota"){
   $queryWhere = "MOF.id = ".$_GET['id_off']."";
 }else{
-  $queryWhere = "MOF.numero_nota = (SELECT numero_nota FROM manager_office WHERE id = '".$_GET['id_off']."')";
+  $queryWhere = " MOF.numero_nota = (SELECT numero_nota FROM manager_office WHERE id = '".$_GET['id_off']."')";
 }
 
 //1º vamos coletar todas as informações que iremos usar no termo
 
 //Office
+
+$query_office = "SELECT 
+                    MOF.id,
+                    MOF.versao AS id_versao,
+                    MDOF.nome AS versao,
+                    MOF.serial,
+                    MOF.fornecedor,
+                    MOF.empresa AS id_empresa,
+                    MDE.nome AS empresa,
+                    MOF.locacao AS id_locacao,
+                    MDL.nome AS locacao,                       
+                    MOF.file_nota AS caminho_of,
+                    MOF.file_nota_nome AS nome_nota_of,
+                    MDOF.nome AS versao_of,
+                    MOF.data_nota AS data_nota_of,
+                    MOF.numero_nota
+                 FROM
+                    manager_office MOF
+                 LEFT JOIN
+                    manager_dropoffice MDOF ON MOF.versao = MDOF.id
+                 LEFT JOIN
+                    manager_dropempresa MDE ON MOF.empresa = MDE.id_empresa
+                 LEFT JOIN
+                    manager_droplocacao MDL ON MOF.locacao = MDL.id_empresa
+                 WHERE ";
 $somando = 0;
 
 $query_office .= $queryWhere;
