@@ -6,7 +6,7 @@ require_once('../conexao/conexao.php');
 require_once('../query/query_dropdowns.php');
 //Aplicando a regra de login
 if ($_SESSION["perfil"] == NULL) {
-   header('location: ../index.html');
+   header('location: ../index.php');
 } elseif (($_SESSION["perfil"] != 0) && ($_SESSION["perfil"] != 2) && ($_SESSION["perfil"] != 4)) {
    header('location: ../error.php');
 }

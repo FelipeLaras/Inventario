@@ -4,9 +4,6 @@
     //chamando ocsweb
     require_once('../conexao/conexao_ocs.php');
     /*---------------------------------------------------------------------*/
-
-
-
     
 
     //1º vamos salvar no OCS
@@ -18,7 +15,10 @@
     //pegando o hardware_id
     $buscando_harwareID = "SELECT HARDWARE_ID FROM accountinfo WHERE TAG = '".$patrimonio['patrimonio']."'";
     $result_harwareID= $conn_ocs->query($buscando_harwareID);
-    $harwareID = $result_harwareID->fetch_assoc();
+
+    if(!$harwareID = $result_harwareID->fetch_assoc()){
+        echo "Equipamento não encontrado no <b>OCSREPORTS</b> <br> esse office vai ser cadastrado dentro do ocs, por favor consulte o <a href='http://rede.paranapart.com.br/ocsreports'>ocsreports</a> para verificar se o equipamento ".$patrimonio['patrimonio']." esta cadastrado";
+    }
 
     //pegando o nome office
     $office = "SELECT nome FROM manager_dropoffice where id = ".$_POST['tipo_office']."";
@@ -26,12 +26,13 @@
     $office_row = $result_office->fetch_assoc();
 
     //juntando todos os ingredientes acimas e fazendo o bolo!!
-    $inserindo_ocs = "INSERT INTO ocsweb.officepack 
-        (HARDWARE_ID, PRODUCT, OFFICEKEY, INSTALL)
-        VALUES
-        ('".$harwareID['HARDWARE_ID']."', '".$office_row['nome']."', '".$_POST['serial_office']."',0)";
+    $inserindo_ocs = "INSERT INTO officepack (HARDWARE_ID, PRODUCT, OFFICEKEY, INSTALL) VALUES ('".$harwareID['HARDWARE_ID']."', '".$office_row['nome']."', '".$_POST['serial_office']."',0)";
 
-    $resultado_ocs = $conn_ocs->query($inserindo_ocs) or die(mysqli_error($conn_ocs));
+    if(!$resultado_ocs = $conn_ocs->query($inserindo_ocs)){
+        echo "Não consegui salvar o office no OCS";
+        printf("Motivo do erro: %s\n", $conn->error);
+
+    }
 
     /*---------------------------------------------------------------------*/
     //2º agora vamos salvar no MANAGER
