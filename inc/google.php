@@ -1,18 +1,17 @@
 <?php
-   //aplicando para usar varialve em outro arquivo
-   session_start();
-   //chamando conexão com o banco
-   require_once('../conexao/conexao.php');
-   require_once('header.php');
+//aplicando para usar varialve em outro arquivo
+session_start();
+//chamando conexão com o banco
+require_once('../conexao/conexao.php');
+require_once('header.php');
 
-   //Aplicando a regra de login
-   if($_SESSION["perfil"] == NULL){  
-     header('location: ../front/index.html');
-   
-   }elseif (($_SESSION["perfil"] != 0) AND ($_SESSION["perfil"] != 2) AND ($_SESSION["perfil"] != 4)) {
-   
-       header('location: ../front/error.php');
-   }
+//Aplicando a regra de login
+if ($_SESSION["perfil"] == NULL) {
+    header('location: ../front/index.html');
+} elseif (($_SESSION["perfil"] != 0) and ($_SESSION["perfil"] != 2) and ($_SESSION["perfil"] != 4)) {
+
+    header('location: ../front/error.php');
+}
 
 ?>
 <!--Chamando a Header-->
@@ -22,7 +21,7 @@
             <ul class="mainnav">
                 <li><a href="tecnicos_ti.php"><i class="icon-home"></i><span>Home</span> </a> </li>
                 <li><a href="equip.php"><i class="icon-table"></i><span>Inventário</span> </a> </li>
-                <li class="active"><a href="google.php"><i class="icon-search"></i><span>Google T.I</span> </a></li>                                
+                <li class="active"><a href="google.php"><i class="icon-search"></i><span>Google T.I</span> </a></li>
                 <li><a href="relatorio_tecnicos.php"><i class="icon-list-alt"></i><span>Relatórios</span></a></li>
             </ul>
         </div>
@@ -30,20 +29,22 @@
     </div>
     <!-- /subnavbar-inner -->
 </div>
-   <a class="botao" href="google_insert.php" title="Inserir nova Info">
-      <i class='btn-icon-only icon-plus fa fa-2x' style="margin-left: -3px"> </i>
-   </a>
+<a class="botao" href="google_insert.php" title="Inserir nova Info">
+    <i class='btn-icon-only icon-plus fa fa-2x' style="margin-left: -3px;color: #3780ff;"> </i>
+</a>
 <div class="tab-content">
     <div class="tab-pane active google" id="formcontrols">
         <form id="edit-profile" class="form-horizontal" action="search.php" method="POST" autocomplete="off">
             <fieldset>
                 <div class="control-group">
                     <div class="controls">
-                        <div>
-                            <img src="../img/google_servopa.png" width="600" height="800" id="imgpos">
+                        <img src="../img/google_servopa.png" class="rounded mx-auto d-block" style="width: 80%;">
+                        <div class="controls" style="margin-top: 30px; margin-left: -14px;">
+                            <div class="input-append">
+                                <input class="span8 m-wrap"  name="pesquisa" id="appendedInputButton" type="text" style="height: 27px;">
+                                <button class="btn" type="submit" style="height: 37px">Buscar</button>
+                            </div>
                         </div>
-                        <input type="text" class="span6" id="firstname" name="pesquisa">
-                        <button type="submit" class="btn btn-primary">Pesquisar</button>
                     </div> <!-- /controls -->
                 </div> <!-- /form-actions -->
             </fieldset>

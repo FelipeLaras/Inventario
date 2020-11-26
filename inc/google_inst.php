@@ -20,12 +20,13 @@
         $sql_file = "SELECT tipo_arquivo FROM google_validacao_arquivo WHERE tipo_arquivo LIKE '".$tipo_file."'";//query de validação 
 
         $result =  $conn_db->query($sql_file);//aplicando a query
-        $row = mysqli_fetch_array($result);//salvando o resultado em uma variavel
+
+        $row = $result->fetch_assoc();//salvando o resultado em uma variavel
 
         /*TRABALHAMDO COM O RESULTADO DA VALIDAÇÃO*/
         if ($row['tipo_arquivo'] != NULL) {//se é arquivo valido       
             if (move_uploaded_file($_FILES['file']['tmp_name'], $caminho )){//aplicando o salvamento
-                echo "arquivo Enviado!";
+                /* echo "arquivo Enviado!"; */
             }else{
                 echo "Arquivo não foi enviado! ".$caminho." não localizado";//se caso não salvar vai mostrar o erro!
                 exit;
@@ -36,24 +37,31 @@
         }
 
         /*SALVANDO AGORA NO BANCO DE DADOS O DOCUMENTO*/
-         $inst = "INSERT INTO google (titulo, body, caminho_arquivo, usuario, data_created) VALUES ('".$_POST['titulo']."', '".$_POST['txtArtigo']."', '".$caminho_db."', '".$_SESSION["id"]."', '".$date."')";
+        $inst = "INSERT INTO google (titulo, body, caminho_arquivo, usuario, data_created) VALUES ('".$_POST['titulo']."', '".$_POST['txtArtigo']."', '".$caminho_db."', '".$_SESSION["id"]."', '".$date."')";
         
-         $inst_replace = str_replace("\\", "/", $inst);
+        $inst_replace = str_replace("\\", "/", $inst);
 
-         $result = $conn_db->query($inst_replace);  
+         if(!$result = $conn_db->query($inst_replace)){ 
+
+             printf("Erro Codigo[1]: %s\n", $conn_db->error); 
+             exit;
+
+            }  
 
     }else{
         //SALVANDO A INFORMAÇÃO
         $inst = "INSERT INTO google (titulo, body, usuario, data_created) VALUES ('".$_POST['titulo']."', '".$_POST['txtArtigo']."', '".$_SESSION["id"]."', '".$date."')";
-        
- 
+         
         $inst_replace = str_replace("\\", "/", $inst);
 
-        $result = $conn_db->query($inst_replace);       
+        if(!$result = $conn_db->query($inst_replace)){ 
+
+            printf("Erro Codigo[2]: %s\n", $conn_db->error); 
+            exit;
+
+        }       
     }
 
     header('location: msn_google_s.php');//indo para a tela informando que o mesmo foi salvo
 
     $conn_db->close();//fechando banco pesquisa(google)
-
-?> 

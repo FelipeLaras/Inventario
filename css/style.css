@@ -98,7 +98,10 @@ div#botao {
     font-weight: bold;
     color: red;
 }
-
+#firstname {
+    margin-left: 62px;
+    margin-top: 38px;
+}
 .liberar{
     margin-bottom: -25px;
     color: red;
