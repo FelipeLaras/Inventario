@@ -1,17 +1,34 @@
 <?php
 //chamar a sessão
 session_start();
-//chamando conexão com o banco
-require_once('../conexao/conexao.php');
 //Aplicando a regra de login
-if($_SESSION["perfil"] == NULL){  
-    header('location: ../front/index.html');
-}elseif ($_SESSION["perfil"] == 2) {
+if ($_SESSION["perfil"] == NULL) {
+    header('location: ../front/index.php');
+} elseif ($_SESSION["perfil"] == 2) {
     header('location: ../front/error.php');
 }
 
+//chamando conexão com o banco
+require_once('../conexao/conexao.php');
 //chamando a header
 require_once('header.php');
+
+//informações sobre o equipamento
+$equip_check = "SELECT 
+                    MIE.id_equipamento, 
+                    MIE.modelo, 
+                    MIE.numero, 
+                    MIE.tipo_equipamento,
+                    MIE.imei_chip,
+                    MDE.nome
+                FROM 
+                    manager_inventario_equipamento MIE
+                LEFT JOIN
+                    manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
+                WHERE 
+                    id_funcionario = " . $_GET['id_fun'] . "";
+
+$result_check = $conn->query($equip_check);
 ?>
 
 <!--Chamando a Header-->
@@ -30,8 +47,8 @@ require_once('header.php');
                     </a>
                 </li>
                 <?php
-            if($_SESSION["perfil"] != 3){
-               echo "
+                if ($_SESSION["perfil"] != 3) {
+                    echo "
                <li>
                   <a href='inventario_equip.php'><i class='icon-cogs'></i>
                      <span>Equipamentos</span>
@@ -42,8 +59,8 @@ require_once('header.php');
                      <span>Relatórios</span>
                   </a>
                </li>";
-            }
-            ?>
+                }
+                ?>
             </ul>
         </div>
     </div>
@@ -63,17 +80,17 @@ require_once('header.php');
     </h3>
 </div>
 <?php
-    switch ($_GET['status']) {
-        case '1':
-            echo '<div class="alert alert-block"><button type="button" class="close" data-dismiss="alert">×</button><h4>Atenção!</h4>Preencha o campo "3"!</div>';
-            break;
-    }
+switch ($_GET['status']) {
+    case '1':
+        echo '<div class="alert alert-block"><button type="button" class="close" data-dismiss="alert">×</button><h4>Atenção!</h4>Preencha o campo "3"!</div>';
+        break;
+}
 ?>
 <!-- /widget-header -->
 <h3 style="color: red;">
     <div class="titulo_check">
         <font style="vertical-align: inherit;">
-            <i class="fas fa-clipboard-list"></i> CHEK-LIST!
+            <i class="fas fa-clipboard-list"></i> CHECK-LIST!
         </font>
     </div>
 </h3>
@@ -99,58 +116,53 @@ require_once('header.php');
                         </select>
                     </div>
                 </div>
-                
+
                 <div id='equip_select' style='display: none'>
                     <div class="control-group">
                         <div class="controls">
                             <h5>3-) Escolha os equipamentos:</h5>
                             <ul class='ul_equip' id='list0'>
-                                <?php    
-                                    $equip_check = "SELECT 
-                                    MIE.id_equipamento, 
-                                    MIE.modelo, 
-                                    MIE.numero, 
-                                    MIE.tipo_equipamento,
-                                    MIE.imei_chip,
-                                    MDE.nome
-                                    FROM 
-                                    manager_inventario_equipamento MIE
-                                    LEFT JOIN
-                                    manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
-                                    WHERE 
-                                    id_funcionario = ".$_GET['id_fun']."";
-                                    $result_check = $conn -> query($equip_check);
-
-                                    while($linha_check = $result_check -> fetch_assoc()){
-                                        if($linha_check['tipo_equipamento'] == 3){
-                                            echo "
+                                <?php
+                                while ($linha_check = $result_check->fetch_assoc()) {
+                                    if ($linha_check['tipo_equipamento'] == 3) {
+                                        echo "
                                             <li class='li_equip'>
-                                                <input type='checkbox' name='id_equip[]' value='".$linha_check['id_equipamento']."'> ".$linha_check['nome']." | ".$linha_check['numero']."
+                                                <input type='checkbox' name='id_equip[]' value='" . $linha_check['id_equipamento'] . "'> " . $linha_check['nome'] . " | " . $linha_check['numero'] . "
                                             </li>";
-                                        }else{
-                                            echo "
+                                    } else {
+                                        echo "
                                             <li class='li_equip'>
-                                                <input type='checkbox' name='id_equip[]' value='".$linha_check['id_equipamento']."'> ".$linha_check['nome']." | ".$linha_check['modelo']." | ".$linha_check['imei_chip']."
+                                                <input type='checkbox' name='id_equip[]' value='" . $linha_check['id_equipamento'] . "'> " . $linha_check['nome'] . " | " . $linha_check['modelo'] . " | " . $linha_check['imei_chip'] . "
                                             </li>";
-                                        }
                                     }
+                                }
                                 ?>
                             </ul>
                         </div>
                     </div>
                 </div>
-                        <div class="control-group">
-                            <div class="controls">
-                                <h5 style="color: red; font-weight: bold;">3-) Funcionário foi demitido ?</h5>
-                                <select class="span1 subtitulo" id="selectEquip"  name="demitido" required>
-                                    <option value="">---</option>
-                                    <option value="1">Sim</option>
-                                    <option value="0">Não</option>
-                                </select>
-                            </div>
-                        </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <h5 style="color: red; font-weight: bold;">3-) Funcionário foi demitido ?</h5>
+                        <select class="span1 subtitulo" id="selectEquip" name="demitido" required>
+                            <option value="">---</option>
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-actions">
-                    <button type="submit" tar class="btn btn-primary pull-right" id="salvarTermo">Emitir</button>
+                    <?php
+                        $queryLiberar = "SELECT distinct tipo_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = '".$_GET['id_fun']."' AND tipo_equipamento != 8 LIMIT 1";
+                        $resultLiberar = $conn -> query($queryLiberar);
+
+                        if(!empty($liberar = $resultLiberar->fetch_assoc())){
+                            echo '<button type="submit" tar="" class="btn btn-primary pull-right" id="salvarTermo">Emitir</button>';
+                        }else{
+                            echo '<div class="liberar">Funcionario possui equipamentos que não precisa emitir check-list</div>
+                            <button type="submit" class="btn btn-primary pull-right" id="salvarTermo" disabled>Emitir</button>';
+                        }
+                    ?>                    
                 </div>
             </form>
         </div>
@@ -160,15 +172,15 @@ require_once('header.php');
 <!--ESCONDER UL-->
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js' type='text/javascript'></script>
 <script>
-$('#selectEquip').change(
-    function() {
-        $('#equip_select').hide();
+    $('#selectEquip').change(
+        function() {
+            $('#equip_select').hide();
 
-        if (this.value == '1') {
-            $('#equip_select').show();
+            if (this.value == '1') {
+                $('#equip_select').show();
+            }
         }
-    }
-);
+    );
 </script>
 <!--LOGIN-->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>

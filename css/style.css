@@ -99,6 +99,12 @@ div#botao {
     color: red;
 }
 
+.liberar{
+    margin-bottom: -25px;
+    color: red;
+    margin-left: 50%;
+}
+
 #imgpos {    
     margin-left: 1%;
     margin-bottom: 2%;
