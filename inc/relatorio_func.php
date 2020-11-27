@@ -29,7 +29,7 @@ if ($_GET['nome_funcionario'] != NULL) {
 if($_GET['status_funcionario'] == 3){
    $statusFuncionario = "termo = 1";
 }else{
-   $statusFuncionario = "MIF.status = " . $_GET['status_funcionario'];
+   $statusFuncionario = "MIF.status = '" . $_GET['status_funcionario'];
 }
 
 //montando a pesquisa para o relatório
