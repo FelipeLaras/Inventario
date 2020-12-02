@@ -400,6 +400,14 @@ require_once('header.php');
                         <div class='controls'>
                         <select id='t_cob' name='so_cpu' class='span4'>
                               <option value='" . $windows['id_versao'] . "'>" . $windows['versao'] . "</option>
+                              <option>---</option>";
+
+                              $windowsCPU = "SELECT * FROM manager_dropsistemaoperacional";
+                              $resultWindowsCpu = $conn -> query($windowsCPU);
+                              while($windowsC = $resultWindowsCpu->fetch_assoc()){
+                                 echo "<option value='" . $windowsC['id'] . "'>" . $windowsC['nome'] . "</option>";
+                              }
+                     echo "
                         </select>
                         </div>
                      </div>

@@ -60,15 +60,26 @@ if($_POST['tipo_equipamento'] == 8){//desktop
     $result_equip_cpu = $conn -> query($update_equip_cpu);
 
     //windows
-    $update_cpu_so = "UPDATE manager_sistema_operacional
-    SET
-    versao = '".$_POST['so_cpu']."', 
-    serial = '".$_POST['serial_so_cpu']."',
-    fornecedor = '".$_POST['fornecedor_so_cpu']."',
-    locacao = '".$_POST['locacao_cpu']."'
-    WHERE
-    id_equipamento = ".$_POST['id_equipamento']." ";
-    $result_cpu_so = $conn -> query($update_cpu_so);
+    #verificar se já possui windows
+    $queryVerificarWindows = "SELECT id FROM manager_sistema_operacional WHERE id_equipamento = ".$_POST['id_equipamento']."";
+    $resultVerificarWindows = $conn->query($queryVerificarWindows);
+
+    if(!empty($verificarWindows = $resultVerificarWindows->fetch_assoc())){
+        $update_cpu_so = "UPDATE manager_sistema_operacional
+                            SET
+                                versao = '".$_POST['so_cpu']."', 
+                                serial = '".$_POST['serial_so_cpu']."',
+                                fornecedor = '".$_POST['fornecedor_so_cpu']."',
+                                locacao = '".$_POST['locacao_cpu']."'
+                            WHERE
+                                id_equipamento = ".$_POST['id_equipamento']." ";
+        $result_cpu_so = $conn -> query($update_cpu_so);
+    }else{
+        $insertWindows = "INSERT INTO manager_sistema_operacional (id_equipamento, versao, serial, fornecedor) VALUES ('".$_POST['id_equipamento']."', '".$_POST['so_cpu']."','".$_POST['serial_so_cpu']."', '".$_POST['fornecedor_so_cpu']."')";
+        if(!$resultWindows = $conn->query($insertWindows)){
+            printf("Erro cod[2]: %s\n", $conn->error);
+        }
+    }
 
     //office
     if($_POST['id_office'] != NULL){
