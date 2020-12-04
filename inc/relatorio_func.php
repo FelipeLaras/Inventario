@@ -29,7 +29,7 @@ if ($_GET['nome_funcionario'] != NULL) {
 if($_GET['status_funcionario'] == 3){
    $statusFuncionario = "termo = 1";
 }else{
-   $statusFuncionario = "MIF.status = '" . $_GET['status_funcionario'];
+   $statusFuncionario = "MIF.status = " . $_GET['status_funcionario'];
 }
 
 //montando a pesquisa para o relatório
@@ -82,7 +82,7 @@ if (empty($_GET['funcao_funcionario'])) {
 
          } else {
 
-            $query_relatorios .= " AND ".$statusFuncionario ."'";
+            $query_relatorios .= " AND ".$statusFuncionario ."";
          }
       }
    } else {
@@ -95,7 +95,7 @@ if (empty($_GET['funcao_funcionario'])) {
          $query_relatorios .= " AND MIF.empresa = '" . $_GET['empresa_funcionario'] . "'";
          if (empty($_GET['status_funcionario'])) {
          } else {
-            $query_relatorios .= " AND ".$statusFuncionario ."'";
+            $query_relatorios .= " AND ".$statusFuncionario ."";
          }
       }
    }
@@ -106,14 +106,14 @@ if (empty($_GET['funcao_funcionario'])) {
       if (empty($_GET['empresa_funcionario'])) {
          if (empty($_GET['status_funcionario'])) {
          } else {
-            $query_relatorios .= " AND ".$statusFuncionario ."'";
+            $query_relatorios .= " AND ".$statusFuncionario ."";
          }
       } else {
          $query_relatorios .= " AND MIF.empresa = '" . $_GET['empresa_funcionario'] . "'";
 
          if (empty($_GET['status_funcionario'])) {
          } else {
-            $query_relatorios .= " AND ".$statusFuncionario ."'";
+            $query_relatorios .= " AND ".$statusFuncionario ."";
          }
       }
    } else {
@@ -127,7 +127,7 @@ if (empty($_GET['funcao_funcionario'])) {
 
          if (empty($_GET['status_funcionario'])) {
          } else {
-            $query_relatorios .= " AND ".$statusFuncionario ."'";
+            $query_relatorios .= " AND ".$statusFuncionario ."";
          }
       }
    }
