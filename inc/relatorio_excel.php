@@ -84,14 +84,14 @@ $html .="
 	$html .=  "<td>---</td>";         
                }
                //modelo
-               if($row_relatorio['empresa'] != NULL){
-	$html .=  "<td>".$row_relatorio['empresa']."</td>";         
+               if($row_relatorio['filial'] != NULL){
+	$html .=  "<td>".$row_relatorio['filial']."</td>";         
                }else{
 	$html .= "<td>---</td>";         
                }
                //imei
-               if($row_relatorio['funcionario'] != NULL){
-	$html .= "<td>".$row_relatorio['funcionario']."</td>";         
+               if($row_relatorio['nome'] != NULL){
+	$html .= "<td>".$row_relatorio['nome']."</td>";         
                }else{
 	$html .= "<td>---</td>";         
                }

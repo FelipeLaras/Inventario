@@ -182,26 +182,26 @@ require_once('header.php')
          echo "<td>---</td>";         
                }
                //status
+               if($row_relatorio['imei_chip'] != NULL){
+         echo "<td>".$row_relatorio['imei_chip']."</td>";         
+               }else{
+         echo "<td>---</td>";         
+               }
+               //departamento
                if($row_relatorio['status'] != NULL){
          echo "<td>".$row_relatorio['status']."</td>";         
                }else{
          echo "<td>---</td>";         
                }
-               //departamento
+               //filial
                if($row_relatorio['departamento'] != NULL){
          echo "<td>".$row_relatorio['departamento']."</td>";         
                }else{
          echo "<td>---</td>";         
                }
-               //filial
+               //imei_chip
                if($row_relatorio['filial'] != NULL){
          echo "<td>".$row_relatorio['filial']."</td>";         
-               }else{
-         echo "<td>---</td>";         
-               }
-               //imei_chip
-               if($row_relatorio['imei_chip'] != NULL){
-         echo "<td>".$row_relatorio['imei_chip']."</td>";         
                }else{
          echo "<td>---</td>";         
                }
