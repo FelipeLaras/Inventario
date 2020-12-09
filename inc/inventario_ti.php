@@ -46,8 +46,6 @@ $resultInativar = $conn->query($queryInativar);
 
 while($inativar = $resultInativar->fetch_assoc()){
    $updateInativar = "UPDATE manager_inventario_funcionario SET deletar = 1 WHERE id_funcionario = ".$inativar['id_funcionario']."";
-
-   printf($updateInativar);
    $inativar = $conn->query($updateInativar);
 }
 
