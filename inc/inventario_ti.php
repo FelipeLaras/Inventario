@@ -37,13 +37,20 @@ while($funcionario = mysqli_fetch_assoc($result_funcionario)){
 
 /*UM PEQUENO AJUSTE PARA ELIMINAR FUNCIONARIOS QUE NÃO POSSUEM EQUIPAMENTOS*/
 
-$verificar_funcio = "SELECT id_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = '".$row['id_funcionario']."'";
-$resulado_ver_funci = $conn->query($verificar_funcio);
-$linha_ver = mysqli_fetch_assoc($resulado_ver_funci);
-if ($linha_ver['id_equipamento'] == NULL) {
-   $update_ver_funcio = "UPDATE manager_inventario_funcionario SET status = 9 WHERE id_funcionario = '".$row['id_funcionario']."'";
-   $resul = $conn->query($update_ver_funcio);
+$queryInativar = "SELECT MIF.nome, MIF.id_funcionario, MIE.id_equipamento, MIF.deletar FROM manager_inventario_funcionario MIF
+                  LEFT JOIN manager_inventario_equipamento MIE ON (MIF.id_funcionario = MIE.id_funcionario)
+                  WHERE MIF.deletar = 0 AND MIF.status = 8 AND MIE.id_equipamento IS NULL";
+                  
+$resultInativar = $conn->query($queryInativar);
+
+
+while($inativar = $resultInativar->fetch_assoc()){
+   $updateInativar = "UPDATE manager_inventario_funcionario SET deletar = 1 WHERE id_funcionario = ".$inativar['id_funcionario']."";
+
+   printf($updateInativar);
+   $inativar = $conn->query($updateInativar);
 }
+
 
 $conn -> close();
 
