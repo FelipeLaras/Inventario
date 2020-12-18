@@ -1,8 +1,8 @@
 ﻿<?php
     //variaveis para conexao
-    $servername = "localhost";
-    $username = "root";
-    $password = "qtbvar03";
+    $servername = "10.100.1.65";
+    $username = "manager";
+    $password = "Servopa123#";
     $dbname = "manager";
     $port = "3306";
 

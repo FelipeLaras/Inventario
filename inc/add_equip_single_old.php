@@ -55,31 +55,49 @@ if ($_SESSION["perfil"] == NULL) {
     <!--ALERTAS-->
     <?php
 
-    switch ($_GET['error']) {
-        case '2':
-            echo "<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento <b style='color:red'>NÃO ENCONTRADO</b>, verifique no <b>OCS / AGENTE</b> antes de continuar. </div>";
-        break;
-    
-        case '3':
-            echo "<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Preencha pelo menos um equipamento para prosseguir com o cadastro.</div>";
-        break;
-    
-        case '4':
-            echo "<div class='alert alert-block'><button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento <b style='color:red'>CONDENADO</b>. </div>";
-        break;
-    
-        case '5':
-            echo "<div class='alert alert-block'> <button type='button' class='close' data-dismiss='alert'>×</button><h4>ATENÇÃO</h4>Equipamento <b style='color:red'>JÁ CADASTRADO</b>. </div>";
-        break;
-    }
-
     if ($_GET['ok'] == 1) { //Equipamento cadastrado com sucesso
         echo "
     <div class='alert alert-success'>
     <button type='button' class='close' data-dismiss='alert'>×</button>
     <strong>Alerta!</strong> Cadastro realizado com sucesso!.
     </div>";
-    }
+    } //end alerta ok 1
+
+    if ($_GET['error'] == 2) { //Equipamento não encontrado no OCS
+        echo "
+    <div class='alert alert-block'>
+    <button type='button' class='close' data-dismiss='alert'>×</button>
+    <h4>ATENÇÃO</h4>
+    Equipamento <b style='color:red'>NÃO ENCONTRADO</b>, verifique no <b>OCS / AGENTE</b> antes de continuar. 
+    </div>";
+    } //end alerta erro 2
+
+    if ($_GET['error'] == 3) { //Preencher pelomenos um equipamento
+        echo "
+    <div class='alert alert-block'>
+    <button type='button' class='close' data-dismiss='alert'>×</button>
+    <h4>ATENÇÃO</h4>
+    Preencha pelo menos um equipamento para prosseguir com o cadastro. 
+    </div>";
+    } //end alerta erro 3
+
+    if ($_GET['error'] == 4) { //Equipamento já cadastrado porém condenado
+        echo "
+    <div class='alert alert-block'>
+    <button type='button' class='close' data-dismiss='alert'>×</button>
+    <h4>ATENÇÃO</h4>
+    Equipamento <b style='color:red'>CONDENADO</b>. 
+    </div>";
+    } //end alerta erro 4
+
+    if ($_GET['error'] == 5) { //Equipamento já cadastrado
+        echo "
+    <div class='alert alert-block'>
+    <button type='button' class='close' data-dismiss='alert'>×</button>
+    <h4>ATENÇÃO</h4>
+    Equipamento <b style='color:red'>JÁ CADASTRADO</b>. 
+    </div>";
+    } //end alerta erro 4
     ?>
     <!--FIM ALERTAS-->
     <!-- /widget-header -->
