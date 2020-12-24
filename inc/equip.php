@@ -505,7 +505,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
                                        <div class='controls'>
                                           <select class='span2' style='margin-top: -40px; margin-left: 50px;' name='id_status' required>
                                              <option value=''>---</option>";
-               $status = "SELECT id_status, nome FROM manager_dropstatusequipamento WHERE id_status in (6,10)";
+               $status = "SELECT id_status, nome FROM manager_dropstatusequipamento WHERE id_status in (6,10,11)";
                $result_status = $conn->query($status);
 
                while ($row_status = $result_status->fetch_assoc()) {
