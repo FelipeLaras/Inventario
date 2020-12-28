@@ -94,13 +94,13 @@ if ($_GET['status'] != NULL) {
    $equipamentos .= "AND MIE.tipo_equipamento IN (9 , 5, 8)";
 }
 
-$resultado_equip = $conn->query($equipamentos);    
+$resultado_equip = $conn->query($equipamentos);
 
-$nenhumfuncionario = $resultado_equip -> fetch_assoc();
+$nenhumfuncionario = $resultado_equip->fetch_assoc();
 
-if ($nenhumfuncionario['id_funcionario'] == NULL) {//forçando deixar disponivel
-   $updateDisponivel = "UPDATE manager_inventario_equipamento SET status = '6' WHERE (id_equipamento = ".$row_equip['id_equipamento'].")";
-   $aplicarUpdate = $conn -> query($updateDisponivel);
+if ($nenhumfuncionario['id_funcionario'] == NULL) { //forçando deixar disponivel
+   $updateDisponivel = "UPDATE manager_inventario_equipamento SET status = '6' WHERE (id_equipamento = " . $row_equip['id_equipamento'] . ")";
+   $aplicarUpdate = $conn->query($updateDisponivel);
 }
 
 //contagem equipamentos alterados
@@ -134,7 +134,7 @@ $row_count = $result_count->fetch_assoc();
                <a href="google.php">
                   <i class="icon-search"></i><span>Google T.I</span>
                </a>
-            </li>                                           
+            </li>
             <li><a href="relatorio_tecnicos.php"><i class="icon-list-alt"></i><span>Relatórios</span></a></li>
          </ul>
       </div>
@@ -258,9 +258,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
                   $upt = "UPDATE manager_inventario_funcionario SET status = 4 WHERE id_funcionario = " . $row_equip['id_funcionario'] . "";
                   $result_upt = $conn->query($upt);
                   echo "<script type='text/javascript'>window.location.reload()</script>";
-               }
-
-               if ($row_equip['id_fun_status'] == 8) { //Demitido
+               } elseif ($row_equip['id_fun_status'] == 8) { //Demitido
                   echo "<td>
                         <i class='fas fa-circle' style='color: black;'></i> " . $row_equip['fun_status'] . "<br />";
 
@@ -280,9 +278,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
                      echo "<i class='fas fa-circle' style='color: red;'></i> Falta Nota Fiscal";
                   } //Fim IF nota windows
                   echo "</td>";
-               }
-
-               if ($row_equip['id_fun_status'] == 4) { //Ativo
+               }elseif ($row_equip['id_fun_status'] == 4) { //Ativo
                   echo "<td>
                         <i class='fas fa-circle' style='color: green;'></i> " . $row_equip['fun_status'] . "<br />";
 
@@ -302,9 +298,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
                      echo "<i class='fas fa-circle' style='color: red;'></i> Falta Nota Fiscal";
                   } //Fim IF nota windows
                   echo "</td>";
-               }
-
-               if ($row_equip['id_fun_status'] == 3) { //falta termo
+               }elseif ($row_equip['id_fun_status'] == 3) { //falta termo
                   echo "<td>                 
                   <i class='fas fa-circle' style='color: #f3b37c7a;'></i> " . $row_equip['fun_status'] . "<br />";
 
@@ -324,7 +318,11 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
                      echo "<i class='fas fa-circle' style='color: red;'></i> Falta Nota Fiscal";
                   } //Fim IF nota windows//Fim IF nota windows
                   echo "</td>";
-               }
+               }else {
+                  echo "<td>";
+                  echo "<i class='fas fa-circle' style='color: red;'></i>" . $row_equip['fun_status'] . "";
+               } //Fim IF nota windows
+               echo "</td>";
 
 
                //AÇÂO
@@ -528,7 +526,7 @@ if ($_GET['msn'] == 1) { //encontrado porém o usuário está desativado
             </div>
          </div>
          "; //end tabela
-      } //end while
+            } //end while
             ?>
          </tbody>
       </table>
