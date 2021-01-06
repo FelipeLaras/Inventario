@@ -138,11 +138,12 @@
                       </div>
                       <input type="text" name="cod_tabela" style="display:none;" value=" <?= $_GET['id_pesquisa']; ?>  " />
 
-                <script src="ckeditor/ckeditor.js"> 
-                </script>
-                <script>
-                      CKEDITOR.replace( 'txtArtigo' );
-                </script>
+                <script src="ckeditor/ckeditor.js"></script>
+
+                <script>CKEDITOR.replace( 'txtArtigo' );</script>
+
+
+                
                  </div>
                </div>
                <div class="control-group" style="display: none;">
