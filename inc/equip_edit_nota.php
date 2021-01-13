@@ -5,9 +5,9 @@ require_once('../conexao/conexao.php');
 
 if($_POST['programa'] == 1){//Windows
 
-    //salvando a nota
-    //pegando o arquivo e salvando no servidor
-    //salvando a nota do windows
+    /* salvando a nota
+    pegando o arquivo e salvando no servidor
+    salvando a nota do windows */
     $tipo_file = $_FILES['file_nota']['type'];//Pegando qual é a extensão do arquivo
     $nome_db = $_FILES['file_nota']['name'];
     $caminho = "/var/www/html/ti/documentos/tecnicos/" . $_FILES['file_nota']['name'];//caminho onde será salvo o FILE
