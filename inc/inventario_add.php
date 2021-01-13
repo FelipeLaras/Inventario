@@ -102,13 +102,27 @@ if ($_GET['error'] == 2) {
                     <div class="controls">
                         <?php
                         if ($_GET['id_funcio'] != NULL) { //Se for ADICONAR UM EQUIPAMENTO
-                            echo "<input name='gols1' id='CPF' class='cpfcnpj span2' type='text' value='" . $_SESSION['new_cpf'] . "' required/> ";
+
+                            echo '<input name="gols1" id="CPF" class="cpfcnpj span2" type="text" value="' . $_SESSION['new_cpf'] . '" maxlength="14" onblur="ValidarCPF(this)" autofocus/>
+
+                            <span style="display: none; color: red;" id="cpfInvalido"><i class="fas fa-times-circle"></i> CPF Invalido!</span>
+                            <span style="display: none; color: green" id="cpfValido"><i class="fas fa-check-circle"></i> CPF OK!</span> ';
+                            
                             unset($_SESSION['new_cpf']);
+
                         } elseif ($_SESSION['cpf_vazia'] != NULL) {
-                            echo "<input name='gols1' id='gols1' class='cpfcnpj span2' type=text' value='" . $_SESSION['cpf_vazia'] . "' onkeydown='javascript: fMasc( this, mCPF );'/>";
+
+                            echo '<input name="gols1" class="cpfcnpj span2" type="text" value="' . $_SESSION['cpf_vazia'] . '" onkeydown="fMasc( this, mCPF );" maxlength="14" onload="ValidarCPF(this)" onblur="ValidarCPF(this)" autofocus/>
+
+                            <span style="display: none; color: red;" id="cpfInvalido"><i class="fas fa-times-circle"></i> CPF Invalido!</span>
+                            <span style="display: none; color: green" id="cpfValido"><i class="fas fa-check-circle"></i> CPF OK!</span>
+                            ';
+
                             unset($_SESSION['cpf_vazia']);
+
                         } else {
-                            echo "<input type='text' name='gols1' id='gols1' class='cpfcnpj span2' onkeydown='javascript: fMasc( this, mCPF );' autofocus>";
+
+                            echo '<input type="text" name="gols1" id="gols1" class="cpfcnpj span2" onkeydown="fMasc( this, mCPF );" maxlength="14" autofocus/>';
                         }
                         ?>
                     </div>
@@ -1074,7 +1088,7 @@ if ($_GET['error'] == 2) {
     </div>
     <!--Campos Escondidos-->
     <div class="form-actions">
-        <?= ($_GET['id_equip'] != NULL && $_GET['id_funcio'] != NULL) ? '<a href="inventario_add_plus.php?id_funcio=' . $_GET['id_funcio'] . '&id_equip=' . $_GET['id_equip'] . '" class="btn btn-primary pull-right" id="salvarTermo">Salvar + Termo</a>' : '<button type="submit" class="btn btn-primary pull-right" id="salvarTermo">Salvar + Termo</button>' ?>
+        <?= ($_GET['id_equip'] != NULL && $_GET['id_funcio'] != NULL) ? '<a href="inventario_add_plus.php?id_funcio=' . $_GET['id_funcio'] . '&id_equip=' . $_GET['id_equip'] . '" class="btn btn-primary pull-right" id="procurar">Salvar + Termo</a>' : '<button type="submit" class="btn btn-primary pull-right" id="procurar">Salvar + Termo</button>' ?>
     </div>
     </form>
 </div>
@@ -1084,7 +1098,8 @@ if ($_GET['error'] == 2) {
 </body>
 <!-- BLOQUEAR BOTÃO SALVAR QUANDO CLICAR MAIS DE UM VEZ!! -->
 <script>
-    document.getElementById("salvarTermo").onclick = function() {
+
+    document.getElementById("procurar").onclick = function() {
         this.disabled = true;
         document.getElementById("form1").submit();
     }
@@ -1133,7 +1148,61 @@ if ($_GET['error'] == 2) {
     }
 </script>
 
+<script>
 
+function ValidarCPF(cpf) {
+
+        cpf = cpf.value.replace(".", "")
+        cpf = cpf.replace(".", "")
+        cpf = cpf.replace("-", "")
+
+        var Soma;
+        var Resto;
+        Soma = 0;
+
+        var strCPF = cpf;
+
+        if (strCPF == "00000000000") {
+            var retorno = false;
+        }
+
+        for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(strCPF.substring(9, 10))) {
+            var retorno = false;
+        }
+
+        Soma = 0;
+        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(strCPF.substring(10, 11))) {
+            var retorno = false;
+        } else {
+            var retorno = true;
+        }
+
+        if (retorno == true) {
+
+            document.getElementById("cpfValido").style.display = "block";
+
+            document.getElementById("cpfInvalido").style.display = "none";
+
+            document.getElementById("procurar").disabled = false;
+
+        } else {
+
+            document.getElementById("cpfValido").style.display = "none";
+
+            document.getElementById("cpfInvalido").style.display = "block";
+
+            document.getElementById("procurar").disabled = true;
+        }
+    }
+</script>
 <!--MASCARA MAIUSCULA-->
 <script type="text/javascript">
     // INICIO FUNÇÃO DE MASCARA MAIUSCULA

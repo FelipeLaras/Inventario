@@ -195,7 +195,10 @@ switch ($_GET['msn']) {
           <div class="control-group">
             <label class="control-label">CPF:</label>
             <div class="controls">
-              <input class="cpfcnpj span2" type="text" name="cnpj_forne" value="<?= $row['cpf']  ?>" required />
+              <input class="cpfcnpj span2" type="text" name="cnpj_forne" value="<?= $row['cpf']  ?>" maxlength="14" onblur="ValidarCPF(this)" required />
+
+              <span style="display: none; color: red;" id="cpfInvalido"><i class="fas fa-times-circle"></i> CPF Invalido!</span>
+              <span style="display: none; color: green" id="cpfValido"><i class="fas fa-check-circle"></i> CPF OK!</span>
             </div>
           </div>
           <div class="control-group">
@@ -252,11 +255,11 @@ switch ($_GET['msn']) {
                 <option value="<?= $row['id_status'] ?>"><?= $row['status'] ?></option>
                 <option value="">---</option>
                 <?php
-                  $query_statusFun = "SELECT * FROM manager_dropstatus WHERE id_status IN (4, 3, 8, 10) AND deletar = 0 ORDER BY nome ASC";
-                  $resultado_statusFun = mysqli_query($conn, $query_statusFun);
-                  while ($row_statusFu = mysqli_fetch_assoc($resultado_statusFun)) {
-                    echo "<option value='" . $row_statusFu['id_status'] . "'>" . $row_statusFu['nome'] . "</option>";
-                  } 
+                $query_statusFun = "SELECT * FROM manager_dropstatus WHERE id_status IN (4, 3, 8, 10) AND deletar = 0 ORDER BY nome ASC";
+                $resultado_statusFun = mysqli_query($conn, $query_statusFun);
+                while ($row_statusFu = mysqli_fetch_assoc($resultado_statusFun)) {
+                  echo "<option value='" . $row_statusFu['id_status'] . "'>" . $row_statusFu['nome'] . "</option>";
+                }
                 ?>
               </select>
             </div>
@@ -276,7 +279,7 @@ switch ($_GET['msn']) {
               echo '<a href="emitir_cheklist.php?nome=' . $row["nome"] . '&id_fun=' . $sessao_id . '" class="btn btn-warning pull-left" style="margin-left: -132px;">Check-List</a>';
             }
             ?>
-            <button type="submit" class="btn btn-primary pull-right">Salvar</button>
+            <button type="submit" id="procurar" class="btn btn-primary pull-right">Salvar</button>
           </div>
         </form>
       </div>
@@ -296,25 +299,25 @@ switch ($_GET['msn']) {
                   </a>
                   <!-- Modal Emitir Termo-->
                   <div id='emitirTermo' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' style='display: none;'>
-                                        <div class=' modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
-                    <h3 id='myModalLabel' style="text-decoration: underline;font-size: 18px;">
-                      <i class="fas fa-file-signature"></i>
-                      <u>Termo de Responsabilidade</u>
-                    </h3>
-                  </div>
-                  <div class='modal-body'>
-                    <form id='edit-profile' class='form-horizontal' action='pdf_termo.php' enctype='multipart/form-data' method='post' name="formTermo">
-                      <div id='button_pai'>
-                        <h4>
-                          <i class="fas fa-angle-double-right"></i>
-                          Selecione os Equipamentos.
-                        </h4>
-                      </div>
-                      <div class="control-group">
-                        <div class="controls">
-                          <?php
-                              $termoQueryEquip = "SELECT 
+                    <div class=' modal-header'>
+                      <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+                      <h3 id='myModalLabel' style="text-decoration: underline;font-size: 18px;">
+                        <i class="fas fa-file-signature"></i>
+                        <u>Termo de Responsabilidade</u>
+                      </h3>
+                    </div>
+                    <div class='modal-body'>
+                      <form id='edit-profile' class='form-horizontal' action='pdf_termo.php' enctype='multipart/form-data' method='post' name="formTermo">
+                        <div id='button_pai'>
+                          <h4>
+                            <i class="fas fa-angle-double-right"></i>
+                            Selecione os Equipamentos.
+                          </h4>
+                        </div>
+                        <div class="control-group">
+                          <div class="controls">
+                            <?php
+                            $termoQueryEquip = "SELECT 
                                                       MIE.id_equipamento, 
                                                       MIE.modelo, 
                                                       MIE.imei_chip, 
@@ -325,89 +328,89 @@ switch ($_GET['msn']) {
                                                   LEFT JOIN
                                                     manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
                                                   WHERE
-                                                    MIE.id_funcionario = ".$_GET['id']." AND MIE.deletar = 0 AND MIE.tipo_equipamento NOT IN (8, 9, 5, 10)";
+                                                    MIE.id_funcionario = " . $_GET['id'] . " AND MIE.deletar = 0 AND MIE.tipo_equipamento NOT IN (8, 9, 5, 10)";
 
-                              $resut = $conn->query($termoQueryEquip);
+                            $resut = $conn->query($termoQueryEquip);
 
-                              while($termoEquip = $resut->fetch_assoc()){
-                                
-                                echo '<label class="checkbox line">
-                                        <input type="checkbox" name="termoEquipamento[]" id="equipCheck'.$termoEquip['id_equipamento'].'" onclick="liberarTermo'.$termoEquip['id_equipamento'].'()" value="'.$termoEquip['id_equipamento'].'">';
+                            while ($termoEquip = $resut->fetch_assoc()) {
 
-                                        if(empty($termoEquip['imei_chip'])){
-                                          echo $termoEquip['tipo_equipamento']. " [ ".$termoEquip['numero']." ]";
-                                        }else{
-                                          echo $termoEquip['tipo_equipamento']. " [ ".$termoEquip['modelo']." | ".$termoEquip['imei_chip']." ]";
-                                        }
+                              echo '<label class="checkbox line">
+                                        <input type="checkbox" name="termoEquipamento[]" id="equipCheck' . $termoEquip['id_equipamento'] . '" onclick="liberarTermo' . $termoEquip['id_equipamento'] . '()" value="' . $termoEquip['id_equipamento'] . '">';
+
+                              if (empty($termoEquip['imei_chip'])) {
+                                echo $termoEquip['tipo_equipamento'] . " [ " . $termoEquip['numero'] . " ]";
+                              } else {
+                                echo $termoEquip['tipo_equipamento'] . " [ " . $termoEquip['modelo'] . " | " . $termoEquip['imei_chip'] . " ]";
+                              }
 
 
-                                echo '</label>
+                              echo '</label>
                                 
                                 <script type="text/javascript">
-                                  function liberarTermo'.$termoEquip['id_equipamento'].'(){
+                                  function liberarTermo' . $termoEquip['id_equipamento'] . '(){
 
-                                    if(document.getElementById("equipCheck'.$termoEquip['id_equipamento'].'").checked == true){
+                                    if(document.getElementById("equipCheck' . $termoEquip['id_equipamento'] . '").checked == true){
                                       document.getElementById("buttonTermo").disabled = false;
                                     }
                                   }
                                 </script>';
-                              }
-                          ?>
-                        </div>		<!-- /controls -->		
-                      </div>
-                      <hr>
-                      <div id='button_pai'>
-                        <h4>
-                          <i class="fas fa-angle-double-right"></i>
-                          Observação!<i class="icon-lithe icon-question-sign" title="Essa observação irá para o Termo de Responsabilidade"></i>
-                        </h4>
-                      </div>
-                      <div class="control-group">
-                        <div class="controls">
-                          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="obs_termo"></textarea>
+                            }
+                            ?>
+                          </div> <!-- /controls -->
                         </div>
-                      </div>
-                      <br>
-                      <input type='text' style='display:none;' value='<?= $sessao_id; ?>' name='id_funcionario' />
-                      <!--gambiarra-->
-                      <div class='modal-footer'>
-                        <button class='btn' data-dismiss='modal' aria-hidden='true'>Cancelar</button>
-                        <button class='btn btn-primary' formtarget="_blank" id='buttonTermo' disabled><i class="fas fa-plus"></i> Termo</button>
-                      </div>
-                    </form>
+                        <hr>
+                        <div id='button_pai'>
+                          <h4>
+                            <i class="fas fa-angle-double-right"></i>
+                            Observação!<i class="icon-lithe icon-question-sign" title="Essa observação irá para o Termo de Responsabilidade"></i>
+                          </h4>
+                        </div>
+                        <div class="control-group">
+                          <div class="controls">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="obs_termo"></textarea>
+                          </div>
+                        </div>
+                        <br>
+                        <input type='text' style='display:none;' value='<?= $sessao_id; ?>' name='id_funcionario' />
+                        <!--gambiarra-->
+                        <div class='modal-footer'>
+                          <button class='btn' data-dismiss='modal' aria-hidden='true'>Cancelar</button>
+                          <button class='btn btn-primary' formtarget="_blank" id='buttonTermo' disabled><i class="fas fa-plus"></i> Termo</button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
+                  <!-- Modal Emitir Termo-->
                 </div>
-                <!-- Modal Emitir Termo-->
+                <!-- /controls -->
               </div>
-              <!-- /controls -->
+              <!-- /control-group -->
             </div>
-            <!-- /control-group -->
-          </div>
-          <!-- /widget-header -->
-          <div class="widget-content">
-            <table class="table table-striped table-bordered" style="font-size: 10px">
-              <thead>
-                <tr>
-                  <th>Equipamento</th>
-                  <th>Modelo</th>
-                  <th>Patrimônio</th>
-                  <th>Filial</th>
-                  <th>Operadora</th>
-                  <th>Número</th>
-                  <th>Imei</th>
-                  <th>Planos</th>
-                  <th>Valor</th>
-                  <th>Estado</th>
-                  <th>Situação</th>
-                  <th>Status</th>
-                  <th>Termo</th>
-                  <th>ação</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                //pesquisando os arquivos criados.
-                $query_files = "SELECT 
+            <!-- /widget-header -->
+            <div class="widget-content">
+              <table class="table table-striped table-bordered" style="font-size: 10px">
+                <thead>
+                  <tr>
+                    <th>Equipamento</th>
+                    <th>Modelo</th>
+                    <th>Patrimônio</th>
+                    <th>Filial</th>
+                    <th>Operadora</th>
+                    <th>Número</th>
+                    <th>Imei</th>
+                    <th>Planos</th>
+                    <th>Valor</th>
+                    <th>Estado</th>
+                    <th>Situação</th>
+                    <th>Status</th>
+                    <th>Termo</th>
+                    <th>ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  //pesquisando os arquivos criados.
+                  $query_files = "SELECT 
                                     IQ.id_equipamento,
                                     IQ.id_funcionario,
                                     IQ.patrimonio,
@@ -448,13 +451,13 @@ switch ($_GET['msn']) {
                                     IQ.deletar = 0 AND 
                                     IQ.id_funcionario = " . $sessao_id . "";
 
-                if ($resultado_files = mysqli_query($conn, $query_files)) {
-                  $cont = 0;
-                  while ($row_files = mysqli_fetch_assoc($resultado_files)) {
+                  if ($resultado_files = mysqli_query($conn, $query_files)) {
+                    $cont = 0;
+                    while ($row_files = mysqli_fetch_assoc($resultado_files)) {
 
-                    $data = date("d/m/Y", strtotime($row_files['data_nota']));
+                      $data = date("d/m/Y", strtotime($row_files['data_nota']));
 
-                    echo "    
+                      echo "    
                                           <tr>
                                              <td>
                                                 " . $row_files['equipamento'] . "
@@ -463,12 +466,12 @@ switch ($_GET['msn']) {
                                              <td>
                                                 " . $row_files['modelo'] . "
                                              </td>";
-                    if ($row_files['patrimonio'] != NULL) {
-                      echo "<td>" . $row_files['patrimonio'] . "</td>";
-                    } else {
-                      echo "<td>---</td>";
-                    }
-                    echo " <td>
+                      if ($row_files['patrimonio'] != NULL) {
+                        echo "<td>" . $row_files['patrimonio'] . "</td>";
+                      } else {
+                        echo "<td>---</td>";
+                      }
+                      echo " <td>
                                                 " . $row_files['filial'] . "
                                              </td>
 
@@ -494,50 +497,50 @@ switch ($_GET['msn']) {
                                              <td> 
                                              " . $row_files['situacao'] . " 
                                              </td>";
-                    if ($row_files['id_status'] == 1) { //1 = ATIVO; 2 = MANUTENÇÂO
-                      echo  "<td style='color: green'> 
+                      if ($row_files['id_status'] == 1) { //1 = ATIVO; 2 = MANUTENÇÂO
+                        echo  "<td style='color: green'> 
                                                      " . $row_files['status'] . " 
                                                      </td>";
-                    } else {
-                      echo  "<td style='color: orange'> 
+                      } else {
+                        echo  "<td style='color: orange'> 
                                                      " . $row_files['status'] . " 
                                                    </td>";
-                    }
+                      }
 
-                    echo "<td>";
-                    if ($row_files['termo'] == '0') { //tem termo
-                      echo "<a href='javascript:;' title='Possui Termo!'><i class='icon-ok tem'></i></a>";
-                    } else {
-                      echo "<a href='javascript:;' title='Não Possui Termo!'><i class='icon-remove nao_tem'></i></a>";
-                    } //end IF termo
+                      echo "<td>";
+                      if ($row_files['termo'] == '0') { //tem termo
+                        echo "<a href='javascript:;' title='Possui Termo!'><i class='icon-ok tem'></i></a>";
+                      } else {
+                        echo "<a href='javascript:;' title='Não Possui Termo!'><i class='icon-remove nao_tem'></i></a>";
+                      } //end IF termo
 
-                    echo "</td>
+                      echo "</td>
                                                   <td>";
 
-                    if (($row_files['tipo_equipamento'] == 1) || ($row_files['tipo_equipamento'] == 2) || ($row_files['tipo_equipamento'] == 3)) {
+                      if (($row_files['tipo_equipamento'] == 1) || ($row_files['tipo_equipamento'] == 2) || ($row_files['tipo_equipamento'] == 3)) {
 
-                      if ($row_files['liberado_rh'] == 0) { //0 = não liberado
-                        echo "<!--vigencia-->
+                        if ($row_files['liberado_rh'] == 0) { //0 = não liberado
+                          echo "<!--vigencia-->
                           <a href='javascript:;' class='botaoChecklist' role='button' data-toggle='modal' title='Não foi emitido o Check-List, por esse motivo não é permitido desvincular o equipamento!'>
                             <i class='fas fa-user-alt-slash' style='font-size: 15px; color: red; margin-right: 6px;'></i>
                           </a>";
-                      } else { // 1 = liberado
-                        echo "<!--vigencia-->
+                        } else { // 1 = liberado
+                          echo "<!--vigencia-->
                         <a href='#myModalVi" . $row_files['id_equipamento'] . "' role='button' data-toggle='modal' title='Desvincular equipamento do funcionário'>
                           <i class='fas fa-user-minus' style='font-size: 15px; color: green;     margin-right: 6px;'></i>
                         </a>";
-                      }
-                      echo " <!--Termo Asssinado-->
+                        }
+                        echo " <!--Termo Asssinado-->
                           <a href='#myModalanexos' role='button' data-toggle='modal' title='Anexar Termo Assinado'>
                           </a>
                           <a href='inventario_equip_edit.php?id_equip=" . $row_files['id_equipamento'] . "&tipo=" . $row_files['tipo_equipamento'] . "' role='button' title='Editar'>
                             <i class='icon-pencil' style='font-size: 15px;     margin-right: 6px;'></i>
                           </a>";
-                    } else {
-                      echo "Equipamento Gerenciado pelos Técnicos";
-                    } // end IF mostrar botão ação
+                      } else {
+                        echo "Equipamento Gerenciado pelos Técnicos";
+                      } // end IF mostrar botão ação
 
-                    echo "</td>
+                      echo "</td>
 
 <!-- Modal ANEXOS ADICIONAR -->
 <div id='myModalanexos' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
@@ -557,10 +560,10 @@ switch ($_GET['msn']) {
           <select id='t_cob' name='tipo' class='span2' required>
             <option value=''>---</option>
             <option value='4'>Nota Fiscal</option>";
-                    if ($row_files['termo'] == 1) {
-                      echo "<option value='3'>Termo responsabilidade</option>";
-                    }
-                    echo "
+                      if ($row_files['termo'] == 1) {
+                        echo "<option value='3'>Termo responsabilidade</option>";
+                      }
+                      echo "
           </select>
         </div>
       </div>   
@@ -610,14 +613,14 @@ switch ($_GET['msn']) {
         <label class='control-label' for='gols1' style='margin-top: 11px;'><i class='fas fa-angle-right'></i> Escolha o Funcionário:</label>
         <select id='t_cob' name='list_fun' class='span2'>
           <option value=''>---</option>";
-                    $query_fun = "SELECT id_funcionario, nome FROM manager_inventario_funcionario WHERE deletar = 0 AND empresa != '' order by nome ASC";
-                    $resultado_fun = mysqli_query($conn, $query_fun);
+                      $query_fun = "SELECT id_funcionario, nome FROM manager_inventario_funcionario WHERE deletar = 0 AND empresa != '' order by nome ASC";
+                      $resultado_fun = mysqli_query($conn, $query_fun);
 
-                    while ($row_fun = mysqli_fetch_assoc($resultado_fun)) {
-                      echo "<option value='" . $row_fun['id_funcionario'] . "'>" . $row_fun['nome'] . "</option>";
-                    }
+                      while ($row_fun = mysqli_fetch_assoc($resultado_fun)) {
+                        echo "<option value='" . $row_fun['id_funcionario'] . "'>" . $row_fun['nome'] . "</option>";
+                      }
 
-                    echo "</select>
+                      echo "</select>
         <div class='add_funcionario'>
           <input type='button' name='alert' id='alert' class='btn btn-success' value='+' onclick='abrir();' title='adicionar funcionário'>
         </div>  
@@ -635,7 +638,7 @@ switch ($_GET['msn']) {
 
         <!--LISTA DOS EQUIPAMENTOS-->
         <ul class='ul_equip' id='list" . $cont . "' style='display: none;'>";
-                    $list_equip = "SELECT  
+                      $list_equip = "SELECT  
                         MIE.id_equipamento,
                         MDE.nome AS tipo_equipamento,
                         MIE.tipo_equipamento AS id_tipo,
@@ -647,19 +650,19 @@ switch ($_GET['msn']) {
                         manager_dropequipamentos MDE ON MIE.tipo_equipamento = MDE.id_equip
                       WHERE id_funcionario = " . $_GET['id'] . " AND
                       MIE.tipo_equipamento NOT IN (9, 2, 10, 8)";
-                    $result_list = mysqli_query($conn, $list_equip);
+                      $result_list = mysqli_query($conn, $list_equip);
 
-                    while ($linha_list = mysqli_fetch_assoc($result_list)) {
-                      if ($linha_list['id_tipo'] == 3) { //chip
-                        echo "<li class='li_equip'><input type='checkbox' name='list_equip[]' value='" . $linha_list['id_equipamento'] . "' /> | CHIP - " . $linha_list['numero'] . "</li>";
-                      } else {
-                        echo "<li class='li_equip'>
+                      while ($linha_list = mysqli_fetch_assoc($result_list)) {
+                        if ($linha_list['id_tipo'] == 3) { //chip
+                          echo "<li class='li_equip'><input type='checkbox' name='list_equip[]' value='" . $linha_list['id_equipamento'] . "' /> | CHIP - " . $linha_list['numero'] . "</li>";
+                        } else {
+                          echo "<li class='li_equip'>
                     <input type='checkbox' name='list_equip[]' value='" . $linha_list['id_equipamento'] . "' /> | " . $linha_list['tipo_equipamento'] . " - " . $linha_list['modelo'] . "
                   </li>";
-                      } //end IF chip          
-                    } //end WHILE lista equipamentos
+                        } //end IF chip          
+                      } //end WHILE lista equipamentos
 
-                    echo "</ul>
+                      echo "</ul>
         <!--FIM LISTA-->         
         <hr />     
       <div class='control' id='status'>
@@ -668,14 +671,14 @@ switch ($_GET['msn']) {
           <option value='" . $row_files['id_status'] . "'>" . $row_files['status'] . "</option>
           <option value=''></option>";
 
-                    $query_status = "SELECT * FROM manager_dropstatusequipamento WHERE deletar = 0 order by nome";
-                    $resultado_status = mysqli_query($conn, $query_status);
+                      $query_status = "SELECT * FROM manager_dropstatusequipamento WHERE deletar = 0 order by nome";
+                      $resultado_status = mysqli_query($conn, $query_status);
 
-                    while ($row_status = mysqli_fetch_assoc($resultado_status)) {
-                      echo "<option value='" . $row_status['id_status'] . "'>" . $row_status['nome'] . "</option>";
-                    }
+                      while ($row_status = mysqli_fetch_assoc($resultado_status)) {
+                        echo "<option value='" . $row_status['id_status'] . "'>" . $row_status['nome'] . "</option>";
+                      }
 
-                    echo "</select>
+                      echo "</select>
       </div>
       
       <hr />      
@@ -686,14 +689,14 @@ switch ($_GET['msn']) {
           <option value='" . $row_files['id_filial'] . "'>" . $row_files['filial'] . "</option>
           <option value=''></option>";
 
-                    $query_empresa_equip = "SELECT * FROM manager_dropempresa order by nome";
-                    $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
+                      $query_empresa_equip = "SELECT * FROM manager_dropempresa order by nome";
+                      $resultado_empresa_equip = mysqli_query($conn, $query_empresa_equip);
 
-                    while ($row_empresa_equip = mysqli_fetch_assoc($resultado_empresa_equip)) {
-                      echo "<option value='" . $row_empresa_equip['id_empresa'] . "'>" . $row_empresa_equip['nome'] . "</option>";
-                    }
+                      while ($row_empresa_equip = mysqli_fetch_assoc($resultado_empresa_equip)) {
+                        echo "<option value='" . $row_empresa_equip['id_empresa'] . "'>" . $row_empresa_equip['nome'] . "</option>";
+                      }
 
-                    echo "</select>
+                      echo "</select>
       </div>
       <hr />
       <div class='control-group'>
@@ -762,19 +765,19 @@ switch ($_GET['msn']) {
     <div class='control-group'>
       <div class='controls'>
         <div class='accordion' id='accordion2'>";
-                    $add_obs = 0;
-                    $query_OBS = "SELECT MIO.obs, MIO.data_criacao, MDSE.nome AS status
+                      $add_obs = 0;
+                      $query_OBS = "SELECT MIO.obs, MIO.data_criacao, MDSE.nome AS status
                         FROM manager_inventario_obs MIO
                         LEFT JOIN manager_dropstatusequipamento MDSE ON MIO.id_status = MDSE.id_status
                         where MIO.id_equipamento = " . $row_files['id_equipamento'] . " AND MIO.deletar = 0 order by MIO.data_criacao DESC";
 
-                    $resultado_OBS = mysqli_query($conn, $query_OBS);
+                      $resultado_OBS = mysqli_query($conn, $query_OBS);
 
-                    while ($row_OBS = mysqli_fetch_assoc($resultado_OBS)) {
+                      while ($row_OBS = mysqli_fetch_assoc($resultado_OBS)) {
 
-                      $date_obs = date('d/m/Y H:i:s', strtotime($row_OBS['data_criacao']));
+                        $date_obs = date('d/m/Y H:i:s', strtotime($row_OBS['data_criacao']));
 
-                      echo "<div class='accordion-group'>
+                        echo "<div class='accordion-group'>
              <label class='control-label'><b>Status:</b> " . $row_OBS['status'] . "</label>
             <div class='accordion-heading'>
               <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion2' href='#collapse" . $add_obs . $row_files['id_equipamento'] . "'>
@@ -787,16 +790,16 @@ switch ($_GET['msn']) {
               </div>
             </div>
           </div></br>";
-                      $add_obs++;
-                    }
-                    echo "
+                        $add_obs++;
+                      }
+                      echo "
         </div>
       </div> 
     </div>
   </div>
 </div>";
 
-                    echo "<script>
+                      echo "<script>
       function mostrar_list" . $cont . "(id) {
           document.getElementById(id).style.display = 'block';
           if (id == 'listFuncionario') {
@@ -812,109 +815,109 @@ switch ($_GET['msn']) {
       }
       </script>";
 
-                    $cont++;
+                      $cont++;
+                    }
                   }
-                }
-                ?>
-              </tbody>
-            </table>
+                  ?>
+                </tbody>
+              </table>
+            </div>
+            <!-- /widget-content -->
           </div>
-          <!-- /widget-content -->
+          <!-- /widget -->
         </div>
-        <!-- /widget -->
       </div>
-    </div>
-    <!--ANEXOS-->
-    <div class="tab-pane" id="anexos">
-      <div class="span3" style="width: 1000px;">
-        <div class="widget stacked widget-table action-table">
-          <div class="widget-header">
-            <div class="control-group">
-              <div class="controls">
-                <!-- Button to trigger modal -->
-                <a href="#editar" role="button" class="btn btn-info pull-left filho" data-toggle="modal">Adicionar Nota Fiscal / Termo</a>
-              </div>
-              <!-- Modal ANEXOS ADICIONAR -->
-              <div id='editar' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
-                <div class='modal-header'>
-                  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
-                  <h3 id='myModalLabel'>Adicionar Anexo</h3>
+      <!--ANEXOS-->
+      <div class="tab-pane" id="anexos">
+        <div class="span3" style="width: 1000px;">
+          <div class="widget stacked widget-table action-table">
+            <div class="widget-header">
+              <div class="control-group">
+                <div class="controls">
+                  <!-- Button to trigger modal -->
+                  <a href="#editar" role="button" class="btn btn-info pull-left filho" data-toggle="modal">Adicionar Nota Fiscal / Termo</a>
                 </div>
-                <div class='modal-body'>
-                  <!--Colocar a tabela Aqui!-->
-                  <form id='edit-profile' class='form-horizontal' enctype='multipart/form-data' action='termo_doc.php' method='post'>
-                    <input type='text' name='id_fun' style='display:none' value='<?= $_GET['id']; ?>' />
-                    <div class='control-group'>
-                      <label class='control-label'>Tipo:</label>
-                      <div class='controls'>
-                        <select id='t_cob' name='tipo' class='span2'>
-                          <option value=''>---</option>
-                          <option value='4'>Nota Fiscal</option>";
-                          if($row_filess['termo'] == 1){
-                          echo "<option value='3'>Termo responsabilidade</option>";
-                          }
-                          echo "
-                        </select>
+                <!-- Modal ANEXOS ADICIONAR -->
+                <div id='editar' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                  <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+                    <h3 id='myModalLabel'>Adicionar Anexo</h3>
+                  </div>
+                  <div class='modal-body'>
+                    <!--Colocar a tabela Aqui!-->
+                    <form id='edit-profile' class='form-horizontal' enctype='multipart/form-data' action='termo_doc.php' method='post'>
+                      <input type='text' name='id_fun' style='display:none' value='<?= $_GET['id']; ?>' />
+                      <div class='control-group'>
+                        <label class='control-label'>Tipo:</label>
+                        <div class='controls'>
+                          <select id='t_cob' name='tipo' class='span2'>
+                            <option value=''>---</option>
+                            <option value='4'>Nota Fiscal</option>";
+                            if($row_filess['termo'] == 1){
+                            echo "<option value='3'>Termo responsabilidade</option>";
+                            }
+                            echo "
+                          </select>
+                        </div>
                       </div>
-                    </div>
-                    <div class='control-group'>
-                      <label class='control-label'>Equipamento:</label>
-                      <div class='controls'>
-                        <select id='t_cob' name='id_equipamento' class='span2'>
-                          <option value=''>---</option>
-                          <?php
-                          $mostra_equip = "SELECT id_equipamento, modelo, numero, tipo_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = " . $_GET['id'] . "";
-                          $result_equip = mysqli_query($conn, $mostra_equip);
-                          while ($row_mostrar = mysqli_fetch_assoc($result_equip)) {
+                      <div class='control-group'>
+                        <label class='control-label'>Equipamento:</label>
+                        <div class='controls'>
+                          <select id='t_cob' name='id_equipamento' class='span2'>
+                            <option value=''>---</option>
+                            <?php
+                            $mostra_equip = "SELECT id_equipamento, modelo, numero, tipo_equipamento FROM manager_inventario_equipamento WHERE id_funcionario = " . $_GET['id'] . "";
+                            $result_equip = mysqli_query($conn, $mostra_equip);
+                            while ($row_mostrar = mysqli_fetch_assoc($result_equip)) {
 
-                            if ($row_mostrar['tipo_equipamento'] == 3) {
-                              echo "<option value='" . $row_mostrar['id_equipamento'] . "'>Chip - " . $row_mostrar['numero'] . "</option>";
-                            } else {
-                              echo "
+                              if ($row_mostrar['tipo_equipamento'] == 3) {
+                                echo "<option value='" . $row_mostrar['id_equipamento'] . "'>Chip - " . $row_mostrar['numero'] . "</option>";
+                              } else {
+                                echo "
                                                                 <option value='" . $row_mostrar['id_equipamento'] . "'>" . $row_mostrar['modelo'] . "</option>
                                                               ";
-                            } //end IF equipamento
-                          } //end WHile equipamento
-                          ?>
-                        </select>
+                              } //end IF equipamento
+                            } //end WHile equipamento
+                            ?>
+                          </select>
+                        </div>
                       </div>
-                    </div>
-                    <div class='control-group'>
-                      <label class='control-label'>Selecione:</label>
-                      <div class='controls'>
-                        <input class='cpfcnpj span2' type='file' name='termo' required />
+                      <div class='control-group'>
+                        <label class='control-label'>Selecione:</label>
+                        <div class='controls'>
+                          <input class='cpfcnpj span2' type='file' name='termo' required />
+                        </div>
                       </div>
-                    </div>
-                    <div class='modal-footer'>
-                      <button class='btn' data-dismiss='modal' aria-hidden='true'>Fechar</button>
-                      <button class='btn btn-primary'>Salvar</button>
-                    </div>
-                  </form>
+                      <div class='modal-footer'>
+                        <button class='btn' data-dismiss='modal' aria-hidden='true'>Fechar</button>
+                        <button class='btn btn-primary'>Salvar</button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
+                <!-- /controls -->
               </div>
-              <!-- /controls -->
+              <!-- /control-group -->
             </div>
-            <!-- /control-group -->
-          </div>
-          <!-- /widget-header -->
-          <div class="widget-content">
-            <table class="table table-striped table-bordered">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Documento</th>
-                  <th>Equipamento</th>
-                  <th>Modelo</th>
-                  <th>Patrimônio</th>
-                  <th>IMEI</th>
-                  <th>Data</th>
-                  <th>Ação</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                //pesquisando os arquivos criados.
-                $query_files = "SELECT
+            <!-- /widget-header -->
+            <div class="widget-content">
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Documento</th>
+                    <th>Equipamento</th>
+                    <th>Modelo</th>
+                    <th>Patrimônio</th>
+                    <th>IMEI</th>
+                    <th>Data</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  //pesquisando os arquivos criados.
+                  $query_files = "SELECT
                                       MIA.id_anexo,
                                       MIE.id_equipamento,
                                       MIA.nome,
@@ -937,51 +940,51 @@ switch ($_GET['msn']) {
                                     MIA.id_funcionario = " . $_GET['id'] . " AND 
                                     MIA.deletar = 0";
 
-                if ($resultado_files = mysqli_query($conn, $query_files)) {
-                  while ($row_filess = mysqli_fetch_assoc($resultado_files)) {
+                  if ($resultado_files = mysqli_query($conn, $query_files)) {
+                    while ($row_filess = mysqli_fetch_assoc($resultado_files)) {
 
-                    echo "<tr>
+                      echo "<tr>
                                              <td>
                                                 <a href='" . $row_filess['caminho'] . "' target='_blank'>" . $row_filess['nome'] . "</a>
                                              </td>
                                              <td>";
-                    if ($row_filess['tipo'] == 3) {
-                      echo "TERMO RESPONSABILIDADE";
-                    }
-                    if ($row_filess['tipo'] == 4) {
-                      echo "NOTA FISCAL";
-                    }
-                    if ($row_filess['tipo'] == 5) {
-                      echo "CHECK-LIST";
-                    }
-                    echo "
+                      if ($row_filess['tipo'] == 3) {
+                        echo "TERMO RESPONSABILIDADE";
+                      }
+                      if ($row_filess['tipo'] == 4) {
+                        echo "NOTA FISCAL";
+                      }
+                      if ($row_filess['tipo'] == 5) {
+                        echo "CHECK-LIST";
+                      }
+                      echo "
                                              </td>";
 
-                    if ($row_filess['tipo_equipamento'] != NULL) {
-                      echo "<td>
+                      if ($row_filess['tipo_equipamento'] != NULL) {
+                        echo "<td>
                                                         " . $row_filess['tipo_equipamento'] . "
                                                       </td>";
-                    } else {
-                      echo "<td>---</td>";
-                    }
+                      } else {
+                        echo "<td>---</td>";
+                      }
 
-                    if ($row_filess['modelo'] != NULL) {
-                      echo "<td>
+                      if ($row_filess['modelo'] != NULL) {
+                        echo "<td>
                                                         " . $row_filess['modelo'] . "
                                                       </td>";
-                    } else {
-                      echo "<td>---</td>";
-                    }
+                      } else {
+                        echo "<td>---</td>";
+                      }
 
-                    if ($row_filess['patrimonio'] != NULL) {
-                      echo "<td>
+                      if ($row_filess['patrimonio'] != NULL) {
+                        echo "<td>
                                                         " . $row_filess['patrimonio'] . "
                                                       </td>";
-                    } else {
-                      echo "<td>---</td>";
-                    }
+                      } else {
+                        echo "<td>---</td>";
+                      }
 
-                    echo "      <td>
+                      echo "      <td>
                                                 " . $row_filess['imei_chip'] . "
                                              </td>
                                              <td>
@@ -1020,67 +1023,67 @@ switch ($_GET['msn']) {
                                                 </form>
                                               </div>
                                             </div>";
+                    }
                   }
-                }
-                ?>
-              </tbody>
-            </table>
-          </div>
-          <!-- /widget-content -->
-        </div>
-        <!-- /widget -->
-      </div>
-    </div>
-    <!--Historico-->
-    <?php
-    if ($_GET['page'] == 1) {
-      echo "<div class='tab-pane active' id='historico'>";
-    } else {
-      echo "<div class='tab-pane' id='historico'>";
-    } //aplicando o active caso venha page = 1
-    ?>
-    <div class="control-group">
-      <div class="control">
-        <a href="#modalHistorico" role="button" class="btn btn-info filho" data-toggle="modal" style="float: none;margin-left: 2px;margin-bottom: 10px;">Adicionar Novo Histórico</a>
-      </div>
-      <!--modal histórico-->
-      <div id="modalHistorico" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-          <h3 id="myModalLabel">Insira seu histórico</h3>
-        </div>
-        <form id="adc-historico" class="form-horizontal" action="invent_historico.php" method="post">
-          <div class="modal-body">
-            <div class="control-group">
-              <label class="control-label required">CONTEÚDO:</label>
-              <textarea name="msg_hist" class="form-control" rows="4"></textarea>
+                  ?>
+                </tbody>
+              </table>
             </div>
+            <!-- /widget-content -->
           </div>
-          <input name="id_funcionario" style="display:none" value="<?= $_GET['id']; ?>" />
-          <input name="status_funcionario" style="display:none" value="<?= $row['id_status']; ?>" />
-          <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
-            <button class="btn btn-primary">Salvar informações</button>
-          </div>
-        </form>
+          <!-- /widget -->
+        </div>
       </div>
-      <!--fim modal-->
-      <!--Inicio da tabela-->
-      <div id='tabelaHistorico'>
-        <table class="table table-striped table-bordered" style="width:1000px">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>STATUS</th>
-              <th>USUÁRIO</th>
-              <th>MENSAGEM</th>
-              <th>DATA DO HISTÓRICO</th>
-              <th>AÇÃO</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $tableHistorico = "SELECT 
+      <!--Historico-->
+      <?php
+      if ($_GET['page'] == 1) {
+        echo "<div class='tab-pane active' id='historico'>";
+      } else {
+        echo "<div class='tab-pane' id='historico'>";
+      } //aplicando o active caso venha page = 1
+      ?>
+      <div class="control-group">
+        <div class="control">
+          <a href="#modalHistorico" role="button" class="btn btn-info filho" data-toggle="modal" style="float: none;margin-left: 2px;margin-bottom: 10px;">Adicionar Novo Histórico</a>
+        </div>
+        <!--modal histórico-->
+        <div id="modalHistorico" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            <h3 id="myModalLabel">Insira seu histórico</h3>
+          </div>
+          <form id="adc-historico" class="form-horizontal" action="invent_historico.php" method="post">
+            <div class="modal-body">
+              <div class="control-group">
+                <label class="control-label required">CONTEÚDO:</label>
+                <textarea name="msg_hist" class="form-control" rows="4"></textarea>
+              </div>
+            </div>
+            <input name="id_funcionario" style="display:none" value="<?= $_GET['id']; ?>" />
+            <input name="status_funcionario" style="display:none" value="<?= $row['id_status']; ?>" />
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+              <button class="btn btn-primary">Salvar informações</button>
+            </div>
+          </form>
+        </div>
+        <!--fim modal-->
+        <!--Inicio da tabela-->
+        <div id='tabelaHistorico'>
+          <table class="table table-striped table-bordered" style="width:1000px">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>STATUS</th>
+                <th>USUÁRIO</th>
+                <th>MENSAGEM</th>
+                <th>DATA DO HISTÓRICO</th>
+                <th>AÇÃO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $tableHistorico = "SELECT 
                                                   MIH.id,
                                                   MIH.historico,
                                                   MIH.id_usuario,
@@ -1099,10 +1102,10 @@ switch ($_GET['msn']) {
                                               WHERE
                                                   MIH.deletado = 0 AND 
                                                   MIH.id_funcionario = " . $_GET['id'] . " ORDER BY MIH.id DESC";
-            $result_table = mysqli_query($conn, $tableHistorico);
-            while ($rowtableHistorico = mysqli_fetch_assoc($result_table)) {
+              $result_table = mysqli_query($conn, $tableHistorico);
+              while ($rowtableHistorico = mysqli_fetch_assoc($result_table)) {
 
-              echo "
+                echo "
                                 <tr>
                                   <th scope='row'>" . $rowtableHistorico['id'] . "</th>
                                   <td style='font-size: 9px;width: 8%;'>" . $rowtableHistorico['status'] . "</td>
@@ -1110,8 +1113,8 @@ switch ($_GET['msn']) {
                                   <td>" . $rowtableHistorico['historico'] . "</td>
                                   <td>" . $rowtableHistorico['data_historico'] . "</td>";
 
-              if (($rowtableHistorico['id_usuario'] == $_SESSION['id']) || ($_SESSION['editar_historico'] == 1)) {
-                echo
+                if (($rowtableHistorico['id_usuario'] == $_SESSION['id']) || ($_SESSION['editar_historico'] == 1)) {
+                  echo
                   "<td>
                                       <a href='#modalEditHistorico" . $rowtableHistorico['id'] . "' role='button' data-toggle='modal' title='Editar histórico'>
                                         <i class='icon-large icon-edit' style='color: blue'></i></i>
@@ -1119,10 +1122,10 @@ switch ($_GET['msn']) {
                                         <i class='btn-icon-only icon-trash' style='color: black'></i>
                                       </a>
                                     </td>";
-              } else {
-                echo "<td></td>";
-              }
-              echo "</tr>
+                } else {
+                  echo "<td></td>";
+                }
+                echo "</tr>
 
 
 
@@ -1170,24 +1173,26 @@ switch ($_GET['msn']) {
                               </div>   
                             <!--fim modal excluir histórico-->
                             ";
-            }
-            ?>
-          </tbody>
-        </table>
+              }
+              ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+    <!--FIM HISTORICO-->
   </div>
-  <!--FIM HISTORICO-->
 </div>
 </div>
 </div>
-</div>
+
 <!--JAVASCRITPS TABELAS-->
 <script src="../js/tabela.js"></script>
 <script src="../js/tabela2.js"></script>
 <script src="../java.js"></script>
 <script src="../jquery.dataTables.min.js"></script>
 <script src="../js/dataTables.bootstrap4.min.js"></script>
+
 <!--Paginação entre filho arquivo e pai-->
 <script src="../js/jquery-1.7.2.min.js"></script>
 <script src="../js/bootstrap.js"></script>
@@ -1196,7 +1201,63 @@ switch ($_GET['msn']) {
 <!--MODAIS-->
 
 </html>
+
 <!--MOSTRAR CAMPO ICONE-->
+<script>
+  function ValidarCPF(cpf) {
+
+    cpf = cpf.value.replace(".", "")
+    cpf = cpf.replace(".", "")
+    cpf = cpf.replace("-", "")
+
+    var Soma;
+    var Resto;
+    Soma = 0;
+
+    var strCPF = cpf;
+
+    if (strCPF == "00000000000") {
+      var retorno = false;
+    }
+
+    for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+    Resto = (Soma * 10) % 11;
+
+    if ((Resto == 10) || (Resto == 11)) Resto = 0;
+    if (Resto != parseInt(strCPF.substring(9, 10))) {
+      var retorno = false;
+    }
+
+    Soma = 0;
+    for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+    Resto = (Soma * 10) % 11;
+
+    if ((Resto == 10) || (Resto == 11)) Resto = 0;
+    if (Resto != parseInt(strCPF.substring(10, 11))) {
+      var retorno = false;
+    } else {
+      var retorno = true;
+    }
+
+    if (retorno == true) {
+
+      document.getElementById("cpfValido").style.display = "block";
+
+      document.getElementById("cpfInvalido").style.display = "none";
+
+      document.getElementById("procurar").disabled = false;
+
+    } else {
+
+      document.getElementById("cpfValido").style.display = "none";
+
+      document.getElementById("cpfInvalido").style.display = "block";
+
+      document.getElementById("procurar").disabled = true;
+    }
+  }
+</script>
+<script src="../js/cnpj.js"></script>
 
 <script language="javascript">
   function abrir() {
