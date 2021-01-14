@@ -107,9 +107,8 @@ if ($_GET['error'] == 2) {
 
                             <span style="display: none; color: red;" id="cpfInvalido"><i class="fas fa-times-circle"></i> CPF Invalido!</span>
                             <span style="display: none; color: green" id="cpfValido"><i class="fas fa-check-circle"></i> CPF OK!</span> ';
-                            
-                            unset($_SESSION['new_cpf']);
 
+                            unset($_SESSION['new_cpf']);
                         } elseif ($_SESSION['cpf_vazia'] != NULL) {
 
                             echo '<input name="gols1" class="cpfcnpj span2" type="text" value="' . $_SESSION['cpf_vazia'] . '" onkeydown="fMasc( this, mCPF );" maxlength="14" onload="ValidarCPF(this)" onblur="ValidarCPF(this)" autofocus/>
@@ -119,7 +118,6 @@ if ($_GET['error'] == 2) {
                             ';
 
                             unset($_SESSION['cpf_vazia']);
-
                         } else {
 
                             echo '<input type="text" name="gols1" id="gols1" class="cpfcnpj span2" onkeydown="fMasc( this, mCPF );" maxlength="14" autofocus/>';
@@ -1098,7 +1096,6 @@ if ($_GET['error'] == 2) {
 </body>
 <!-- BLOQUEAR BOTÃO SALVAR QUANDO CLICAR MAIS DE UM VEZ!! -->
 <script>
-
     document.getElementById("procurar").onclick = function() {
         this.disabled = true;
         document.getElementById("form1").submit();
@@ -1149,8 +1146,7 @@ if ($_GET['error'] == 2) {
 </script>
 
 <script>
-
-function ValidarCPF(cpf) {
+    function ValidarCPF(cpf) {
 
         cpf = cpf.value.replace(".", "")
         cpf = cpf.replace(".", "")
@@ -1160,29 +1156,40 @@ function ValidarCPF(cpf) {
         var Resto;
         Soma = 0;
 
-        var strCPF = cpf;
 
-        if (strCPF == "00000000000") {
+        var invalidCPF = ['00000000000', '11111111111', '22222222222', '33333333333', '44444444444', '55555555555', '66666666666', '77777777777', '88888888888', '99999999999']
+
+        var valido = invalidCPF.indexOf(cpf);
+
+        if (valido >= 0) {
+
             var retorno = false;
-        }
 
-        for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
-        Resto = (Soma * 10) % 11;
-
-        if ((Resto == 10) || (Resto == 11)) Resto = 0;
-        if (Resto != parseInt(strCPF.substring(9, 10))) {
-            var retorno = false;
-        }
-
-        Soma = 0;
-        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
-        Resto = (Soma * 10) % 11;
-
-        if ((Resto == 10) || (Resto == 11)) Resto = 0;
-        if (Resto != parseInt(strCPF.substring(10, 11))) {
-            var retorno = false;
         } else {
-            var retorno = true;
+
+            strCPF = cpf;
+
+            for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+            Resto = (Soma * 10) % 11;
+
+            if ((Resto == 10) || (Resto == 11)) Resto = 0;
+            if (Resto != parseInt(strCPF.substring(9, 10))) {
+
+                var retorno = false;
+
+            } else {
+
+                Soma = 0;
+                for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+                Resto = (Soma * 10) % 11;
+
+                if ((Resto == 10) || (Resto == 11)) Resto = 0;
+                if (Resto != parseInt(strCPF.substring(10, 11))) {
+                    var retorno = false;
+                } else {
+                    var retorno = true;
+                }
+            }
         }
 
         if (retorno == true) {

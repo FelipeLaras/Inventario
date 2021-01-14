@@ -1214,29 +1214,40 @@ switch ($_GET['msn']) {
     var Resto;
     Soma = 0;
 
-    var strCPF = cpf;
 
-    if (strCPF == "00000000000") {
+    var invalidCPF = ['00000000000', '11111111111', '22222222222', '33333333333', '44444444444', '55555555555', '66666666666', '77777777777', '88888888888', '99999999999']
+
+    var valido = invalidCPF.indexOf(cpf);
+
+    if (valido >= 0) {
+
       var retorno = false;
-    }
 
-    for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
-    Resto = (Soma * 10) % 11;
-
-    if ((Resto == 10) || (Resto == 11)) Resto = 0;
-    if (Resto != parseInt(strCPF.substring(9, 10))) {
-      var retorno = false;
-    }
-
-    Soma = 0;
-    for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
-    Resto = (Soma * 10) % 11;
-
-    if ((Resto == 10) || (Resto == 11)) Resto = 0;
-    if (Resto != parseInt(strCPF.substring(10, 11))) {
-      var retorno = false;
     } else {
-      var retorno = true;
+
+      strCPF = cpf;
+
+      for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+      Resto = (Soma * 10) % 11;
+
+      if ((Resto == 10) || (Resto == 11)) Resto = 0;
+      if (Resto != parseInt(strCPF.substring(9, 10))) {
+
+        var retorno = false;
+
+      } else {
+
+        Soma = 0;
+        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(strCPF.substring(10, 11))) {
+          var retorno = false;
+        } else {
+          var retorno = true;
+        }
+      }
     }
 
     if (retorno == true) {
