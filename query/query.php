@@ -171,7 +171,6 @@ $resultadoEquipDisponivel = $conn->query($equipamentosDisponiveis);
 
 $queryOffiDisponivel = "SELECT 
                             OFFI.id,
-                            OFFI.status,
                             MDL.nome AS locacao,
                             MDE.nome AS empresa,
                             MDOF.nome AS versao,
@@ -190,7 +189,7 @@ $queryOffiDisponivel = "SELECT
                         LEFT JOIN
                             manager_dropoffice MDOF ON (OFFI.versao = MDOF.id)
                         WHERE
-                            OFFI.status = 6 AND OFFI.deletar = 0";
+                            OFFI.id_equipamento = 0 AND OFFI.deletar = 0";
 
 $resultOfficeDispo = $conn->query($queryOffiDisponivel);
 
@@ -473,7 +472,7 @@ $query_office = "SELECT
                 FROM
                     manager_office OFF
                 WHERE
-                    OFF.status = 6 AND OFF.deletar = 0";
+                    OFF.id_equipamento = 0 AND OFF.deletar = 0";
 
 $resultado_office = $conn->query($query_office);
 
