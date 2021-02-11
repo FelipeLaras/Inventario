@@ -60,12 +60,9 @@ $query_relatorios = "SELECT
                         manager_dropequipamentos MDEQ ON MIE.tipo_equipamento = MDEQ.id_equip
                      LEFT JOIN 
                         manager_dropstatus MDSE ON MIF.status = MDSE.id_status
-                     WHERE 
-
-                        MIF.deletar = 0 AND 
-                        MIE.tipo_equipamento in (1, 3, 4, 2) AND
-
-(";
+                    
+                    WHERE MIF.deletar = 0 AND 
+                        MIE.tipo_equipamento in (1, 3, 4, 2) AND (";
 
 if (empty($_GET['funcao_funcionario'])) {
    if (empty($_GET['depart_funcionario'])) {
